@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://bx2l2u26uttd6"]
+[gd_scene load_steps=15 format=3 uid="uid://bx2l2u26uttd6"]
 
 [ext_resource type="PackedScene" uid="uid://drmufre8h1ghu" path="res://scenes/player.tscn" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://l0i8il70ooj6" path="res://assets/images/skybox/skybox.png" id="2_yqjtg"]
 [ext_resource type="ArrayMesh" uid="uid://c5lvfrcde04w7" path="res://assets/models/kitchenCabinet.obj" id="3_lnu2h"]
 [ext_resource type="ArrayMesh" uid="uid://b8mi0bya075br" path="res://assets/models/Trophy.obj" id="4_lbhrr"]
+[ext_resource type="PackedScene" uid="uid://blte38ktl226o" path="res://assets/models/pot.glb" id="5_iywne"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yqjtg"]
 size = Vector3(20, 0.1, 20)
@@ -28,6 +29,9 @@ size = Vector3(2.10938, 1.60205, 1.13171)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lbhrr"]
 size = Vector3(22.9751, 8.73956, 0.376465)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_iywne"]
+size = Vector3(0.657349, 0.88562, 0.666382)
 
 [node name="Game" type="Node3D"]
 
@@ -132,3 +136,12 @@ shape = SubResource("BoxShape3D_lbhrr")
 [node name="Trophy" type="MeshInstance3D" parent="."]
 transform = Transform3D(-0.847024, 0, 2.87794, 0, 3, 0, -2.87794, 0, -0.847024, 0.0224117, 0.566067, 11.4216)
 mesh = ExtResource("4_lbhrr")
+
+[node name="Pot" type="StaticBody3D" parent="."]
+transform = Transform3D(0.130526, 0, -0.991445, 0, 1, 0, 0.991445, 0, 0.130526, -2.02505, 0.10205, 2.07512)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00396729, -0.0571899, -0.0193481)
+shape = SubResource("BoxShape3D_iywne")
+
+[node name="pot5" parent="Pot" instance=ExtResource("5_iywne")]
