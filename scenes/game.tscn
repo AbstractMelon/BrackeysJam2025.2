@@ -1,0 +1,62 @@
+[gd_scene load_steps=10 format=3 uid="uid://bx2l2u26uttd6"]
+
+[ext_resource type="PackedScene" uid="uid://drmufre8h1ghu" path="res://scenes/player.tscn" id="1_uwrxv"]
+[ext_resource type="Texture2D" uid="uid://l0i8il70ooj6" path="res://assets/images/skybox/skybox.png" id="2_yqjtg"]
+[ext_resource type="ArrayMesh" uid="uid://c5lvfrcde04w7" path="res://assets/models/kitchenCabinet.obj" id="3_lnu2h"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yqjtg"]
+size = Vector3(20, 0.1, 20)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lnu2h"]
+size = Vector3(20, 0.1, 20)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lnu2h"]
+panorama = ExtResource("2_yqjtg")
+
+[sub_resource type="Sky" id="Sky_yqjtg"]
+sky_material = SubResource("PanoramaSkyMaterial_lnu2h")
+
+[sub_resource type="Environment" id="Environment_lnu2h"]
+background_mode = 2
+sky = SubResource("Sky_yqjtg")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lnu2h"]
+size = Vector3(2.10938, 1.60205, 1.13171)
+
+[node name="Game" type="Node3D"]
+
+[node name="Player" parent="." instance=ExtResource("1_uwrxv")]
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_yqjtg")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("BoxMesh_lnu2h")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.625556, 0.780179, 0, -0.780179, 0.625556, 0, 5.95657, 9.90449)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_lnu2h")
+
+[node name="Tables" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="Set1" type="StaticBody3D" parent="Tables"]
+
+[node name="KitchenCabinet" type="MeshInstance3D" parent="Tables/Set1"]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
+mesh = ExtResource("3_lnu2h")
+skeleton = NodePath("../../..")
+
+[node name="KitchenCabinet2" type="MeshInstance3D" parent="Tables/Set1"]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1.04352, 0, 0)
+mesh = ExtResource("3_lnu2h")
+skeleton = NodePath("../../..")
+
+[node name="Collider" type="CollisionShape3D" parent="Tables/Set1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0332, 0.301025, 0.580261)
+shape = SubResource("BoxShape3D_lnu2h")
