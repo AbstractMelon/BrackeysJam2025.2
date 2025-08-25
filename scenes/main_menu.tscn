@@ -1,58 +1,106 @@
-[gd_scene load_steps=19 format=3 uid="uid://bx2l2u26uttd6"]
+[gd_scene load_steps=14 format=3 uid="uid://cmgr105r1aynw"]
 
-[ext_resource type="PackedScene" uid="uid://drmufre8h1ghu" path="res://scenes/player.tscn" id="1_uwrxv"]
-[ext_resource type="Texture2D" uid="uid://l0i8il70ooj6" path="res://assets/images/skybox/skybox.png" id="2_yqjtg"]
-[ext_resource type="ArrayMesh" uid="uid://c5lvfrcde04w7" path="res://assets/models/kitchenCabinet.obj" id="3_lnu2h"]
-[ext_resource type="ArrayMesh" uid="uid://b8mi0bya075br" path="res://assets/models/Trophy.obj" id="4_lbhrr"]
-[ext_resource type="PackedScene" uid="uid://cdrik6fn1c5i7" path="res://scenes/mixing_pot.tscn" id="5_u5sy4"]
-[ext_resource type="PackedScene" uid="uid://djyx8akx6ie7d" path="res://scenes/item_spawner.tscn" id="6_gee14"]
-[ext_resource type="PackedScene" uid="uid://c6yykgad08ibw" path="res://scenes/storage_crate.tscn" id="7_0tnpc"]
-[ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="7_vtaks"]
-[ext_resource type="Resource" uid="uid://chv5hh53mshow" path="res://resources/banana.tres" id="8_kvpfn"]
-[ext_resource type="Texture2D" uid="uid://cac7768q1egxs" path="res://assets/images/dot_large.png" id="10_vtaks"]
+[ext_resource type="Script" uid="uid://dnewjk33x0d0u" path="res://scripts/menu/MenuController.gd" id="1_l6cm7"]
+[ext_resource type="Texture2D" uid="uid://l0i8il70ooj6" path="res://assets/images/skybox/skybox.png" id="2_rtw2f"]
+[ext_resource type="ArrayMesh" uid="uid://c5lvfrcde04w7" path="res://assets/models/kitchenCabinet.obj" id="3_oa1go"]
+[ext_resource type="ArrayMesh" uid="uid://b8mi0bya075br" path="res://assets/models/Trophy.obj" id="4_tbmy8"]
+[ext_resource type="Script" uid="uid://cw2e4m48nn4tk" path="res://scripts/menu/MenuCamera.gd" id="6_5dd4i"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_yqjtg"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_lgwnu"]
 size = Vector3(20, 0.1, 20)
 
-[sub_resource type="BoxMesh" id="BoxMesh_lnu2h"]
+[sub_resource type="BoxMesh" id="BoxMesh_flqon"]
 size = Vector3(20, 0.1, 20)
 
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lnu2h"]
-panorama = ExtResource("2_yqjtg")
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_rcqid"]
+panorama = ExtResource("2_rtw2f")
 
-[sub_resource type="Sky" id="Sky_vtaks"]
-sky_material = SubResource("PanoramaSkyMaterial_lnu2h")
+[sub_resource type="Sky" id="Sky_yqjtg"]
+sky_material = SubResource("PanoramaSkyMaterial_rcqid")
 
-[sub_resource type="Environment" id="Environment_lnu2h"]
+[sub_resource type="Environment" id="Environment_1ajci"]
 background_mode = 2
-sky = SubResource("Sky_vtaks")
+sky = SubResource("Sky_yqjtg")
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_lnu2h"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_7b55j"]
 size = Vector3(2.10938, 1.60205, 1.13171)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_lnu2h"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_5pajh"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_lbhrr"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_j7ex8"]
 size = Vector3(22.9751, 8.73956, 0.376465)
 
-[node name="Game" type="Node3D"]
+[node name="MainMenu" type="Node3D"]
+script = ExtResource("1_l6cm7")
 
-[node name="Player" parent="." instance=ExtResource("1_uwrxv")]
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="Panel" parent="UI"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.21
+anchor_bottom = 1.0
+offset_right = 2.07999
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="UI/Control"]
+layout_mode = 0
+offset_right = 243.0
+offset_bottom = 94.0
+theme_override_font_sizes/font_size = 32
+text = "Bake or Break"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ButtonList" type="VBoxContainer" parent="UI/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.153
+anchor_right = 0.963
+anchor_bottom = 0.83
+offset_left = 5.12
+offset_top = -0.144005
+offset_right = 0.0279846
+offset_bottom = 0.159973
+
+[node name="Play" type="Button" parent="UI/Control/ButtonList"]
+layout_mode = 2
+text = "PLAY"
+
+[node name="Settings" type="Button" parent="UI/Control/ButtonList"]
+layout_mode = 2
+text = "SETTINGS"
+
+[node name="Credits" type="Button" parent="UI/Control/ButtonList"]
+layout_mode = 2
+text = "CREDITS"
+
+[node name="Quit" type="Button" parent="UI/Control/ButtonList"]
+layout_mode = 2
+text = "QUIT"
 
 [node name="Floor" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
-shape = SubResource("BoxShape3D_yqjtg")
+shape = SubResource("BoxShape3D_lgwnu")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
-mesh = SubResource("BoxMesh_lnu2h")
+mesh = SubResource("BoxMesh_flqon")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.625556, 0.780179, 0, -0.780179, 0.625556, 0, 5.95657, 9.90449)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_lnu2h")
+environment = SubResource("Environment_1ajci")
 
 [node name="Tables" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.36397, -1, -1.74285)
@@ -62,181 +110,162 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.04937, 0.000351429, 0.01574
 
 [node name="KitchenCabinet" type="MeshInstance3D" parent="Tables/Set5"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
-mesh = ExtResource("3_lnu2h")
+mesh = ExtResource("3_oa1go")
 skeleton = NodePath("../..")
 
 [node name="KitchenCabinet2" type="MeshInstance3D" parent="Tables/Set5"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1.04352, 0, 0)
-mesh = ExtResource("3_lnu2h")
+mesh = ExtResource("3_oa1go")
 skeleton = NodePath("../..")
 
 [node name="Collider" type="CollisionShape3D" parent="Tables/Set5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0332, 0.301025, 0.580261)
-shape = SubResource("BoxShape3D_lnu2h")
+shape = SubResource("BoxShape3D_7b55j")
 
 [node name="Set6" type="StaticBody3D" parent="Tables"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7352, 0.000351429, 0.0157487)
 
 [node name="KitchenCabinet" type="MeshInstance3D" parent="Tables/Set6"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
-mesh = ExtResource("3_lnu2h")
+mesh = ExtResource("3_oa1go")
 skeleton = NodePath("../..")
 
 [node name="KitchenCabinet2" type="MeshInstance3D" parent="Tables/Set6"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1.04352, 0, 0)
-mesh = ExtResource("3_lnu2h")
+mesh = ExtResource("3_oa1go")
 skeleton = NodePath("../..")
 
 [node name="Collider" type="CollisionShape3D" parent="Tables/Set6"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0332, 0.301025, 0.580261)
-shape = SubResource("BoxShape3D_lnu2h")
+shape = SubResource("BoxShape3D_7b55j")
 
 [node name="Set7" type="StaticBody3D" parent="Tables"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.73625, 0.000702858, 3.30328)
 
 [node name="KitchenCabinet" type="MeshInstance3D" parent="Tables/Set7"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
-mesh = ExtResource("3_lnu2h")
+mesh = ExtResource("3_oa1go")
 skeleton = NodePath("../..")
 
 [node name="KitchenCabinet2" type="MeshInstance3D" parent="Tables/Set7"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1.04352, 0, 0)
-mesh = ExtResource("3_lnu2h")
+mesh = ExtResource("3_oa1go")
 skeleton = NodePath("../..")
 
 [node name="Collider" type="CollisionShape3D" parent="Tables/Set7"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0332, 0.301025, 0.580261)
-shape = SubResource("BoxShape3D_lnu2h")
+shape = SubResource("BoxShape3D_7b55j")
 
 [node name="Set8" type="StaticBody3D" parent="Tables"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.99986, 0.000351429, 3.29033)
 
 [node name="KitchenCabinet" type="MeshInstance3D" parent="Tables/Set8"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
-mesh = ExtResource("3_lnu2h")
+mesh = ExtResource("3_oa1go")
 skeleton = NodePath("../..")
 
 [node name="KitchenCabinet2" type="MeshInstance3D" parent="Tables/Set8"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1.04352, 0, 0)
-mesh = ExtResource("3_lnu2h")
+mesh = ExtResource("3_oa1go")
 skeleton = NodePath("../..")
 
 [node name="Collider" type="CollisionShape3D" parent="Tables/Set8"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0332, 0.301025, 0.580261)
-shape = SubResource("BoxShape3D_lnu2h")
+shape = SubResource("BoxShape3D_7b55j")
 
 [node name="Set1" type="StaticBody3D" parent="Tables"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.16804, 0, 0)
 
 [node name="KitchenCabinet" type="MeshInstance3D" parent="Tables/Set1"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
-mesh = ExtResource("3_lnu2h")
+mesh = ExtResource("3_oa1go")
 skeleton = NodePath("../../..")
 
 [node name="KitchenCabinet2" type="MeshInstance3D" parent="Tables/Set1"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1.04352, 0, 0)
-mesh = ExtResource("3_lnu2h")
+mesh = ExtResource("3_oa1go")
 skeleton = NodePath("../../..")
 
 [node name="Collider" type="CollisionShape3D" parent="Tables/Set1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0332, 0.301025, 0.580261)
-shape = SubResource("BoxShape3D_lnu2h")
+shape = SubResource("BoxShape3D_7b55j")
 
 [node name="Set2" type="StaticBody3D" parent="Tables"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.517795, 0, 0)
 
 [node name="KitchenCabinet" type="MeshInstance3D" parent="Tables/Set2"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
-mesh = ExtResource("3_lnu2h")
+mesh = ExtResource("3_oa1go")
 skeleton = NodePath("../../..")
 
 [node name="KitchenCabinet2" type="MeshInstance3D" parent="Tables/Set2"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1.04352, 0, 0)
-mesh = ExtResource("3_lnu2h")
+mesh = ExtResource("3_oa1go")
 skeleton = NodePath("../../..")
 
 [node name="Collider" type="CollisionShape3D" parent="Tables/Set2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0332, 0.301025, 0.580261)
-shape = SubResource("BoxShape3D_lnu2h")
+shape = SubResource("BoxShape3D_7b55j")
 
 [node name="Set3" type="StaticBody3D" parent="Tables"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.518845, 0.000351429, 3.28753)
 
 [node name="KitchenCabinet" type="MeshInstance3D" parent="Tables/Set3"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
-mesh = ExtResource("3_lnu2h")
+mesh = ExtResource("3_oa1go")
 skeleton = NodePath("../../..")
 
 [node name="KitchenCabinet2" type="MeshInstance3D" parent="Tables/Set3"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1.04352, 0, 0)
-mesh = ExtResource("3_lnu2h")
+mesh = ExtResource("3_oa1go")
 skeleton = NodePath("../../..")
 
 [node name="Collider" type="CollisionShape3D" parent="Tables/Set3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0332, 0.301025, 0.580261)
-shape = SubResource("BoxShape3D_lnu2h")
+shape = SubResource("BoxShape3D_7b55j")
 
 [node name="Set4" type="StaticBody3D" parent="Tables"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.21755, 0, 3.27458)
 
 [node name="KitchenCabinet" type="MeshInstance3D" parent="Tables/Set4"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
-mesh = ExtResource("3_lnu2h")
+mesh = ExtResource("3_oa1go")
 skeleton = NodePath("../../..")
 
 [node name="KitchenCabinet2" type="MeshInstance3D" parent="Tables/Set4"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1.04352, 0, 0)
-mesh = ExtResource("3_lnu2h")
+mesh = ExtResource("3_oa1go")
 skeleton = NodePath("../../..")
 
 [node name="Collider" type="CollisionShape3D" parent="Tables/Set4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0332, 0.301025, 0.580261)
-shape = SubResource("BoxShape3D_lnu2h")
+shape = SubResource("BoxShape3D_7b55j")
+
+[node name="Trophy" type="MeshInstance3D" parent="Tables"]
+transform = Transform3D(-0.847024, 0, 2.87794, 0, 3, 0, -2.87794, 0, -0.847024, 1.38638, 1.56607, 13.1645)
+mesh = ExtResource("4_tbmy8")
+skeleton = NodePath("../..")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.75643)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
 transform = Transform3D(15.5712, 0, 0, 0, 1.00217, 0, 0, 0, 5.16521, 0, -1.18421, 1.57818)
-mesh = SubResource("CylinderMesh_lnu2h")
+mesh = SubResource("CylinderMesh_5pajh")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00952148, 2.54294, -1.2644)
-shape = SubResource("BoxShape3D_lbhrr")
+shape = SubResource("BoxShape3D_j7ex8")
 
-[node name="Trophy" type="MeshInstance3D" parent="."]
-transform = Transform3D(-0.847024, 0, 2.87794, 0, 3, 0, -2.87794, 0, -0.847024, 0.0224117, 0.566067, 11.4216)
-mesh = ExtResource("4_lbhrr")
+[node name="Camera3D" type="Camera3D" parent="." node_paths=PackedStringArray("target")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.62517, 0.743813)
+script = ExtResource("6_5dd4i")
+target = NodePath("../RotationPoint")
 
-[node name="MixingPot" parent="." instance=ExtResource("5_u5sy4")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.07459, 0.10205, 1.96319)
+[node name="RotationPoint" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.62517, 0.743813)
 
-[node name="ItemSpawner" parent="." instance=ExtResource("6_gee14")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.999795, -0.316886, -7.90807)
-available_items = Array[ExtResource("7_vtaks")]([ExtResource("8_kvpfn")])
-
-[node name="StorageCrate" parent="." instance=ExtResource("7_0tnpc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.387478, -0.449999, -4.16796)
-
-[node name="Overlay" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="CenterContainer" type="Control" parent="Overlay"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="Cursor" type="Sprite2D" parent="Overlay/CenterContainer"]
-texture = ExtResource("10_vtaks")
+[connection signal="pressed" from="UI/Control/ButtonList/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="UI/Control/ButtonList/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="UI/Control/ButtonList/Credits" to="." method="_on_credits_pressed"]
+[connection signal="pressed" from="UI/Control/ButtonList/Quit" to="." method="_on_quit_pressed"]

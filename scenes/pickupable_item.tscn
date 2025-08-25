@@ -1,11 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://b8kkofyfauxla"]
+[gd_scene load_steps=4 format=3 uid="uid://b8kkofyfauxla"]
 
 [ext_resource type="Script" uid="uid://cpc3lqfnf7lkv" path="res://scripts/PickupableItem.gd" id="1_xaauh"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_k7bgy"]
-size = Vector3(1, 0.25, 0.25)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_mnuy3"]
 size = Vector3(1, 0.25, 0.25)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_3yb40"]
@@ -17,7 +14,6 @@ script = ExtResource("1_xaauh")
 mesh = SubResource("BoxMesh_k7bgy")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("BoxShape3D_mnuy3")
 
 [node name="PickupArea" type="Area3D" parent="."]
 

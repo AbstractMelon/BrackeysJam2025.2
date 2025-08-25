@@ -18,6 +18,12 @@ config/icon="res://icon.svg"
 [autoload]
 
 GameManager="*res://scripts/autoload/GameManager.gd"
+AudioManager="*res://scripts/autoload/AudioManager.gd"
+SceneManager="*res://scripts/autoload/SceneManager.gd"
+
+[global_group]
+
+storage_crates="Needed to identify storage crates"
 
 [input]
 

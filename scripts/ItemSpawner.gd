@@ -23,6 +23,10 @@ func spawn_initial_items():
 		spawn_random_item()
 
 func _on_spawn_timer_timeout():
+	if not is_inside_tree():
+		spawn_timer.stop() # Prevent it from firing again.
+		return
+
 	if active_items.size() < max_items:
 		spawn_random_item()
 
@@ -72,6 +76,10 @@ func get_random_spawn_position() -> Vector3:
 
 func spawn_item(item_data: ItemData, position: Vector3):
 	var item_instance = pickupable_item_scene.instantiate()
+	
+	if is_inside_tree():
+		return
+		
 	item_instance.item_data = item_data
 	item_instance.global_position = position
 	
@@ -94,3 +102,6 @@ func _on_item_dropped(item: PickupableItem):
 func remove_item(item: PickupableItem):
 	if item in active_items:
 		active_items.erase(item)
+		
+func _exit_tree():
+	spawn_timer.stop()
