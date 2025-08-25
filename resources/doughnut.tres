@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3 uid="uid://b1wwo5e3c2mrs"]
+
+[ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="1_t1r04"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t1r04"]
+albedo_color = Color(1, 0.561077, 0.243591, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_8lo8k"]
+inner_radius = 0.25
+outer_radius = 0.5
+
+[resource]
+script = ExtResource("1_t1r04")
+item_name = "Doughnut"
+point_value = 25
+zone_type = "city"
+mesh = SubResource("TorusMesh_8lo8k")
+material = SubResource("StandardMaterial3D_t1r04")
+is_shiny = false
+shiny_multiplier = 1.5
+metadata/_custom_type_script = "uid://dpsy87irbr46a"

@@ -7,7 +7,7 @@ class_name ItemSpawner
 @export var available_items: Array[ItemData] = []
 
 @onready var spawn_timer: Timer = $SpawnTimer
-var pickupable_item_scene: PackedScene = preload("res://scenes/pickupable_item.tscn")
+var pickupable_item_scene: PackedScene = preload("res://scenes/components/pickupable_item.tscn")
 var active_items: Array[PickupableItem] = []
 
 func _ready():
