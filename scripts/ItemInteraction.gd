@@ -181,11 +181,6 @@ func drop_item():
 	# Drop the item (this handles physics state changes)
 	carried_item.drop()
 	
-	# Check if dropping into storage crate
-	var nearby_crate = find_nearby_storage_crate()
-	if nearby_crate != null and nearby_crate.can_store_item():
-		nearby_crate.store_item(carried_item)
-	
 	carried_item = null
 
 func update_carried_item_position():
@@ -203,15 +198,3 @@ func update_carried_item_position():
 	var current_pos = carried_item.global_position
 	var smooth_pos = current_pos.lerp(target_position, 15.0 * get_process_delta_time())
 	carried_item.global_position = smooth_pos
-
-func find_nearby_storage_crate() -> StorageCrate:
-	if not is_setup_valid():
-		return null
-		
-	var crates = get_tree().get_nodes_in_group("storage_crates")
-	for crate in crates:
-		if crate is StorageCrate and is_instance_valid(crate):
-			var distance = player.global_position.distance_to(crate.global_position)
-			if distance < 3.0 and crate.is_player_nearby:
-				return crate
-	return null

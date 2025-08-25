@@ -1,20 +1,39 @@
-[gd_scene load_steps=19 format=3 uid="uid://bx2l2u26uttd6"]
+[gd_scene load_steps=28 format=3 uid="uid://bx2l2u26uttd6"]
 
 [ext_resource type="PackedScene" uid="uid://drmufre8h1ghu" path="res://scenes/player.tscn" id="1_uwrxv"]
+[ext_resource type="Texture2D" uid="uid://ww8mqihhdcf4" path="res://assets/images/ground/1K_tiling_17_basecolor.png" id="2_ir15t"]
 [ext_resource type="Texture2D" uid="uid://l0i8il70ooj6" path="res://assets/images/skybox/skybox.png" id="2_yqjtg"]
+[ext_resource type="Texture2D" uid="uid://wceqeafm1vcj" path="res://assets/images/ground/1K_tiling_17_height.png" id="3_ca42v"]
 [ext_resource type="ArrayMesh" uid="uid://c5lvfrcde04w7" path="res://assets/models/kitchenCabinet.obj" id="3_lnu2h"]
 [ext_resource type="ArrayMesh" uid="uid://b8mi0bya075br" path="res://assets/models/Trophy.obj" id="4_lbhrr"]
+[ext_resource type="Texture2D" uid="uid://bthwoir3jbvrn" path="res://assets/images/ground/1K_tiling_17_metallic.png" id="4_rysoc"]
+[ext_resource type="Texture2D" uid="uid://fhxn3xqe4kcr" path="res://assets/images/ground/1K_tiling_17_normal.png" id="5_ssvqc"]
 [ext_resource type="PackedScene" uid="uid://cdrik6fn1c5i7" path="res://scenes/components/mixing_pot.tscn" id="5_u5sy4"]
+[ext_resource type="Texture2D" uid="uid://dbl0ubptt0twe" path="res://assets/images/ground/1K_tiling_17_roughness.png" id="6_264po"]
 [ext_resource type="PackedScene" uid="uid://djyx8akx6ie7d" path="res://scenes/components/item_spawner.tscn" id="6_gee14"]
 [ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="7_vtaks"]
 [ext_resource type="Resource" uid="uid://chv5hh53mshow" path="res://resources/banana.tres" id="8_kvpfn"]
 [ext_resource type="Resource" uid="uid://b1wwo5e3c2mrs" path="res://resources/doughnut.tres" id="9_kvpfn"]
 [ext_resource type="Texture2D" uid="uid://cac7768q1egxs" path="res://assets/images/dot_large.png" id="10_vtaks"]
+[ext_resource type="PackedScene" uid="uid://53nblxbwf0d5" path="res://assets/models/building/wall-low.glb" id="16_ca42v"]
+[ext_resource type="PackedScene" uid="uid://dowixpki25tvu" path="res://assets/models/Camera stand.glb" id="17_rysoc"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yqjtg"]
-size = Vector3(20, 0.1, 20)
+size = Vector3(20.6499, 0.1, 30.3824)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1kice"]
+albedo_texture = ExtResource("2_ir15t")
+metallic = 1.0
+metallic_texture = ExtResource("4_rysoc")
+roughness_texture = ExtResource("6_264po")
+normal_enabled = true
+normal_texture = ExtResource("5_ssvqc")
+heightmap_enabled = true
+heightmap_texture = ExtResource("3_ca42v")
+uv1_scale = Vector3(100, 100, 100)
 
 [sub_resource type="BoxMesh" id="BoxMesh_lnu2h"]
+material = SubResource("StandardMaterial3D_1kice")
 size = Vector3(20, 0.1, 20)
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lnu2h"]
@@ -35,6 +54,9 @@ size = Vector3(2.10938, 1.60205, 1.13171)
 [sub_resource type="BoxShape3D" id="BoxShape3D_lbhrr"]
 size = Vector3(22.9751, 8.73956, 0.376465)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_rysoc"]
+size = Vector3(0.109955, 1.22156, 6.07607)
+
 [node name="Game" type="Node3D"]
 
 [node name="Player" parent="." instance=ExtResource("1_uwrxv")]
@@ -43,13 +65,12 @@ size = Vector3(22.9751, 8.73956, 0.376465)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.330475, 0.0163426, -5.17632)
 shape = SubResource("BoxShape3D_yqjtg")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+transform = Transform3D(1.5, 0, 0, 0, 2.033, 0, 0, 0, 2.033, -0.0431976, 0.0278702, -0.00214958)
 mesh = SubResource("BoxMesh_lnu2h")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.625556, 0.780179, 0, -0.780179, 0.625556, 0, 5.95657, 9.90449)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_lnu2h")
@@ -212,7 +233,7 @@ mesh = ExtResource("4_lbhrr")
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.07459, 0.10205, 1.96319)
 
 [node name="ItemSpawner" parent="." instance=ExtResource("6_gee14")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.999795, -0.316886, -7.90807)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.999795, -0.316886, -6.17999)
 available_items = Array[ExtResource("7_vtaks")]([ExtResource("8_kvpfn"), ExtResource("9_kvpfn")])
 
 [node name="Overlay" type="Control" parent="."]
@@ -237,3 +258,85 @@ mouse_filter = 2
 
 [node name="Cursor" type="Sprite2D" parent="Overlay/CenterContainer"]
 texture = ExtResource("10_vtaks")
+
+[node name="Building" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0559096)
+
+[node name="Wall" type="StaticBody3D" parent="Building"]
+transform = Transform3D(1, 0, 0, 0, 5.98226, 0, 0, 0, 6.73239, -10.6001, -0.873932, 0)
+
+[node name="Model" parent="Building/Wall" instance=ExtResource("16_ca42v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 3.037, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Building/Wall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00413513, 0.599304, -0.000587463)
+shape = SubResource("BoxShape3D_rysoc")
+
+[node name="Wall2" type="StaticBody3D" parent="Building"]
+transform = Transform3D(1, 0, 0, 0, 5.98226, 0, 0, 0, 6.73239, 9.79683, -0.873932, 0)
+
+[node name="Model" parent="Building/Wall2" instance=ExtResource("16_ca42v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 3.037, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Building/Wall2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00413513, 0.599304, -0.000587463)
+shape = SubResource("BoxShape3D_rysoc")
+
+[node name="Wall3" type="StaticBody3D" parent="Building"]
+transform = Transform3D(-4.37114e-08, 0, 3.42287, 0, 7.51216, 0, -1, 0, -1.49618e-07, -0.375252, -2.63743, 19.4086)
+
+[node name="Model" parent="Building/Wall3" instance=ExtResource("16_ca42v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 3.037, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Building/Wall3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 4.44089e-16, 0, 1, 0.00413513, 0.599304, -0.000587463)
+shape = SubResource("BoxShape3D_rysoc")
+
+[node name="Wall4" type="StaticBody3D" parent="Building"]
+transform = Transform3D(-4.37114e-08, 0, 3.42287, 0, 7.51216, 0, -1, 0, -1.49618e-07, -0.37957, -2.63743, -20.1548)
+
+[node name="Model" parent="Building/Wall4" instance=ExtResource("16_ca42v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 3.037, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Building/Wall4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 4.44089e-16, 0, 1, 0.00413513, 0.599304, -0.000587463)
+shape = SubResource("BoxShape3D_rysoc")
+
+[node name="Roof" type="StaticBody3D" parent="Building"]
+transform = Transform3D(-4.30671e-08, -18.2889, 0, 0.98526, -7.99433e-07, 0, 0, 0, 6.71093, 10.7164, 6.19979, 0)
+
+[node name="Model" parent="Building/Roof" instance=ExtResource("16_ca42v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 3.037, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Building/Roof"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 4.44089e-16, 0, 1, 0.00413513, 0.599304, -0.000587463)
+shape = SubResource("BoxShape3D_rysoc")
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0268533, 5.92852, 0.0218022)
+omni_range = 20.0
+omni_attenuation = -0.3
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.00925872, 6.09239, 11.4135)
+shadow_enabled = true
+spot_range = 10.0
+spot_attenuation = -1.0
+spot_angle = 9.0
+
+[node name="Camera stand" parent="." instance=ExtResource("17_rysoc")]
+transform = Transform3D(0.721289, 0, -0.692634, 0, 1, 0, 0.692634, 0, 0.721289, -1.79757, 0, 14.111)
+
+[node name="Camera stand2" parent="." instance=ExtResource("17_rysoc")]
+transform = Transform3D(-0.988486, -0.00819072, 0.151091, 0, -0.998534, -0.0541312, 0.151312, -0.0535079, 0.987037, 3.44342, 3.89825, 14.2791)
+
+[node name="Camera stand3" parent="." instance=ExtResource("17_rysoc")]
+transform = Transform3D(2.78394, 0, -1.11789, 0, 3, 0, 1.11789, 0, 2.78394, -6.72918, 0, 15.527)
+
+[node name="Camera stand4" parent="." instance=ExtResource("17_rysoc")]
+transform = Transform3D(0.888128, 0, 0.459595, 0, 1, 0, -0.459595, 0, 0.888128, 8.11035, 0, 13.0523)
+
+[node name="Camera stand6" parent="." instance=ExtResource("17_rysoc")]
+transform = Transform3D(-0.909867, 0, -0.4149, 0, 1, 0, 0.4149, 0, -0.909867, 4.7054, 0, 14.0227)

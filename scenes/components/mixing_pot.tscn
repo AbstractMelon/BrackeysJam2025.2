@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://cdrik6fn1c5i7"]
 
 [ext_resource type="Script" uid="uid://cxtgcnd7q8uda" path="res://scripts/MixingPot.gd" id="1_syecd"]
-[ext_resource type="PackedScene" uid="uid://blte38ktl226o" path="res://assets/models/pot.glb" id="2_wborl"]
+[ext_resource type="PackedScene" uid="uid://blte38ktl226o" path="res://assets/models/food/pot.glb" id="2_wborl"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_jwlrf"]
 size = Vector3(0.602966, 0.497559, 0.777115)

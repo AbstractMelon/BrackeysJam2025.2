@@ -1,0 +1,165 @@
+[gd_scene load_steps=5 format=3 uid="uid://bwf5re1xq7xid"]
+
+[ext_resource type="PackedScene" uid="uid://bkaq1f1t1sjhl" path="res://assets/models/food/Crate.glb" id="2_tn62d"]
+
+[sub_resource type="GDScript" id="GDScript_0p5pm"]
+script/source = "extends StaticBody3D
+class_name StorageCrate
+
+@export var max_capacity: int = 20
+@onready var storage_area: Area3D = $StorageArea
+@onready var item_container: Node3D = $ItemContainer
+@onready var ui_label: Label3D = $UILabel
+
+var stored_items: Array[PickupableItem] = []
+var is_player_nearby: bool = false
+
+signal items_stored_changed(count: int)
+
+func _ready():
+	# Connect signals
+	storage_area.body_entered.connect(_on_player_entered)
+	storage_area.body_exited.connect(_on_player_exited)
+	
+	# Also connect area entered/exited for items
+	storage_area.area_entered.connect(_on_area_entered)
+	storage_area.area_exited.connect(_on_area_exited)
+	
+	update_ui()
+
+func _on_player_entered(body):
+	if body is FirstPersonController:
+		is_player_nearby = true
+		print(\"Player entered storage area\")
+
+func _on_player_exited(body):
+	if body is FirstPersonController:
+		is_player_nearby = false
+		print(\"Player left storage area\")
+
+func _on_area_entered(area):
+	# Handle when items with PickupArea enter the storage zone
+	if area.name == \"PickupArea\" and area.get_parent() is PickupableItem:
+		var item = area.get_parent() as PickupableItem
+		if not item.is_being_carried and not stored_items.has(item):
+			print(\"Item entered storage area: \", item.name)
+
+func _on_area_exited(area):
+	if area.name == \"PickupArea\" and area.get_parent() is PickupableItem:
+		var item = area.get_parent() as PickupableItem
+		print(\"Item left storage area: \", item.name)
+
+func can_store_item() -> bool:
+	return stored_items.size() < max_capacity
+
+func store_item(item: PickupableItem) -> bool:
+	if not can_store_item():
+		print(\"Cannot store item: crate is full\")
+		return false
+	
+	if stored_items.has(item):
+		print(\"Item already stored\")
+		return false
+	
+	print(\"Storing item: \", item.name)
+	stored_items.append(item)
+	
+	# Remove from current parent
+	var old_parent = item.get_parent()
+	if old_parent:
+		old_parent.remove_child(item)
+	
+	# Add to item container
+	item_container.add_child(item)
+	
+	# Position item in crate (simple stacking)
+	var stack_height = (stored_items.size() - 1) * 0.3
+	item.position = Vector3(0, stack_height, 0)
+	item.rotation = Vector3.ZERO
+	
+	# Make sure item is not being carried and is frozen
+	item.is_being_carried = false
+	item.freeze = true
+	item.freeze_mode = RigidBody3D.FREEZE_MODE_KINEMATIC
+	
+	update_ui()
+	items_stored_changed.emit(stored_items.size())
+	return true
+
+func remove_item() -> PickupableItem:
+	if stored_items.is_empty():
+		return null
+	
+	var item = stored_items.pop_back()
+	item_container.remove_child(item)
+	
+	# Add back to main scene
+	get_tree().current_scene.add_child(item)
+	
+	# Unfreeze and position in front of crate
+	item.freeze = false
+	item.freeze_mode = RigidBody3D.FREEZE_MODE_STATIC
+	item.global_position = global_position + Vector3(0, 1, 1.5)
+	
+	update_ui()
+	items_stored_changed.emit(stored_items.size())
+	return item
+
+func remove_all_items() -> Array[PickupableItem]:
+	var items = stored_items.duplicate()
+	stored_items.clear()
+	
+	for item in items:
+		if is_instance_valid(item):
+			item_container.remove_child(item)
+			get_tree().current_scene.add_child(item)
+			item.freeze = false
+			item.freeze_mode = RigidBody3D.FREEZE_MODE_STATIC
+	
+	update_ui()
+	items_stored_changed.emit(0)
+	return items
+
+func get_stored_count() -> int:
+	return stored_items.size()
+
+func update_ui():
+	if ui_label:
+		ui_label.text = \"Storage: %d/%d\" % [stored_items.size(), max_capacity]
+
+func _input(event):
+	if event.is_action_pressed(\"interact\") and is_player_nearby:
+		var player = get_tree().get_first_node_in_group(\"player\")
+		if player:
+			var item_handler = player.get_node(\"ItemHandler\")
+			if item_handler and item_handler.carried_item == null and not stored_items.is_empty():
+				var retrieved_item = remove_item()
+				if retrieved_item:
+					item_handler.carried_item = retrieved_item
+					retrieved_item.pickup()
+"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_u13xs"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_egel5"]
+
+[node name="StorageCrate" type="StaticBody3D" groups=["storage_crates"]]
+script = SubResource("GDScript_0p5pm")
+
+[node name="MeshInstance" parent="." instance=ExtResource("2_tn62d")]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, -2.38419e-07, -0.467752, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_u13xs")
+
+[node name="ItemContainer" type="Node3D" parent="."]
+
+[node name="UILabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00423491, 0.319063, 0.504862)
+text = "Stored: 2"
+
+[node name="StorageArea" type="Area3D" parent="."]
+transform = Transform3D(1.9969, 0, 0, 0, 1.9969, 0, 0, 0, 1.9969, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StorageArea"]
+shape = SubResource("BoxShape3D_egel5")
