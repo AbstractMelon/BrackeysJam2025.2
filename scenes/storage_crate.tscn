@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://c6yykgad08ibw"]
+
+[ext_resource type="Script" uid="uid://cgbk84iitls2l" path="res://scripts/StorageCrate.gd" id="1_egel5"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_tn62d"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_u13xs"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_egel5"]
+
+[node name="StorageCrate" type="StaticBody3D"]
+script = ExtResource("1_egel5")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_tn62d")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_u13xs")
+
+[node name="ItemContainer" type="Node3D" parent="."]
+
+[node name="UILabel" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00423491, 0.319063, 0.504862)
+text = "Stored: 2"
+
+[node name="StorageArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StorageArea"]
+shape = SubResource("BoxShape3D_egel5")

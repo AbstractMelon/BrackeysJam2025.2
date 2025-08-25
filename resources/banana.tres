@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3 uid="uid://chv5hh53mshow"]
+
+[ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="1_21uq3"]
+
+[sub_resource type="PlaceholderMaterial" id="PlaceholderMaterial_21uq3"]
+
+[sub_resource type="TorusMesh" id="TorusMesh_21uq3"]
+
+[resource]
+script = ExtResource("1_21uq3")
+item_name = "Banana"
+point_value = 10
+zone_type = "jungle"
+mesh = SubResource("TorusMesh_21uq3")
+material = SubResource("PlaceholderMaterial_21uq3")
+is_shiny = false
+shiny_multiplier = 2.0
+metadata/_custom_type_script = "uid://dpsy87irbr46a"
