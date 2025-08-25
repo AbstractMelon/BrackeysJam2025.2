@@ -18,5 +18,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.620785, 0)
 
 [node name="ItemHandler" type="Node" parent="." node_paths=PackedStringArray("player", "camera")]
 script = ExtResource("2_g2els")
+carry_height_offset = 0.0
 player = NodePath("..")
 camera = NodePath("../Head/Camera3D")

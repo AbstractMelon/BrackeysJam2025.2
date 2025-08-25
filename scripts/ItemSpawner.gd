@@ -26,7 +26,7 @@ func spawn_initial_items():
 	print("[ItemSpawner] Initial spawn complete. Active items:", active_items.size())
 
 func _on_spawn_timer_timeout():
-	if active_items.size() < max_items:
+	if active_items.size() < max_items:                             
 		spawn_random_item()
 	else:
 		print("[ItemSpawner] Max items reached, skipping spawn")

@@ -1,20 +1,18 @@
 [gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3 uid="uid://chv5hh53mshow"]
 
 [ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="1_21uq3"]
+[ext_resource type="ArrayMesh" uid="uid://cklqru31y6di2" path="res://assets/food/banana.obj" id="1_ixkxx"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_21uq3"]
-
-[sub_resource type="TorusMesh" id="TorusMesh_21uq3"]
-inner_radius = 0.25
-outer_radius = 0.5
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ytuuf"]
+albedo_color = Color(1, 1, 0.14902, 1)
 
 [resource]
 script = ExtResource("1_21uq3")
 item_name = "Banana"
 point_value = 10
 zone_type = "jungle"
-mesh = SubResource("TorusMesh_21uq3")
-material = SubResource("StandardMaterial3D_21uq3")
+mesh = ExtResource("1_ixkxx")
+material = SubResource("StandardMaterial3D_ytuuf")
 is_shiny = false
 shiny_multiplier = 2.0
 metadata/_custom_type_script = "uid://dpsy87irbr46a"
