@@ -1,8 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://c6yykgad08ibw"]
 
 [ext_resource type="Script" uid="uid://cgbk84iitls2l" path="res://scripts/StorageCrate.gd" id="1_egel5"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_tn62d"]
+[ext_resource type="PackedScene" uid="uid://bkaq1f1t1sjhl" path="res://assets/models/Crate.glb" id="2_tn62d"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_u13xs"]
 
@@ -11,8 +10,8 @@
 [node name="StorageCrate" type="StaticBody3D"]
 script = ExtResource("1_egel5")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("BoxMesh_tn62d")
+[node name="MeshInstance" parent="." instance=ExtResource("2_tn62d")]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, -2.38419e-07, -0.467752, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_u13xs")
