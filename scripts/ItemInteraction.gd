@@ -29,6 +29,15 @@ func _input(event):
 			drop_item()
 		else:
 			pickup_item()
+	
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP and event.pressed:
+			carry_distance = clamp(carry_distance + 0.2, 0.5, 5.0)
+			print("Carry distance:", carry_distance)
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN and event.pressed:
+			carry_distance = clamp(carry_distance - 0.2, 0.5, 5.0)
+			print("Carry distance:", carry_distance)
+
 
 func _physics_process(delta):
 	# Add null checks
