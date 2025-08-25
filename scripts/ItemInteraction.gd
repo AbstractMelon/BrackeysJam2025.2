@@ -6,9 +6,12 @@ class_name ItemInteractionSystem
 @export var carry_height_offset: float = -0.5
 @export var player: FirstPersonController
 @export var camera: Camera3D
+@export var tooltip_scene: PackedScene  # Assign the ItemTooltip scene here
 
 var carried_item: PickupableItem = null
 var highlighted_item: PickupableItem = null
+var tooltip: ItemTooltip = null
+var tooltip_delay_timer: Timer
 
 func _ready():
 	# Validate that references are set
@@ -21,7 +24,38 @@ func _ready():
 	
 	# Add to player group for identification
 	player.add_to_group("player")
+	
+	# Setup tooltip
+	setup_tooltip()
+	
+	# Setup tooltip delay timer
+	tooltip_delay_timer = Timer.new()
+	tooltip_delay_timer.wait_time = 0.5  # Half second delay before showing tooltip
+	tooltip_delay_timer.one_shot = true
+	tooltip_delay_timer.timeout.connect(_on_tooltip_delay_timeout)
+	add_child(tooltip_delay_timer)
+	
 	print("ItemInteractionSystem ready")
+
+func setup_tooltip():
+	if tooltip_scene:
+		tooltip = tooltip_scene.instantiate()
+		# Defer adding tooltip to avoid "busy setting up children" error
+		setup_tooltip_deferred.call_deferred()
+	else:
+		print("WARNING: Tooltip scene not assigned in ItemInteractionSystem!")
+
+func setup_tooltip_deferred():
+	if not tooltip:
+		return
+		
+	# Add tooltip to the main scene's UI layer
+	var main_scene = get_tree().current_scene
+	if main_scene.has_method("get_ui_layer"):
+		main_scene.get_ui_layer().add_child(tooltip)
+	else:
+		# Fallback: add to current scene
+		get_tree().current_scene.add_child(tooltip)
 
 func _input(event):
 	if event.is_action_pressed("interact"):
@@ -38,7 +72,6 @@ func _input(event):
 			carry_distance = clamp(carry_distance - 0.2, 0.5, 5.0)
 			print("Carry distance:", carry_distance)
 
-
 func _physics_process(delta):
 	# Add null checks
 	if not is_setup_valid():
@@ -46,6 +79,7 @@ func _physics_process(delta):
 		
 	update_item_detection()
 	update_carried_item_position()
+	update_tooltip_position()
 
 func is_setup_valid() -> bool:
 	return player != null and camera != null and is_instance_valid(player) and is_instance_valid(camera)
@@ -82,16 +116,53 @@ func update_item_detection():
 					break
 				current_node = current_node.get_parent()
 	
-	# Update highlighting
+	# Update highlighting and tooltip
 	if highlighted_item != new_highlighted:
+		# Hide old tooltip and cancel timer
+		hide_tooltip()
+		tooltip_delay_timer.stop()
+		
+		# Remove highlighting from old item
 		if highlighted_item != null and is_instance_valid(highlighted_item):
 			highlighted_item.highlight(false)
+		
+		# Set new highlighted item
 		highlighted_item = new_highlighted
+		
+		# Highlight new item and start tooltip timer
 		if highlighted_item != null and is_instance_valid(highlighted_item) and not highlighted_item.is_being_carried:
 			highlighted_item.highlight(true)
+			# Start tooltip delay timer
+			tooltip_delay_timer.start()
+
+func _on_tooltip_delay_timeout():
+	# Show tooltip for currently highlighted item
+	if highlighted_item != null and is_instance_valid(highlighted_item) and not highlighted_item.is_being_carried:
+		show_tooltip_for_item(highlighted_item)
+
+func show_tooltip_for_item(item: PickupableItem):
+	if not tooltip or not item or not item.item_data:
+		return
+	
+	var mouse_pos = get_viewport().get_mouse_position()
+	tooltip.show_tooltip(item.item_data, mouse_pos)
+
+func hide_tooltip():
+	if tooltip:
+		tooltip.hide_tooltip()
+
+func update_tooltip_position():
+	# Update tooltip position to follow mouse if it's visible
+	if tooltip and tooltip.is_visible:
+		var mouse_pos = get_viewport().get_mouse_position()
+		tooltip.position_tooltip(mouse_pos)
 
 func pickup_item():
 	if highlighted_item != null and is_instance_valid(highlighted_item) and not highlighted_item.is_being_carried and carried_item == null:
+		# Hide tooltip when picking up
+		hide_tooltip()
+		tooltip_delay_timer.stop()
+		
 		carried_item = highlighted_item
 		carried_item.pickup()
 

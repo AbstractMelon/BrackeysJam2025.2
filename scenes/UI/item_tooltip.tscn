@@ -1,0 +1,60 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvdks5fgvnsv0"]
+
+[ext_resource type="Script" uid="uid://dexmclqaqqpu" path="res://scripts/ItemTooltip.gd" id="1_2kp16"]
+[ext_resource type="Texture2D" uid="uid://bnd673kmr5d5k" path="res://assets/UI/panel_brown_damaged.png" id="2_svcor"]
+
+[node name="ItemTooltip" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_2kp16")
+
+[node name="Background" type="NinePatchRect" parent="."]
+layout_mode = 1
+offset_right = 281.0
+offset_bottom = 102.0
+texture = ExtResource("2_svcor")
+region_rect = Rect2(0, 0, 128, 128)
+patch_margin_left = 19
+patch_margin_top = 20
+patch_margin_right = 18
+patch_margin_bottom = 18
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[node name="ItemName" type="Label" parent="Background"]
+layout_mode = 2
+offset_left = 18.0
+offset_top = 18.0
+offset_right = 263.0
+offset_bottom = 41.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+text = "Item - Zone"
+
+[node name="HSeparator" type="HSeparator" parent="Background"]
+layout_mode = 2
+offset_left = 20.0
+offset_top = 37.0
+offset_right = 265.0
+offset_bottom = 41.0
+
+[node name="Points" type="Label" parent="Background"]
+layout_mode = 2
+offset_left = 18.0
+offset_top = 41.0
+offset_right = 263.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 11
+text = "Points: %d (base: %d)"
+
+[node name="ShinyBonus" type="Label" parent="Background"]
+layout_mode = 2
+offset_left = 18.0
+offset_top = 55.0
+offset_right = 263.0
+offset_bottom = 78.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 11
+text = "Shiny! (x2 multiplier)"
