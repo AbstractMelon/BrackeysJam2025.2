@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://bx2l2u26uttd6"]
+[gd_scene load_steps=29 format=3 uid="uid://bx2l2u26uttd6"]
 
 [ext_resource type="PackedScene" uid="uid://drmufre8h1ghu" path="res://scenes/player.tscn" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://ww8mqihhdcf4" path="res://assets/images/ground/1K_tiling_17_basecolor.png" id="2_ir15t"]
@@ -54,6 +54,9 @@ size = Vector3(2.10938, 1.60205, 1.13171)
 [sub_resource type="BoxShape3D" id="BoxShape3D_lbhrr"]
 size = Vector3(22.9751, 8.73956, 0.376465)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_ssvqc"]
+size = Vector3(0.115723, 1.83704, 5.09988)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_rysoc"]
 size = Vector3(0.109955, 1.11775, 4.82421)
 
@@ -69,7 +72,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.330475, 0.0276769, -0.0114
 shape = SubResource("BoxShape3D_yqjtg")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
-transform = Transform3D(1.5, 0, 0, 0, 2.033, 0, 0, 0, 2.033, -0.0431976, 0.0278702, -0.00214958)
+transform = Transform3D(1.00133, 0, 0, 0, 2.03654, 0, 0, 0, 2.03654, -0.0431976, 0.0278702, -0.00214958)
 mesh = SubResource("BoxMesh_lnu2h")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -263,14 +266,14 @@ texture = ExtResource("10_vtaks")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0559096)
 
 [node name="Wall" type="StaticBody3D" parent="Building"]
-transform = Transform3D(1, 0, 0, 0, 5.98226, 0, 0, 0, 6.73239, -10.6001, -0.873932, 4.58765)
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, -10.6001, -0.873932, 4.58765)
 
 [node name="Model" parent="Building/Wall" instance=ExtResource("16_ca42v")]
-transform = Transform3D(1.00046, 0, 0, 0, 1.02449, 0, 0, 0, 2.39933, 0, 0, -0.179497)
+transform = Transform3D(1, 0, 0, 0, 1.02327, 0, 0, 0, 2.56036, 0, 0, -0.118084)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Building/Wall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00413513, 0.599304, -0.179888)
-shape = SubResource("BoxShape3D_rysoc")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0187044, 0.313083, -0.11583)
+shape = SubResource("BoxShape3D_ssvqc")
 
 [node name="Wall2" type="StaticBody3D" parent="Building"]
 transform = Transform3D(1, 0, 0, 0, 5.98226, 0, 0, 0, 6.73239, 9.79683, -0.873932, 0)
