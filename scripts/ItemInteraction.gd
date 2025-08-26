@@ -30,7 +30,7 @@ func _ready():
 	
 	# Setup tooltip delay timer
 	tooltip_delay_timer = Timer.new()
-	tooltip_delay_timer.wait_time = 0.5  # Half second delay before showing tooltip
+	tooltip_delay_timer.wait_time = 0.25  # Quartar second delay before showing tooltip
 	tooltip_delay_timer.one_shot = true
 	tooltip_delay_timer.timeout.connect(_on_tooltip_delay_timeout)
 	add_child(tooltip_delay_timer)
