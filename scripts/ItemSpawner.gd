@@ -63,7 +63,8 @@ func _on_spawn_timer_timeout():
 	if active_items.size() < max_items:
 		spawn_random_item()
 	else:
-		print("[ItemSpawner] Max items reached, skipping spawn")
+		#print("[ItemSpawner] Max items reached, skipping spawn")
+		pass
 
 func spawn_random_item():
 	if available_items.is_empty():
