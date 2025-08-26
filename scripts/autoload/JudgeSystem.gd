@@ -4,6 +4,7 @@ signal judging_started()
 signal judge_comment(judge_name: String, comment: String, comment_type: String)
 signal judge_reaction(judge_name: String, reaction: String)
 signal judging_complete()
+signal update_victim(player_name: String)
 
 enum Judge {
 	GRANNY_BUTTERWORTH,
@@ -83,6 +84,9 @@ func _judge_player_biscuit(player: GameState.PlayerData):
 	if not player.current_biscuit:
 		return
 	print("\n--- Judging ", player.name, "'s biscuit ---")
+	
+	# Tell the UI who is being judged
+	update_victim.emit(player.name)
 	
 	await _granny_butterworth_judges(player)
 	await get_tree().create_timer(1.5).timeout

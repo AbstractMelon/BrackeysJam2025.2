@@ -11,10 +11,15 @@ signal modifier_selected(modifier_name: String)
 @onready var modifier_panel: Panel = $ModifierPanel
 @onready var modifier_buttons: VBoxContainer = $ModifierPanel/VBoxContainer
 
+# Message labels
 @onready var elimination_message: Label = $Labels/EliminationMessage
 @onready var victory_message: Label = $Labels/VictoryMessage
 @onready var defeat_message: Label = $Labels/DefeatMessage
-@onready var judge_comment: RichTextLabel = $Labels/JudgeComment
+
+# Judge commenting
+@onready var judge_panel: Panel = $Judging
+@onready var current_victim: Label = $Judging/CurrentVictim
+@onready var judge_comment: Label = $Judging/JudgeComment
 
 var available_modifiers: Array[String] = [
 	"Double Vision - 2x chance for shiny items",
@@ -30,7 +35,10 @@ var available_modifiers: Array[String] = [
 func _ready():
 	add_to_group("game_ui")
 	end_baking_button.pressed.connect(_on_end_baking_pressed)
+	
+	# Hide panels
 	modifier_panel.hide()
+	judge_panel.hide()
 	
 	# Hide all message elements initially
 	elimination_message.hide()
@@ -43,6 +51,8 @@ func _ready():
 	GameLoop.timer_updated.connect(_on_timer_updated)
 	GameLoop.round_started.connect(_on_round_started)
 	GameLoop.player_eliminated.connect(_on_player_eliminated)
+	
+	JudgeSystem.update_victim.connect(_on_update_victim)
 
 func _on_state_changed(new_state: GameState.State):
 	match new_state:
@@ -65,6 +75,7 @@ func _show_baking_ui():
 	player_count_label.show()
 	end_baking_button.show()
 	modifier_panel.hide()
+	judge_panel.hide()
 	
 	# Hide message elements during baking
 	elimination_message.hide()
@@ -75,6 +86,7 @@ func _show_baking_ui():
 func _show_judging_ui():
 	end_baking_button.hide()
 	elimination_message.hide()
+	judge_panel.show()
 	# Keep timer and round info visible during judging
 
 func _show_modifier_selection_ui():
@@ -102,7 +114,7 @@ func _hide_all_ui():
 	elimination_message.hide()
 	victory_message.hide()
 	defeat_message.hide()
-	judge_comment.hide()
+	judge_panel.hide()
 
 func _on_timer_updated(time_left: float):
 	var minutes = int(time_left / 60)
@@ -211,12 +223,8 @@ func _show_defeat_message():
 	print("Showed death message")
 
 func show_judge_comment(judge_name: String, comment: String):
-	judge_comment.text = "[b]" + judge_name + ":[/b] " + comment
+	judge_comment.text = judge_name + ": " + comment
 	judge_comment.show()
 
-	# Remove after 5 seconds
-	var tween = create_tween()
-	tween.tween_interval(5.0)
-	tween.tween_property(judge_comment, "modulate:a", 0.0, 1.0)
-	tween.tween_callback(judge_comment.hide)
-	tween.tween_callback(func(): judge_comment.modulate.a = 1.0) # Reset alpha for next use
+func _on_update_victim(player_name: String):
+	current_victim.text = "Currently Judging: " + player_name

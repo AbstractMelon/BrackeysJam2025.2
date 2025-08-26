@@ -196,6 +196,7 @@ func _eliminate_player(player: GameState.PlayerData):
 	elif alive_players.size() <= 1:
 		change_state(GameState.State.VICTORY)
 	else:
+		await wait(3)
 		change_state(GameState.State.MODIFIER_SELECTION)
 
 func _start_modifier_selection():
