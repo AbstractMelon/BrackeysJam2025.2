@@ -7,7 +7,7 @@ signal player_eliminated(player: GameState.PlayerData)
 signal game_over(winner: GameState.PlayerData)
 signal timer_updated(time_left: float)
 
-const BAKING_TIME: float = 300.0  # 5 minutes
+const BAKING_TIME: float = 15.0  # 5 minutes - 300 seconds
 const NPC_NAMES: Array[String] = [
 	"Chef Crumbleton", "Baker Betty", "Flour Power Fred",
 	"Dough Master Dan", "Sweet Sally", "Crispy Carl", "Buttery Bob"

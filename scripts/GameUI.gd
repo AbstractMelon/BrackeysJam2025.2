@@ -170,7 +170,7 @@ func _show_elimination_message(player_name: String):
 
 	# Fade out after 3 seconds
 	var tween = create_tween()
-	tween.tween_delay(3.0)
+	tween.tween_interval(3.0)
 	tween.tween_property(message, "modulate:a", 0.0, 1.0)
 	tween.tween_callback(message.queue_free)
 
@@ -200,6 +200,6 @@ func show_judge_comment(judge_name: String, comment: String):
 
 	# Remove after 5 seconds
 	var tween = create_tween()
-	tween.tween_delay(5.0)
+	tween.tween_interval(5.0)
 	tween.tween_property(comment_label, "modulate:a", 0.0, 1.0)
 	tween.tween_callback(comment_label.queue_free)
