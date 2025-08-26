@@ -42,7 +42,7 @@ class BiscuitData:
 
 	func generate_from_pot(pot: MixingPot, points: int):
 		ingredients = pot.mixed_items.duplicate()
-		base_points = pot.base_points
+		base_points = int(pot.base_points)
 		total_points = points
 		modifier_points = points - base_points
 		_generate_biscuit_properties()
