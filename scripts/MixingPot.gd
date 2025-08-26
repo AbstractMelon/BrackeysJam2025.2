@@ -1,6 +1,9 @@
 extends StaticBody3D
 class_name MixingPot
 
+@export var is_npc_pot: bool = false
+@export var npc_name: String = "" # Only used if is_npc_pot is true
+
 @onready var mixing_area: Area3D = $MixingArea
 @onready var ui_label: Label3D = $UILabel
 
@@ -12,10 +15,11 @@ signal item_mixed(item: PickupableItem, points: int)
 signal mixing_complete(total_points: int)
 
 func _ready():
-	mixing_area.body_entered.connect(_on_item_entered)
+	# If it's an NPC pot, no need for collision signals
+	if not is_npc_pot:
+		mixing_area.body_entered.connect(_on_item_entered)
 	
 	update_score_data()
-	
 	update_ui()
 
 func update_score_data() -> void:
@@ -32,23 +36,24 @@ func update_score_data() -> void:
 	ModifierManager.get_modified_score(score_data)
 
 func _on_item_entered(body):
+	if is_npc_pot:
+		return # NPCs don’t mix this way
 	if body is PickupableItem and not body.is_being_carried:
 		mix_item(body)
 
 func mix_item(item: PickupableItem):
+	if is_npc_pot:
+		return # Ignore human-style mixing
 	if not item or item in mixed_items:
 		return
 	
-	# Calculate points with game manager modifiers
 	var points : float = GameManager.calculate_item_points(item)
 	base_points += points
 	
 	mixed_items.append(item.item_data)
 	update_score_data()
 	
-	# Remove item from world
 	item.queue_free()
-	
 	update_ui()
 	item_mixed.emit(item, points)
 
@@ -61,8 +66,19 @@ func complete_mixing() -> int:
 	return final_points
 
 func update_ui():
-	if ui_label:
-		ui_label.text = "Mixed: %d items\nBase points: %d\nModified points: %d" % [mixed_items.size(), base_points, score_data.points * score_data.multiplier]
+	if not ui_label:
+		return
+	
+	if is_npc_pot:
+		# Just show NPC info
+		ui_label.text = "%s's Pot\nPoints: %d" % [npc_name, get_current_points()]
+	else:
+		# Full breakdown for human pot
+		ui_label.text = "Your Pot\nMixed: %d items\nBase points: %d\nModified points: %d" % [
+			mixed_items.size(),
+			base_points,
+			get_current_points()
+		]
 
 func get_current_points() -> int:
 	return score_data.points * score_data.multiplier

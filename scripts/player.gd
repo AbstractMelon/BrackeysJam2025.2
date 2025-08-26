@@ -24,6 +24,9 @@ var speed: float
 @onready var camera: Camera3D = $Head/Camera3D
 
 func _ready():
+	# Add to groups for detection
+	add_to_group("player")
+
 	# Capture the mouse cursor
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
@@ -51,7 +54,7 @@ func _physics_process(delta):
 
 	# Get the input direction and handle the movement/deceleration
 	var input_dir = Vector2.ZERO
-	
+
 	if Input.is_action_pressed("move_right"):
 		input_dir.x += 1
 	if Input.is_action_pressed("move_left"):
@@ -60,10 +63,10 @@ func _physics_process(delta):
 		input_dir.y += 1
 	if Input.is_action_pressed("move_forward"):
 		input_dir.y -= 1
-	
+
 	# Get the movement direction relative to the player's rotation
 	var direction = (head.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	
+
 	if is_on_floor():
 		if direction != Vector3.ZERO:
 			velocity.x = direction.x * speed
@@ -79,7 +82,7 @@ func _physics_process(delta):
 	# Head bob
 	t_bob += delta * velocity.length() * float(is_on_floor())
 	camera.transform.origin = _headbob(t_bob)
-	
+
 	# FOV
 	var velocity_clamped = clamp(velocity.length(), 0.5, sprint_speed * 2)
 	var target_fov = base_fov + fov_change * velocity_clamped

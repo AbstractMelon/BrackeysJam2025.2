@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://bx2l2u26uttd6"]
+[gd_scene load_steps=31 format=3 uid="uid://bx2l2u26uttd6"]
 
 [ext_resource type="PackedScene" uid="uid://drmufre8h1ghu" path="res://scenes/player.tscn" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://ww8mqihhdcf4" path="res://assets/images/ground/1K_tiling_17_basecolor.png" id="2_ir15t"]
@@ -17,6 +17,8 @@
 [ext_resource type="Texture2D" uid="uid://cac7768q1egxs" path="res://assets/images/dot_large.png" id="10_vtaks"]
 [ext_resource type="PackedScene" uid="uid://53nblxbwf0d5" path="res://assets/models/building/wall-low.glb" id="16_ca42v"]
 [ext_resource type="PackedScene" uid="uid://dowixpki25tvu" path="res://assets/models/Camera stand.glb" id="17_rysoc"]
+[ext_resource type="Script" uid="uid://ctnbqgf36a50c" path="res://scripts/GameController.gd" id="18_gamecontroller"]
+[ext_resource type="PackedScene" uid="uid://db3ipmukjssfw" path="res://scenes/UI/game_ui.tscn" id="19_gameui"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yqjtg"]
 size = Vector3(20.6499, 0.205603, 40.7003)
@@ -61,6 +63,7 @@ size = Vector3(0.115723, 1.83704, 5.09988)
 size = Vector3(0.109955, 1.11775, 4.82421)
 
 [node name="Game" type="Node3D"]
+script = ExtResource("18_gamecontroller")
 
 [node name="Player" parent="." instance=ExtResource("1_uwrxv")]
 
@@ -343,3 +346,35 @@ shadow_enabled = true
 spot_range = 10.0
 spot_attenuation = -1.0
 spot_angle = 9.0
+
+[node name="GameUI" parent="." instance=ExtResource("19_gameui")]
+
+[node name="MixingPots" type="Node3D" parent="."]
+
+[node name="Pot1" parent="MixingPots" instance=ExtResource("5_u5sy4")]
+transform = Transform3D(-0.987452, 0, -0.157917, 0, 1, 0, 0.157917, 0, -0.987452, 1.849, 0.25882, -1.01)
+is_npc_pot = true
+
+[node name="Pot2" parent="MixingPots" instance=ExtResource("5_u5sy4")]
+transform = Transform3D(-0.982241, 0, 0.187621, 0, 1, 0, -0.187621, 0, -0.982241, 5.00482, 0.25882, -1.01)
+is_npc_pot = true
+
+[node name="Pot3" parent="MixingPots" instance=ExtResource("5_u5sy4")]
+transform = Transform3D(-0.994582, 0, -0.103956, 0, 1, 0, 0.103956, 0, -0.994582, -1.37413, 0.25882, -1.01)
+is_npc_pot = true
+
+[node name="Pot4" parent="MixingPots" instance=ExtResource("5_u5sy4")]
+transform = Transform3D(-0.996053, 0, 0.0887551, 0, 1, 0, -0.0887551, 0, -0.996053, -5.15324, 0.25882, -1.01)
+is_npc_pot = true
+
+[node name="Pot5" parent="MixingPots" instance=ExtResource("5_u5sy4")]
+transform = Transform3D(-0.810931, 0, 0.585142, 0, 1, 0, -0.585142, 0, -0.810931, -5.80452, 0.25882, 2.08979)
+is_npc_pot = true
+
+[node name="Pot6" parent="MixingPots" instance=ExtResource("5_u5sy4")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.75357, 0.25882, 2.08979)
+is_npc_pot = true
+
+[node name="Pot7" parent="MixingPots" instance=ExtResource("5_u5sy4")]
+transform = Transform3D(-0.981128, 0, -0.193361, 0, 1, 0, 0.193361, 0, -0.981128, 5.32292, 0.25882, 2.08979)
+is_npc_pot = true

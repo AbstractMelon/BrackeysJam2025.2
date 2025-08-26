@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="BakeOrBreak"
-run/main_scene="uid://bx2l2u26uttd6"
+run/main_scene="uid://cmgr105r1aynw"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -21,6 +21,9 @@ GameManager="*res://scripts/autoload/GameManager.gd"
 AudioManager="*res://scripts/autoload/AudioManager.gd"
 SceneManager="*res://scripts/autoload/SceneManager.gd"
 ModifierManager="*res://scenes/components/modifiers.tscn"
+GameState="*res://scripts/autoload/GameState.gd"
+GameLoop="*res://scripts/autoload/GameLoop.gd"
+JudgeSystem="*res://scripts/autoload/JudgeSystem.gd"
 
 [global_group]
 
