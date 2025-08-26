@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c03g3uc2erf6l"]
+
+[ext_resource type="Script" uid="uid://byfdqi8d1poej" path="res://scripts/autoload/ModifierManager.gd" id="1_jnttb"]
+
+[node name="Modifiers" type="Node"]
+script = ExtResource("1_jnttb")

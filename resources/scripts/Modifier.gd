@@ -7,12 +7,12 @@ var _description : String
 # Array of ModifierTypes to hold data on what the modifier actually does
 
 func _get_additive_score(values : ScoreData) -> ScoreData:
+	# Called when getting base points and multiplier
 	return values
-# Called when getting base points and multiplier
 
 func _get_multiplicitive_score(values : ScoreData) -> ScoreData:
+	# Called when getting multiplied points and multiplier
 	return values
-# Called when getting multiplied points and multiplier
 
 func _get_player_stats(values : PlayerStats) -> PlayerStats:
 	return values
@@ -27,9 +27,9 @@ func _trigger() -> void:
 	pass
 
 func _on_modifier_gained() -> void:
+	# Called when the modifier is gained
 	pass
-# Called when the modifier is gained
 
 func _on_modifier_removed() -> void:
+	# Called when the modifier is removed
 	pass
-# Called when the modifier is removed
