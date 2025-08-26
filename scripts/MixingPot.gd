@@ -6,7 +6,7 @@ class_name MixingPot
 
 var score_data : ScoreData
 var base_points : float = 0
-var mixed_items : Array[PickupableItem] = []
+var mixed_items : Array[ItemData] = []
 
 signal item_mixed(item: PickupableItem, points: int)
 signal mixing_complete(total_points: int)
@@ -25,8 +25,8 @@ func update_score_data() -> void:
 	score_data.multiplier = 1
 	
 	var ingredients : Array[ItemData] = []
-	for mixed_item in mixed_items:
-		ingredients.append(mixed_item.item_data)
+	for data in mixed_items:
+		ingredients.append(data)
 	score_data.ingredients = ingredients
 	
 	ModifierManager.get_modified_score(score_data)
@@ -43,7 +43,7 @@ func mix_item(item: PickupableItem):
 	var points : float = GameManager.calculate_item_points(item)
 	base_points += points
 	
-	mixed_items.append(item)
+	mixed_items.append(item.item_data)
 	update_score_data()
 	
 	# Remove item from world
