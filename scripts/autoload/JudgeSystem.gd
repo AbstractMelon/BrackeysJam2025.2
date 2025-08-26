@@ -137,7 +137,7 @@ func _granny_butterworth_judges(player: GameState.PlayerData):
 		await _granny_emotional_response(biscuit, patience)
 		await get_tree().create_timer(0.4).timeout
 
-func _granny_primary_assessment(biscuit: GameState.BiscuitData, patience: float):
+func _granny_primary_assessment(biscuit: GameState.BiscuitData, _patience: float):
 	var comments = []
 	
 	if biscuit.total_points > 80:
@@ -189,7 +189,7 @@ func _granny_primary_assessment(biscuit: GameState.BiscuitData, patience: float)
 	judge_comment.emit("Granny Butterworth", comment, CommentType.PRAISE if biscuit.total_points > 50 else CommentType.CRITICISM)
 	print("Granny Butterworth: ", comment)
 
-func _granny_personal_story(biscuit: GameState.BiscuitData, nostalgia: float):
+func _granny_personal_story(biscuit: GameState.BiscuitData, _nostalgia: float):
 	var stories = []
 	
 	if "Sweet" in biscuit.special_attributes:
@@ -256,7 +256,7 @@ func _granny_technical_observation(biscuit: GameState.BiscuitData):
 		judge_comment.emit("Granny Butterworth", observation, CommentType.OBSERVATION)
 		print("Granny Butterworth: ", observation)
 
-func _granny_emotional_response(biscuit: GameState.BiscuitData, patience: float):
+func _granny_emotional_response(biscuit: GameState.BiscuitData, _patience: float):
 	var responses = []
 	
 	if biscuit.total_points > 80:
@@ -283,7 +283,6 @@ func _granny_emotional_response(biscuit: GameState.BiscuitData, patience: float)
 func _rordan_gamsey_judges(player: GameState.PlayerData):
 	var biscuit = player.current_biscuit
 	var rage = judge_mood_modifiers[Judge.RORDAN_GAMSEY]["rage"]
-	var standards = judge_mood_modifiers[Judge.RORDAN_GAMSEY]["standards"]
 	
 	# Primary assessment
 	await _rordan_primary_assessment(biscuit, rage)
@@ -291,7 +290,7 @@ func _rordan_gamsey_judges(player: GameState.PlayerData):
 	
 	# Technical criticism
 	if randf() < 0.8:
-		await _rordan_technical_criticism(biscuit, standards)
+		await _rordan_technical_criticism(biscuit)
 		await get_tree().create_timer(0.6).timeout
 	
 	# Comparison to standards
@@ -304,7 +303,7 @@ func _rordan_gamsey_judges(player: GameState.PlayerData):
 		await _rordan_emotional_outburst(biscuit)
 		await get_tree().create_timer(0.4).timeout
 
-func _rordan_primary_assessment(biscuit: GameState.BiscuitData, rage: float):
+func _rordan_primary_assessment(biscuit: GameState.BiscuitData, _rage: float):
 	var comments = []
 	
 	if biscuit.total_points > 90:
@@ -356,7 +355,7 @@ func _rordan_primary_assessment(biscuit: GameState.BiscuitData, rage: float):
 	judge_comment.emit("Rordan Gamsey", comment, CommentType.CRITICISM if biscuit.total_points < 60 else CommentType.PRAISE)
 	print("Rordan Gamsey: ", comment)
 
-func _rordan_technical_criticism(biscuit: GameState.BiscuitData, standards: float):
+func _rordan_technical_criticism(biscuit: GameState.BiscuitData):
 	var criticisms = []
 	
 	if biscuit.ingredients.size() < 3:
@@ -425,7 +424,7 @@ func _rordan_comparison(biscuit: GameState.BiscuitData):
 		judge_comment.emit("Rordan Gamsey", comparison, CommentType.COMPARISON)
 		print("Rordan Gamsey: ", comparison)
 
-func _rordan_emotional_outburst(biscuit: GameState.BiscuitData):
+func _rordan_emotional_outburst(_biscuit: GameState.BiscuitData):
 	var outbursts = [
 		"*throws hands in air* I CAN'T TAKE THIS ANYMORE!",
 		"*slams fist on table* THIS IS MADNESS!",
@@ -442,15 +441,14 @@ func _rordan_emotional_outburst(biscuit: GameState.BiscuitData):
 func _professor_biscotti_judges(player: GameState.PlayerData):
 	var biscuit = player.current_biscuit
 	var curiosity = judge_mood_modifiers[Judge.PROFESSOR_BISCOTTI]["curiosity"]
-	var precision = judge_mood_modifiers[Judge.PROFESSOR_BISCOTTI]["precision"]
 	
 	# Scientific analysis
-	await _professor_scientific_analysis(biscuit, precision)
+	await _professor_scientific_analysis(biscuit)
 	await get_tree().create_timer(0.8).timeout
 	
 	# Complexity assessment
 	if randf() < 0.7:
-		await _professor_complexity_assessment(biscuit, curiosity)
+		await _professor_complexity_assessment(biscuit)
 		await get_tree().create_timer(0.6).timeout
 	
 	# Theoretical implications
@@ -463,7 +461,7 @@ func _professor_biscotti_judges(player: GameState.PlayerData):
 		await _professor_research_suggestions(biscuit)
 		await get_tree().create_timer(0.4).timeout
 
-func _professor_scientific_analysis(biscuit: GameState.BiscuitData, precision: float):
+func _professor_scientific_analysis(biscuit: GameState.BiscuitData):
 	var complexity_score = biscuit.ingredients.size() + biscuit.special_attributes.size()
 	var comments = []
 	
@@ -516,7 +514,7 @@ func _professor_scientific_analysis(biscuit: GameState.BiscuitData, precision: f
 	judge_comment.emit("Professor Biscotti", comment, CommentType.TECHNICAL_ANALYSIS)
 	print("Professor Biscotti: ", comment)
 
-func _professor_complexity_assessment(biscuit: GameState.BiscuitData, curiosity: float):
+func _professor_complexity_assessment(biscuit: GameState.BiscuitData):
 	var assessments = []
 	
 	if biscuit.ingredients.size() > 6:
@@ -575,7 +573,7 @@ func _professor_theoretical_implications(biscuit: GameState.BiscuitData):
 		judge_comment.emit("Professor Biscotti", implication, CommentType.TECHNICAL_ANALYSIS)
 		print("Professor Biscotti: ", implication)
 
-func _professor_research_suggestions(biscuit: GameState.BiscuitData):
+func _professor_research_suggestions(_biscuit: GameState.BiscuitData):
 	var suggestions = [
 		"This warrants further investigation in controlled laboratory conditions.",
 		"I would recommend additional research into the underlying mechanisms.",
@@ -614,7 +612,7 @@ func reset_judge_moods():
 	_initialize_judge_moods()
 
 # ---------------- Advanced Dialogue System ----------------
-func generate_contextual_response(judge: Judge, biscuit: GameState.BiscuitData, context: String) -> String:
+func generate_contextual_response(judge: Judge, _biscuit: GameState.BiscuitData, context: String) -> String:
 	var responses = []
 	
 	match judge:

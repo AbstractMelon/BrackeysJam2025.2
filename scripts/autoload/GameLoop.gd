@@ -83,7 +83,7 @@ func change_state(new_state: GameState.State):
 	_handle_state_change(old_state, new_state)
 	state_changed.emit(new_state)
 
-func _handle_state_change(old_state: GameState.State, new_state: GameState.State):
+func _handle_state_change(_old_state: GameState.State, new_state: GameState.State):
 	match new_state:
 		GameState.State.SETUP:
 			_setup_round()
