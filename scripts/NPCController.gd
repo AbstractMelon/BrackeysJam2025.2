@@ -28,21 +28,6 @@ func start_baking(npcs: Array[GameState.PlayerData], difficulty: float):
 	for npc in active_npcs:
 		npc_timers[npc.player_id] = 0.0
 
-	# Start NPC behavior
-	_initialize_npc_pots()
-
-func _initialize_npc_pots():
-	# Create mixing pots for NPCs if they don't have them
-	for npc in active_npcs:
-		if not npc.mixing_pot:
-			npc.mixing_pot = _create_npc_mixing_pot(npc)
-
-func _create_npc_mixing_pot(npc: GameState.PlayerData) -> MixingPot:
-	var pot = MixingPotScene.instantiate() as MixingPot
-	pot.name = "NPC_MixingPot_" + str(npc.player_id)
-	add_child(pot)
-	return pot
-
 func stop_baking():
 	is_baking = false
 	active_npcs.clear()
@@ -52,7 +37,7 @@ func _process(delta):
 	if not is_baking:
 		return
 
-	for npc in active_npcs:
+	for npc in active_npcs: 
 		if npc.player_id in npc_timers:
 			npc_timers[npc.player_id] += delta
 			_update_npc_behavior(npc, delta)

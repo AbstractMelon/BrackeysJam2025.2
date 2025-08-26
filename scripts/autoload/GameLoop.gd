@@ -7,7 +7,7 @@ signal player_eliminated(player: GameState.PlayerData)
 signal game_over(winner: GameState.PlayerData)
 signal timer_updated(time_left: float)
 
-const BAKING_TIME: float = 30.0  # 5 minutes - 300 seconds
+const BAKING_TIME: float = 10.0  # 5 minutes - 300 seconds
 const NPC_NAMES: Array[String] = [
 	"Chef Crumbleton", "Baker Betty", "Flour Power Fred",
 	"Dough Master Dan", "Sweet Sally", "Crispy Carl", "Buttery Bob"
@@ -214,6 +214,10 @@ func on_modifier_selected():
 func _handle_game_over():
 	print("Game Over!")
 	game_over.emit(null)
+		
+	await wait(3.0)
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	SceneManager.goto_scene("res://scenes/main_menu.tscn", 3)
 
 func _handle_victory():
 	print("Victory!")
@@ -235,3 +239,6 @@ func get_current_round() -> int:
 
 func is_human_player_alive() -> bool:
 	return human_player.is_alive
+
+func wait(seconds: float) -> void:
+	await get_tree().create_timer(seconds).timeout
