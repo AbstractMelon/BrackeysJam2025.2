@@ -6,9 +6,9 @@ class_name ModifierSelectionUI
 @onready var round_label: Label = $VBoxContainer/RoundLabel
 
 @export var modifier_button_scene: PackedScene
-var available_modifiers: Array[GameModifier] = []
+var available_modifiers: Array[Modifier] = []
 
-signal modifier_selected(modifier: GameModifier)
+signal modifier_selected(modifier: Modifier)
 
 func _ready():
 	GameManager.round_completed.connect(_on_round_completed)
@@ -23,7 +23,7 @@ func _on_score_updated(new_score: int):
 		score_label.text = "Total Score: %d" % new_score
 
 func show_modifier_selection():
-	available_modifiers = GameManager.get_random_modifiers(3)
+	available_modifiers = ModifierManager.get_random_modifiers(3)
 	create_modifier_buttons()
 	
 	# Update UI
@@ -49,8 +49,8 @@ func create_modifier_buttons():
 		button.pressed.connect(_on_modifier_selected.bind(modifier))
 		modifier_container.add_child(button)
 
-func _on_modifier_selected(modifier: GameModifier):
-	GameManager.apply_modifier(modifier)
+func _on_modifier_selected(modifier: Modifier):
+	ModifierManager.apply_modifier(modifier)
 	hide()
 	get_tree().paused = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 GameManager="*res://scripts/autoload/GameManager.gd"
 AudioManager="*res://scripts/autoload/AudioManager.gd"
 SceneManager="*res://scripts/autoload/SceneManager.gd"
+ModifierManager="*res://scripts/autoload/ModifierManager.gd"
 
 [global_group]
 

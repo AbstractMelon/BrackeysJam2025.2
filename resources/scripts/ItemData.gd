@@ -1,6 +1,14 @@
 extends Resource
 class_name ItemData
 
+enum Zones {
+	JUNGLE,
+	LAVA,
+	ICE,
+	CAVE,
+	CLIFF
+}
+
 @export var item_name: String = "New Item"
 @export var point_value: int = 10
 @export var zone_type: String = "jungle"  # jungle, lava, ice, cave, cliff
