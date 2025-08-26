@@ -79,7 +79,7 @@ mesh = SubResource("BoxMesh_lnu2h")
 environment = SubResource("Environment_lnu2h")
 
 [node name="Tables" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.36397, -1, -1.74285)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.36397, -0.745472, -1.74285)
 
 [node name="Set5" type="StaticBody3D" parent="Tables"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.04937, 0.000351429, 0.0157487)
@@ -218,7 +218,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0332, 0.301025, 0.580261)
 shape = SubResource("BoxShape3D_lnu2h")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 7.75643)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.219834, 7.75643)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
 transform = Transform3D(15.5712, 0, 0, 0, 1.00217, 0, 0, 0, 5.16521, 0, -1.18421, 1.57818)
@@ -229,11 +229,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00952148, 2.54294, -1.2644)
 shape = SubResource("BoxShape3D_lbhrr")
 
 [node name="Trophy" type="MeshInstance3D" parent="."]
-transform = Transform3D(-0.847024, 0, 2.87794, 0, 3, 0, -2.87794, 0, -0.847024, 0.0224117, 0.566067, 11.4216)
+transform = Transform3D(-0.847024, 0, 2.87794, 0, 3, 0, -2.87794, 0, -0.847024, 0.0224117, 0.785901, 11.4216)
 mesh = ExtResource("4_lbhrr")
 
 [node name="MixingPot" parent="." instance=ExtResource("5_u5sy4")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.07459, 0.10205, 1.96319)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.07459, 0.28769, 1.96319)
 
 [node name="ItemSpawner" parent="." instance=ExtResource("6_gee14")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.999795, -0.316886, -31.879)
@@ -316,10 +316,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 4.44089e-16, 0, 1, 0.00413513, 0.59930
 shape = SubResource("BoxShape3D_rysoc")
 
 [node name="Camera stand" parent="Building" instance=ExtResource("17_rysoc")]
-transform = Transform3D(0.721289, 0, -0.692634, 0, 1, 0, 0.692634, 0, 0.721289, -1.79757, 0, 14.1669)
+transform = Transform3D(0.721289, 0, -0.692634, 0, 1, 0, 0.692634, 0, 0.721289, -1.79757, 0.219834, 14.1669)
 
 [node name="Camera stand2" parent="Building" instance=ExtResource("17_rysoc")]
-transform = Transform3D(-0.988486, -0.00819072, 0.151091, 0, -0.998534, -0.0541312, 0.151312, -0.0535079, 0.987037, 3.44342, 3.89825, 14.335)
+transform = Transform3D(-0.988486, -0.00819072, 0.151091, 0, -0.998534, -0.0541312, 0.151312, -0.0535079, 0.987037, 3.44342, 3.63336, 14.335)
 
 [node name="Camera stand3" parent="Building" instance=ExtResource("17_rysoc")]
 transform = Transform3D(2.78394, 0, -1.11789, 0, 3, 0, 1.11789, 0, 2.78394, -6.72918, 0, 15.5829)
@@ -328,7 +328,7 @@ transform = Transform3D(2.78394, 0, -1.11789, 0, 3, 0, 1.11789, 0, 2.78394, -6.7
 transform = Transform3D(0.888128, 0, 0.459595, 0, 1, 0, -0.459595, 0, 0.888128, 8.11035, 0, 13.1082)
 
 [node name="Camera stand6" parent="Building" instance=ExtResource("17_rysoc")]
-transform = Transform3D(-0.909867, 0, -0.4149, 0, 1, 0, 0.4149, 0, -0.909867, 4.7054, 0, 14.0786)
+transform = Transform3D(-0.909867, 0, -0.4149, 0, 1, 0, 0.4149, 0, -0.909867, 5.09771, 1.6073, 14.0786)
 
 [node name="Lighting" type="Node3D" parent="."]
 
