@@ -11,6 +11,11 @@ signal modifier_selected(modifier_name: String)
 @onready var modifier_panel: Panel = $ModifierPanel
 @onready var modifier_buttons: VBoxContainer = $ModifierPanel/VBoxContainer
 
+@onready var elimination_message: Label = $Labels/EliminationMessage
+@onready var victory_message: Label = $Labels/VictoryMessage
+@onready var defeat_message: Label = $Labels/DefeatMessage
+@onready var judge_comment: RichTextLabel = $Labels/JudgeComment
+
 var available_modifiers: Array[String] = [
 	"Double Vision - 2x chance for shiny items",
 	"Height Advantage - See over counters better",
@@ -26,6 +31,12 @@ func _ready():
 	add_to_group("game_ui")
 	end_baking_button.pressed.connect(_on_end_baking_pressed)
 	modifier_panel.hide()
+	
+	# Hide all message elements initially
+	elimination_message.hide()
+	victory_message.hide()
+	defeat_message.hide()
+	judge_comment.hide()
 
 	# Connect to GameLoop signals
 	GameLoop.state_changed.connect(_on_state_changed)
@@ -52,9 +63,16 @@ func _show_baking_ui():
 	player_count_label.show()
 	end_baking_button.show()
 	modifier_panel.hide()
+	
+	# Hide message elements during baking
+	elimination_message.hide()
+	victory_message.hide()
+	defeat_message.hide()
+	judge_comment.hide()
 
 func _show_judging_ui():
 	end_baking_button.hide()
+	elimination_message.hide()
 	# Keep timer and round info visible during judging
 
 func _show_modifier_selection_ui():
@@ -64,6 +82,8 @@ func _show_game_over_ui(state: GameState.State):
 	timer_label.hide()
 	end_baking_button.hide()
 	modifier_panel.hide()
+	elimination_message.hide()
+	judge_comment.hide()
 
 	if state == GameState.State.VICTORY:
 		_show_victory_message()
@@ -76,6 +96,10 @@ func _hide_all_ui():
 	player_count_label.hide()
 	end_baking_button.hide()
 	modifier_panel.hide()
+	elimination_message.hide()
+	victory_message.hide()
+	defeat_message.hide()
+	judge_comment.hide()
 
 func _on_timer_updated(time_left: float):
 	var minutes = int(time_left / 60)
@@ -162,44 +186,32 @@ func _enable_item_preview():
 			item.show_value_preview(true)
 
 func _show_elimination_message(player_name: String):
-	var message = Label.new()
-	message.text = player_name + " has been eliminated!"
-	message.modulate = Color.RED
-	message.position = Vector2(get_viewport().size.x / 2 - 150, 100)
-	add_child(message)
+	elimination_message.text = player_name + " has been eliminated!"
+	elimination_message.modulate = Color.RED
+	elimination_message.show()
 
 	# Fade out after 3 seconds
 	var tween = create_tween()
 	tween.tween_interval(3.0)
-	tween.tween_property(message, "modulate:a", 0.0, 1.0)
-	tween.tween_callback(message.queue_free)
+	tween.tween_property(elimination_message, "modulate:a", 0.0, 1.0)
+	tween.tween_callback(elimination_message.hide)
+	tween.tween_callback(func(): elimination_message.modulate.a = 1.0) # Reset alpha for next use
 
 func _show_victory_message():
-	var message = Label.new()
-	message.text = "VICTORY! You are the last baker standing!"
-	message.modulate = Color.GREEN
-	message.add_theme_font_size_override("font_size", 48)
-	message.position = Vector2(get_viewport().size.x / 2 - 300, get_viewport().size.y / 2)
-	add_child(message)
+	_hide_all_ui()
+	victory_message.show()
 
 func _show_defeat_message():
-	var message = Label.new()
-	message.text = "DEFEAT! Your biscuit was the worst..."
-	message.modulate = Color.RED
-	message.add_theme_font_size_override("font_size", 48)
-	message.position = Vector2(get_viewport().size.x / 2 - 300, get_viewport().size.y / 2)
-	add_child(message)
+	_hide_all_ui()
+	defeat_message.show()
 
 func show_judge_comment(judge_name: String, comment: String):
-	var comment_label = RichTextLabel.new()
-	comment_label.bbcode_enabled = true
-	comment_label.text = "[b]" + judge_name + ":[/b] " + comment
-	comment_label.size = Vector2(600, 100)
-	comment_label.position = Vector2(50, 150)
-	add_child(comment_label)
+	judge_comment.text = "[b]" + judge_name + ":[/b] " + comment
+	judge_comment.show()
 
 	# Remove after 5 seconds
 	var tween = create_tween()
 	tween.tween_interval(5.0)
-	tween.tween_property(comment_label, "modulate:a", 0.0, 1.0)
-	tween.tween_callback(comment_label.queue_free)
+	tween.tween_property(judge_comment, "modulate:a", 0.0, 1.0)
+	tween.tween_callback(judge_comment.hide)
+	tween.tween_callback(func(): judge_comment.modulate.a = 1.0) # Reset alpha for next use

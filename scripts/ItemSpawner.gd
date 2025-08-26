@@ -40,6 +40,19 @@ func spawn_items_for_round(item_count: int, difficulty: float):
 	# Clear existing items
 	clear_all_items()
 
+	# Wait until we're properly in the tree before spawning
+	_wait_for_tree_ready(item_count, difficulty)
+
+func _wait_for_tree_ready(item_count: int, difficulty: float):
+	if not is_inside_tree() or not is_node_ready():
+		# Wait one more frame
+		await get_tree().process_frame
+		_wait_for_tree_ready(item_count, difficulty)
+		return
+	
+	_spawn_round_items(item_count, difficulty)
+
+func _spawn_round_items(item_count: int, difficulty: float):
 	# Adjust spawn parameters based on difficulty
 	var adjusted_max_items = int(item_count * difficulty)
 	var adjusted_spawn_interval = spawn_interval / difficulty
@@ -67,6 +80,10 @@ func _on_spawn_timer_timeout():
 		pass
 
 func spawn_random_item():
+	if not is_inside_tree():
+		print("[ItemSpawner] Cannot spawn item: not in tree")
+		return
+		
 	if available_items.is_empty():
 		print("[ItemSpawner] No available items to spawn")
 		return
@@ -114,19 +131,21 @@ func get_random_spawn_position() -> Vector3:
 	return Vector3(x, y_position, z) + global_position
 
 func spawn_item(item_data: ItemData, position: Vector3):
-	if !is_inside_tree():
-		print("[ItemSpawner] Tried to spawn item while not in tree")
+	if not is_inside_tree():
+		print("[ItemSpawner] Cannot spawn item: not in tree")
 		return
 
 	var item_instance = pickupable_item_scene.instantiate()
 	item_instance.item_data = item_data
-	item_instance.global_position = position
-
+	
 	# Connect signals
 	item_instance.item_picked_up.connect(_on_item_picked_up)
 	item_instance.item_dropped.connect(_on_item_dropped)
 
-	get_parent().call_deferred("add_child", item_instance)
+	# Add to parent first, then set position
+	get_parent().add_child(item_instance)
+	item_instance.global_position = position
+	
 	active_items.append(item_instance)
 	print("[ItemSpawner] Spawned item:", item_data.item_name, " at", position, " Active items:", active_items.size())
 
