@@ -55,9 +55,11 @@ func _on_state_changed(new_state: GameState.State):
 		GameState.State.GAME_OVER, GameState.State.VICTORY:
 			_show_game_over_ui(new_state)
 		_:
-			_hide_all_ui()
+			#_hide_all_ui()
+			pass
 
 func _show_baking_ui():
+
 	timer_label.show()
 	round_label.show()
 	player_count_label.show()
@@ -91,6 +93,7 @@ func _show_game_over_ui(state: GameState.State):
 		_show_defeat_message()
 
 func _hide_all_ui():
+	print("Hiding all UI")
 	timer_label.hide()
 	round_label.hide()
 	player_count_label.hide()
@@ -203,7 +206,9 @@ func _show_victory_message():
 
 func _show_defeat_message():
 	_hide_all_ui()
+	print("Showing death message")
 	defeat_message.show()
+	print("Showed death message")
 
 func show_judge_comment(judge_name: String, comment: String):
 	judge_comment.text = "[b]" + judge_name + ":[/b] " + comment

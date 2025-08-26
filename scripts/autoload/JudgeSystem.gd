@@ -73,7 +73,7 @@ func _begin_judging_sequence():
 	
 	for player in sorted_players:
 		await _judge_player_biscuit(player)
-		# await get_tree().create_timer(2.0).timeout
+		await get_tree().create_timer(2.0).timeout
 		_update_judge_moods(player)
 	
 	judging_complete.emit()
@@ -85,11 +85,11 @@ func _judge_player_biscuit(player: GameState.PlayerData):
 	print("\n--- Judging ", player.name, "'s biscuit ---")
 	
 	await _granny_butterworth_judges(player)
-	# await get_tree().create_timer(1.5).timeout
+	await get_tree().create_timer(1.5).timeout
 	await _rordan_gamsey_judges(player)
-	# await get_tree().create_timer(1.5).timeout
+	await get_tree().create_timer(1.5).timeout
 	await _professor_biscotti_judges(player)
-	# await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(1.0).timeout
 
 func _update_judge_moods(player: GameState.PlayerData):
 	var biscuit = player.current_biscuit
