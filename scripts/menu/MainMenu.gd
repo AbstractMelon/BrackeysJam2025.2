@@ -12,12 +12,6 @@ func _ready():
 	options_button.pressed.connect(_on_options_pressed)
 	quit_button.pressed.connect(_on_quit_pressed)
 
-	# Set up UI
-	title_label.text = "BAKE OR BREAK"
-	start_button.text = "Start Game"
-	options_button.text = "Options"
-	quit_button.text = "Quit"
-
 	# Ensure mouse is visible in menu
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 

@@ -2,13 +2,13 @@ extends Node3D
 
 @export var scene_transition_time: float = 1.0
 
-# Camera animation exports - easy editor usage
+# Camera animation export
 @export_group("Camera Animation")
 @export var camera: Camera3D
 @export var enable_camera_animation: bool = true
 @export var camera_animation_duration: float = 13.0
 
-# Keyframe positions and rotations (easy to set up in editor)
+# Keyframe positions and rotations 
 @export var keyframe_positions: Array[Vector3] = []
 @export var keyframe_rotations: Array[Vector3] = []  # Euler angles in degrees
 @export var keyframe_timings: Array[float] = []  # When each keyframe should be reached (0-1)
@@ -21,29 +21,7 @@ var tween: Tween
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	setup_default_keyframes()
 	start_cutscene()
-
-func setup_default_keyframes():
-	# Set up default keyframes if none are provided
-	if keyframe_positions.is_empty():
-		keyframe_positions = [
-			Vector3(0, 5, 10),    # Starting position
-			Vector3(-5, 3, 5),    # Mid position 1
-			Vector3(5, 2, 8),     # Mid position 2
-			Vector3(0, 1, 3)      # End position
-		]
-	
-	if keyframe_rotations.is_empty():
-		keyframe_rotations = [
-			Vector3(-15, 0, 0),   # Looking slightly down
-			Vector3(-10, 45, 0),  # Looking down-left
-			Vector3(-10, -45, 0), # Looking down-right
-			Vector3(0, 0, 0)      # Looking forward
-		]
-	
-	if keyframe_timings.is_empty():
-		keyframe_timings = [0.0, 0.3, 0.7, 1.0]  # Timing for each keyframe
 
 func start_cutscene():
 	if enable_camera_animation and camera:
@@ -99,7 +77,7 @@ func handover_delay(length: float):
 	await get_tree().create_timer(length - (scene_transition_time / 2)).timeout
 	SceneManager.goto_scene("res://scenes/game.tscn", scene_transition_time)
 
-# Optional: Add manual camera position helpers for easier setup
+# Add manual camera position helpers for easier setup
 func _input(event):
 	# Only works in editor/debug builds
 	if OS.is_debug_build() and event.is_action_pressed("ui_accept"):

@@ -56,8 +56,9 @@ size = Vector3(0.115723, 1.83704, 5.09988)
 [sub_resource type="BoxShape3D" id="BoxShape3D_hocux"]
 size = Vector3(0.109955, 1.11775, 4.82421)
 
-[node name="Cutscene" type="Node3D"]
+[node name="Cutscene" type="Node3D" node_paths=PackedStringArray("camera")]
 script = ExtResource("1_ury3t")
+camera = NodePath("Camera3D")
 
 [node name="Floor" type="StaticBody3D" parent="."]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -1, 0)
@@ -346,3 +347,5 @@ is_npc_pot = true
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("13_447rg")
 autoplay = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
