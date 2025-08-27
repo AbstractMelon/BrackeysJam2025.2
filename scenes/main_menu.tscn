@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://cmgr105r1aynw"]
+[gd_scene load_steps=27 format=3 uid="uid://cmgr105r1aynw"]
 
 [ext_resource type="Script" uid="uid://dnewjk33x0d0u" path="res://scripts/menu/MenuController.gd" id="1_l6cm7"]
 [ext_resource type="Texture2D" uid="uid://l0i8il70ooj6" path="res://assets/images/skybox/skybox.png" id="2_rtw2f"]
@@ -14,6 +14,9 @@
 [ext_resource type="PackedScene" uid="uid://cdrik6fn1c5i7" path="res://scenes/components/mixing_pot.tscn" id="12_hstxw"]
 [ext_resource type="PackedScene" uid="uid://53nblxbwf0d5" path="res://assets/models/building/wall-low.glb" id="13_8egab"]
 [ext_resource type="PackedScene" uid="uid://dowixpki25tvu" path="res://assets/models/Camera stand.glb" id="14_gw5y6"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_1ajci"]
+font_size = 32
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_svtp6"]
 size = Vector3(20.6499, 0.205603, 40.7003)
@@ -78,11 +81,14 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Label" type="Label" parent="UI/Control"]
-layout_mode = 0
-offset_right = 243.0
-offset_bottom = 94.0
-theme_override_font_sizes/font_size = 32
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.145
+offset_right = -0.999985
+offset_bottom = 0.0399933
 text = "Bake or Break"
+label_settings = SubResource("LabelSettings_1ajci")
 horizontal_alignment = 1
 vertical_alignment = 1
 

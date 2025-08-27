@@ -19,3 +19,4 @@ grow_horizontal = 2
 grow_vertical = 2
 stream = ExtResource("1_c13y7")
 autoplay = true
+expand = true
