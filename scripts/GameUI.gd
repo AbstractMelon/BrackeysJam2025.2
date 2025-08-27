@@ -90,6 +90,7 @@ func _show_judging_ui():
 	# Keep timer and round info visible during judging
 
 func _show_modifier_selection_ui():
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	show_modifier_selection()
 
 func _show_game_over_ui(state: GameState.State):
@@ -134,6 +135,7 @@ func _on_round_started(round_number: int):
 	_update_player_count()
 
 func _on_player_eliminated(player: GameState.PlayerData):
+	judge_panel.hide()
 	_update_player_count()
 	_show_elimination_message(player.name)
 
@@ -169,6 +171,7 @@ func _on_modifier_button_pressed(modifier_name: String):
 	modifier_selected.emit(modifier_name)
 	_apply_modifier(modifier_name)
 	modifier_panel.hide()
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	GameLoop.on_modifier_selected()
 
 func _apply_modifier(modifier_name: String):
