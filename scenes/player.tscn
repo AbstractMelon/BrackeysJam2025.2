@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://drmufre8h1ghu"]
+[gd_scene load_steps=6 format=3 uid="uid://drmufre8h1ghu"]
 
 [ext_resource type="Script" uid="uid://tw8egy8ai7wj" path="res://scripts/Player.gd" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://cy8d7bkopnmyv" path="res://scripts/ItemInteraction.gd" id="2_g2els"]
 [ext_resource type="PackedScene" uid="uid://bvdks5fgvnsv0" path="res://scenes/UI/item_tooltip.tscn" id="3_qhqgy"]
+[ext_resource type="AudioStream" uid="uid://bbmjc4m7hqwt6" path="res://assets/audio/SFX/dropitem.ogg" id="4_dqkch"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u8vuu"]
 
@@ -23,3 +24,4 @@ carry_height_offset = 0.0
 player = NodePath("..")
 camera = NodePath("../Head/Camera3D")
 tooltip_scene = ExtResource("3_qhqgy")
+dropitemAudio = ExtResource("4_dqkch")

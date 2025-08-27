@@ -13,6 +13,8 @@ var highlighted_item: PickupableItem = null
 var tooltip: ItemTooltip = null
 var tooltip_delay_timer: Timer
 
+@export var dropitemAudio: AudioStream
+
 func _ready():
 	# Validate that references are set
 	if player == null:
@@ -182,6 +184,7 @@ func drop_item():
 	carried_item.drop()
 	
 	carried_item = null
+	AudioManager.play_sfx(dropitemAudio)
 
 func update_carried_item_position():
 	if carried_item == null or not is_instance_valid(carried_item) or not is_setup_valid():
