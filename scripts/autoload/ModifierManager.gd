@@ -34,7 +34,8 @@ func _ready() -> void:
 		modifier_instance._on_modifier_created()
 		_available_modifiers.append(modifier_instance)
 	
-
+	GameLoop.game_over.connect(_on_game_over)
+	
 # Returns modifiers
 func get_modifiers() -> Array[Modifier]:
 	return _modifiers
@@ -43,6 +44,9 @@ func get_modifiers() -> Array[Modifier]:
 func remove_modifier(modifier : Modifier, send_signal : bool = true) -> bool:
 	if modifier not in _modifiers:
 		return false
+		
+	modifier._on_modifier_removed()
+	
 	_modifiers.erase(modifier)
 	
 	get_additive_score.disconnect(modifier._get_additive_score)
@@ -50,9 +54,10 @@ func remove_modifier(modifier : Modifier, send_signal : bool = true) -> bool:
 	get_additive_player_stats.disconnect(modifier._get_additive_player_stats)
 	get_multiplicative_player_stats.disconnect(modifier._get_multiplicative_player_stats)
 	
-	_available_modifiers.append(modifier.get_script().new())
+	var new_modifier : Modifier = modifier.get_script().new()
+	new_modifier._on_modifier_created()
+	_available_modifiers.append(new_modifier)
 	
-	modifier._on_modifier_removed()
 	modifier.free()
 	
 	if send_signal:
@@ -114,9 +119,13 @@ func get_random_modifiers(count : int) -> Array[Modifier]:
 	shuffled.shuffle()
 	return shuffled.slice(0, min(count, shuffled.size()))
 
+func _on_game_over(winner: GameState.PlayerData) -> void:
+	reset_modifiers()
+
 func reset_modifiers() -> void:
-	var modifiers = _modifiers.duplicate()
-	for modifier in modifiers:
+	print("Resetting modifiers!")
+	var modifiers : Array[Modifier] = _modifiers.duplicate() 
+	for modifier in _modifiers:
 		remove_modifier(modifier, false)
 	
 	modifiers_changed.emit()
