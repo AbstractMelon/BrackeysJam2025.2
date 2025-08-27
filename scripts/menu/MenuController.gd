@@ -25,3 +25,7 @@ func _on_credits_pressed() -> void:
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()
+
+
+func _on_tutorial_pressed() -> void:
+	SceneManager.goto_scene("res://scenes/tutorial.tscn", 2.0)
