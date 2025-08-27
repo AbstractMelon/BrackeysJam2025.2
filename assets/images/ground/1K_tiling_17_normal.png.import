@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://fhxn3xqe4kcr"
 path.s3tc="res://.godot/imported/1K_tiling_17_normal.png-def06bf45f7258b560685d14a12646b4.s3tc.ctex"
+path.etc2="res://.godot/imported/1K_tiling_17_normal.png-def06bf45f7258b560685d14a12646b4.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/images/ground/1K_tiling_17_normal.png"
-dest_files=["res://.godot/imported/1K_tiling_17_normal.png-def06bf45f7258b560685d14a12646b4.s3tc.ctex"]
+dest_files=["res://.godot/imported/1K_tiling_17_normal.png-def06bf45f7258b560685d14a12646b4.s3tc.ctex", "res://.godot/imported/1K_tiling_17_normal.png-def06bf45f7258b560685d14a12646b4.etc2.ctex"]
 
 [params]
 

@@ -85,6 +85,7 @@ func _show_judging_ui():
 	# Keep timer and round info visible during judging
 
 func _show_modifier_selection_ui():
+	skip_judging_label.text = "Press \"R\" to skip"
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	show_modifier_selection()
 

@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://5wbfpjb4uug4" path="res://resources/scripts/modifiers/PoisonResistance.gd" id="4_rxwtq"]
 [ext_resource type="Script" uid="uid://biipbn5kypv6p" path="res://resources/scripts/modifiers/HeightAdvantage.gd" id="5_u8ywy"]
 [ext_resource type="Script" uid="uid://bjilivpkmaica" path="res://resources/scripts/modifiers/SugarRush.gd" id="6_bn1mn"]
-[ext_resource type="Script" uid="uid://b43u1lowr42cr" path="res://resources/scripts/modifiers/TimeLord.gd" id="7_bn1mn"]
+[ext_resource type="Script" path="res://resources/scripts/modifiers/TimeLord.gd" id="7_bn1mn"]
 
 [node name="Modifiers" type="Node"]
 script = ExtResource("1_jnttb")
