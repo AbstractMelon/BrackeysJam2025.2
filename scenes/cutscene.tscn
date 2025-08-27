@@ -1,29 +1,31 @@
-[gd_scene load_steps=23 format=3 uid="uid://b5ma4kipgpd1s"]
+[gd_scene load_steps=25 format=3 uid="uid://b5ma4kipgpd1s"]
 
-[ext_resource type="Texture2D" uid="uid://ww8mqihhdcf4" path="res://assets/images/ground/1K_tiling_17_basecolor.png" id="1_pvbl2"]
-[ext_resource type="Texture2D" uid="uid://wceqeafm1vcj" path="res://assets/images/ground/1K_tiling_17_height.png" id="2_vi1t0"]
-[ext_resource type="Texture2D" uid="uid://bthwoir3jbvrn" path="res://assets/images/ground/1K_tiling_17_metallic.png" id="3_1titf"]
-[ext_resource type="Texture2D" uid="uid://fhxn3xqe4kcr" path="res://assets/images/ground/1K_tiling_17_normal.png" id="4_ed5nn"]
-[ext_resource type="Texture2D" uid="uid://dbl0ubptt0twe" path="res://assets/images/ground/1K_tiling_17_roughness.png" id="5_5gysb"]
-[ext_resource type="Texture2D" uid="uid://l0i8il70ooj6" path="res://assets/images/skybox/skybox.png" id="6_l2u6u"]
-[ext_resource type="ArrayMesh" uid="uid://c5lvfrcde04w7" path="res://assets/models/kitchenCabinet.obj" id="7_pby01"]
-[ext_resource type="ArrayMesh" uid="uid://b8mi0bya075br" path="res://assets/models/Trophy.obj" id="8_jyjru"]
-[ext_resource type="PackedScene" uid="uid://cdrik6fn1c5i7" path="res://scenes/components/mixing_pot.tscn" id="9_3v3wj"]
-[ext_resource type="PackedScene" uid="uid://53nblxbwf0d5" path="res://assets/models/building/wall-low.glb" id="10_jad71"]
-[ext_resource type="PackedScene" uid="uid://dowixpki25tvu" path="res://assets/models/Camera stand.glb" id="11_2kv0s"]
+[ext_resource type="Script" uid="uid://yr0fpbodivlt" path="res://scripts/cutscene_handler.gd" id="1_ury3t"]
+[ext_resource type="Texture2D" uid="uid://ww8mqihhdcf4" path="res://assets/images/ground/1K_tiling_17_basecolor.png" id="2_m2h23"]
+[ext_resource type="Texture2D" uid="uid://wceqeafm1vcj" path="res://assets/images/ground/1K_tiling_17_height.png" id="3_8qop0"]
+[ext_resource type="Texture2D" uid="uid://bthwoir3jbvrn" path="res://assets/images/ground/1K_tiling_17_metallic.png" id="4_mu2gi"]
+[ext_resource type="Texture2D" uid="uid://fhxn3xqe4kcr" path="res://assets/images/ground/1K_tiling_17_normal.png" id="5_c7dhu"]
+[ext_resource type="Texture2D" uid="uid://dbl0ubptt0twe" path="res://assets/images/ground/1K_tiling_17_roughness.png" id="6_qthij"]
+[ext_resource type="Texture2D" uid="uid://l0i8il70ooj6" path="res://assets/images/skybox/skybox.png" id="7_er82a"]
+[ext_resource type="ArrayMesh" uid="uid://c5lvfrcde04w7" path="res://assets/models/kitchenCabinet.obj" id="8_40a5i"]
+[ext_resource type="ArrayMesh" uid="uid://b8mi0bya075br" path="res://assets/models/Trophy.obj" id="9_f3v4i"]
+[ext_resource type="PackedScene" uid="uid://cdrik6fn1c5i7" path="res://scenes/components/mixing_pot.tscn" id="10_tvcxb"]
+[ext_resource type="PackedScene" uid="uid://53nblxbwf0d5" path="res://assets/models/building/wall-low.glb" id="11_bcuqd"]
+[ext_resource type="PackedScene" uid="uid://dowixpki25tvu" path="res://assets/models/Camera stand.glb" id="12_5a45q"]
+[ext_resource type="AudioStream" uid="uid://dirdh8x55e705" path="res://assets/audio/IntroTrumpets.ogg" id="13_447rg"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kw1r5"]
 size = Vector3(20.6499, 0.205603, 40.7003)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_264po"]
-albedo_texture = ExtResource("1_pvbl2")
+albedo_texture = ExtResource("2_m2h23")
 metallic = 1.0
-metallic_texture = ExtResource("3_1titf")
-roughness_texture = ExtResource("5_5gysb")
+metallic_texture = ExtResource("4_mu2gi")
+roughness_texture = ExtResource("6_qthij")
 normal_enabled = true
-normal_texture = ExtResource("4_ed5nn")
+normal_texture = ExtResource("5_c7dhu")
 heightmap_enabled = true
-heightmap_texture = ExtResource("2_vi1t0")
+heightmap_texture = ExtResource("3_8qop0")
 uv1_scale = Vector3(200, 200, 200)
 
 [sub_resource type="BoxMesh" id="BoxMesh_mlekn"]
@@ -31,7 +33,7 @@ material = SubResource("StandardMaterial3D_264po")
 size = Vector3(20, 0.1, 20)
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_doqf5"]
-panorama = ExtResource("6_l2u6u")
+panorama = ExtResource("7_er82a")
 
 [sub_resource type="Sky" id="Sky_1kice"]
 sky_material = SubResource("PanoramaSkyMaterial_doqf5")
@@ -55,6 +57,7 @@ size = Vector3(0.115723, 1.83704, 5.09988)
 size = Vector3(0.109955, 1.11775, 4.82421)
 
 [node name="Cutscene" type="Node3D"]
+script = ExtResource("1_ury3t")
 
 [node name="Floor" type="StaticBody3D" parent="."]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, -1, 0)
@@ -78,12 +81,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.04937, 0.000351429, 0.01574
 
 [node name="KitchenCabinet" type="MeshInstance3D" parent="Tables/Set5"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
-mesh = ExtResource("7_pby01")
+mesh = ExtResource("8_40a5i")
 skeleton = NodePath("../..")
 
 [node name="KitchenCabinet2" type="MeshInstance3D" parent="Tables/Set5"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1.04352, 0, 0)
-mesh = ExtResource("7_pby01")
+mesh = ExtResource("8_40a5i")
 skeleton = NodePath("../..")
 
 [node name="Collider" type="CollisionShape3D" parent="Tables/Set5"]
@@ -95,12 +98,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7352, 0.000351429, 0.015748
 
 [node name="KitchenCabinet" type="MeshInstance3D" parent="Tables/Set6"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
-mesh = ExtResource("7_pby01")
+mesh = ExtResource("8_40a5i")
 skeleton = NodePath("../..")
 
 [node name="KitchenCabinet2" type="MeshInstance3D" parent="Tables/Set6"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1.04352, 0, 0)
-mesh = ExtResource("7_pby01")
+mesh = ExtResource("8_40a5i")
 skeleton = NodePath("../..")
 
 [node name="Collider" type="CollisionShape3D" parent="Tables/Set6"]
@@ -112,12 +115,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.73625, 0.000702858, 3.30328
 
 [node name="KitchenCabinet" type="MeshInstance3D" parent="Tables/Set7"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
-mesh = ExtResource("7_pby01")
+mesh = ExtResource("8_40a5i")
 skeleton = NodePath("../..")
 
 [node name="KitchenCabinet2" type="MeshInstance3D" parent="Tables/Set7"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1.04352, 0, 0)
-mesh = ExtResource("7_pby01")
+mesh = ExtResource("8_40a5i")
 skeleton = NodePath("../..")
 
 [node name="Collider" type="CollisionShape3D" parent="Tables/Set7"]
@@ -129,12 +132,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.99986, 0.000351429, 3.29033
 
 [node name="KitchenCabinet" type="MeshInstance3D" parent="Tables/Set8"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
-mesh = ExtResource("7_pby01")
+mesh = ExtResource("8_40a5i")
 skeleton = NodePath("../..")
 
 [node name="KitchenCabinet2" type="MeshInstance3D" parent="Tables/Set8"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1.04352, 0, 0)
-mesh = ExtResource("7_pby01")
+mesh = ExtResource("8_40a5i")
 skeleton = NodePath("../..")
 
 [node name="Collider" type="CollisionShape3D" parent="Tables/Set8"]
@@ -146,12 +149,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.16804, 0, 0)
 
 [node name="KitchenCabinet" type="MeshInstance3D" parent="Tables/Set1"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
-mesh = ExtResource("7_pby01")
+mesh = ExtResource("8_40a5i")
 skeleton = NodePath("../../..")
 
 [node name="KitchenCabinet2" type="MeshInstance3D" parent="Tables/Set1"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1.04352, 0, 0)
-mesh = ExtResource("7_pby01")
+mesh = ExtResource("8_40a5i")
 skeleton = NodePath("../../..")
 
 [node name="Collider" type="CollisionShape3D" parent="Tables/Set1"]
@@ -163,12 +166,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.517795, 0, 0)
 
 [node name="KitchenCabinet" type="MeshInstance3D" parent="Tables/Set2"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
-mesh = ExtResource("7_pby01")
+mesh = ExtResource("8_40a5i")
 skeleton = NodePath("../../..")
 
 [node name="KitchenCabinet2" type="MeshInstance3D" parent="Tables/Set2"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1.04352, 0, 0)
-mesh = ExtResource("7_pby01")
+mesh = ExtResource("8_40a5i")
 skeleton = NodePath("../../..")
 
 [node name="Collider" type="CollisionShape3D" parent="Tables/Set2"]
@@ -180,12 +183,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.518845, 0.000351429, 3.2875
 
 [node name="KitchenCabinet" type="MeshInstance3D" parent="Tables/Set3"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
-mesh = ExtResource("7_pby01")
+mesh = ExtResource("8_40a5i")
 skeleton = NodePath("../../..")
 
 [node name="KitchenCabinet2" type="MeshInstance3D" parent="Tables/Set3"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1.04352, 0, 0)
-mesh = ExtResource("7_pby01")
+mesh = ExtResource("8_40a5i")
 skeleton = NodePath("../../..")
 
 [node name="Collider" type="CollisionShape3D" parent="Tables/Set3"]
@@ -197,12 +200,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.21755, 0, 3.27458)
 
 [node name="KitchenCabinet" type="MeshInstance3D" parent="Tables/Set4"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 0, 0, 0)
-mesh = ExtResource("7_pby01")
+mesh = ExtResource("8_40a5i")
 skeleton = NodePath("../../..")
 
 [node name="KitchenCabinet2" type="MeshInstance3D" parent="Tables/Set4"]
 transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -1.04352, 0, 0)
-mesh = ExtResource("7_pby01")
+mesh = ExtResource("8_40a5i")
 skeleton = NodePath("../../..")
 
 [node name="Collider" type="CollisionShape3D" parent="Tables/Set4"]
@@ -222,9 +225,9 @@ shape = SubResource("BoxShape3D_maqbp")
 
 [node name="Trophy" type="MeshInstance3D" parent="."]
 transform = Transform3D(-0.847024, 0, 2.87794, 0, 3, 0, -2.87794, 0, -0.847024, 0.0224117, 0.785901, 11.4216)
-mesh = ExtResource("8_jyjru")
+mesh = ExtResource("9_f3v4i")
 
-[node name="MixingPot" parent="." instance=ExtResource("9_3v3wj")]
+[node name="MixingPot" parent="." instance=ExtResource("10_tvcxb")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.07459, 0.315876, 1.96319)
 
 [node name="Building" type="Node3D" parent="."]
@@ -233,7 +236,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0559096)
 [node name="Wall" type="StaticBody3D" parent="Building"]
 transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, -10.6001, -0.873932, 4.58765)
 
-[node name="Model" parent="Building/Wall" instance=ExtResource("10_jad71")]
+[node name="Model" parent="Building/Wall" instance=ExtResource("11_bcuqd")]
 transform = Transform3D(1, 0, 0, 0, 1.02327, 0, 0, 0, 2.56036, 0, 0, -0.118084)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Building/Wall"]
@@ -243,7 +246,7 @@ shape = SubResource("BoxShape3D_e8ewp")
 [node name="Wall2" type="StaticBody3D" parent="Building"]
 transform = Transform3D(1, 0, 0, 0, 5.98226, 0, 0, 0, 6.73239, 9.79683, -0.873932, 0)
 
-[node name="Model" parent="Building/Wall2" instance=ExtResource("10_jad71")]
+[node name="Model" parent="Building/Wall2" instance=ExtResource("11_bcuqd")]
 transform = Transform3D(1, 0, 0, 0, 1.04637, 0, 0, 0, 2.7543, 0, 0, 0.153483)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Building/Wall2"]
@@ -253,7 +256,7 @@ shape = SubResource("BoxShape3D_hocux")
 [node name="Wall3" type="StaticBody3D" parent="Building"]
 transform = Transform3D(-4.37114e-08, 0, 3.42287, 0, 7.62965, 0, -1, 0, -1.49618e-07, -0.375252, -2.63743, 19.4086)
 
-[node name="Model" parent="Building/Wall3" instance=ExtResource("10_jad71")]
+[node name="Model" parent="Building/Wall3" instance=ExtResource("11_bcuqd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 3.037, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Building/Wall3"]
@@ -263,7 +266,7 @@ shape = SubResource("BoxShape3D_hocux")
 [node name="Wall4" type="StaticBody3D" parent="Building"]
 transform = Transform3D(-4.37114e-08, 0, 3.42287, 0, 7.51216, 0, -1, 0, -1.49618e-07, -0.37957, -2.63743, -17.1195)
 
-[node name="Model" parent="Building/Wall4" instance=ExtResource("10_jad71")]
+[node name="Model" parent="Building/Wall4" instance=ExtResource("11_bcuqd")]
 transform = Transform3D(1, 0, 2.84217e-14, 0, 1.01497, 0, -3.55271e-15, 0, 3.037, -0.00214386, 0.00125861, -0.000280291)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Building/Wall4"]
@@ -273,26 +276,26 @@ shape = SubResource("BoxShape3D_hocux")
 [node name="Roof" type="StaticBody3D" parent="Building"]
 transform = Transform3D(-4.30671e-08, -18.2889, 0, 0.98526, -7.99433e-07, 0, 0, 0, 6.71093, 10.7164, 6.19979, 0)
 
-[node name="Model" parent="Building/Roof" instance=ExtResource("10_jad71")]
+[node name="Model" parent="Building/Roof" instance=ExtResource("11_bcuqd")]
 transform = Transform3D(0.997953, -1.08002e-12, 0, 2.22045e-16, 0.954384, 0, 0, 0, 2.81001, 0.275103, 0.0265645, 0.08691)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Building/Roof"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 4.44089e-16, 0, 1, 0.00413513, 0.599304, -0.000587463)
 shape = SubResource("BoxShape3D_hocux")
 
-[node name="Camera stand" parent="Building" instance=ExtResource("11_2kv0s")]
+[node name="Camera stand" parent="Building" instance=ExtResource("12_5a45q")]
 transform = Transform3D(0.721289, 0, -0.692634, 0, 1, 0, 0.692634, 0, 0.721289, -1.79757, 0.219834, 14.1669)
 
-[node name="Camera stand2" parent="Building" instance=ExtResource("11_2kv0s")]
+[node name="Camera stand2" parent="Building" instance=ExtResource("12_5a45q")]
 transform = Transform3D(-0.988486, -0.00819072, 0.151091, 0, -0.998534, -0.0541312, 0.151312, -0.0535079, 0.987037, 3.44342, 3.63336, 14.335)
 
-[node name="Camera stand3" parent="Building" instance=ExtResource("11_2kv0s")]
+[node name="Camera stand3" parent="Building" instance=ExtResource("12_5a45q")]
 transform = Transform3D(2.78394, 0, -1.11789, 0, 3, 0, 1.11789, 0, 2.78394, -6.72918, 0, 15.5829)
 
-[node name="Camera stand4" parent="Building" instance=ExtResource("11_2kv0s")]
+[node name="Camera stand4" parent="Building" instance=ExtResource("12_5a45q")]
 transform = Transform3D(0.888128, 0, 0.459595, 0, 1, 0, -0.459595, 0, 0.888128, 8.11035, 0, 13.1082)
 
-[node name="Camera stand6" parent="Building" instance=ExtResource("11_2kv0s")]
+[node name="Camera stand6" parent="Building" instance=ExtResource("12_5a45q")]
 transform = Transform3D(-0.909867, 0, -0.4149, 0, 1, 0, 0.4149, 0, -0.909867, 5.09771, 1.6073, 14.0786)
 
 [node name="Lighting" type="Node3D" parent="."]
@@ -312,30 +315,34 @@ spot_angle = 9.0
 [node name="MixingPots" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0467436, 0)
 
-[node name="Pot1" parent="MixingPots" instance=ExtResource("9_3v3wj")]
+[node name="Pot1" parent="MixingPots" instance=ExtResource("10_tvcxb")]
 transform = Transform3D(-0.987452, 0, -0.157917, 0, 1, 0, 0.157917, 0, -0.987452, 1.849, 0.25882, -1.01)
 is_npc_pot = true
 
-[node name="Pot2" parent="MixingPots" instance=ExtResource("9_3v3wj")]
+[node name="Pot2" parent="MixingPots" instance=ExtResource("10_tvcxb")]
 transform = Transform3D(-0.982241, 0, 0.187621, 0, 1, 0, -0.187621, 0, -0.982241, 5.00482, 0.25882, -1.01)
 is_npc_pot = true
 
-[node name="Pot3" parent="MixingPots" instance=ExtResource("9_3v3wj")]
+[node name="Pot3" parent="MixingPots" instance=ExtResource("10_tvcxb")]
 transform = Transform3D(-0.994582, 0, -0.103956, 0, 1, 0, 0.103956, 0, -0.994582, -1.37413, 0.25882, -1.01)
 is_npc_pot = true
 
-[node name="Pot4" parent="MixingPots" instance=ExtResource("9_3v3wj")]
+[node name="Pot4" parent="MixingPots" instance=ExtResource("10_tvcxb")]
 transform = Transform3D(-0.996053, 0, 0.0887551, 0, 1, 0, -0.0887551, 0, -0.996053, -5.15324, 0.25882, -1.01)
 is_npc_pot = true
 
-[node name="Pot5" parent="MixingPots" instance=ExtResource("9_3v3wj")]
+[node name="Pot5" parent="MixingPots" instance=ExtResource("10_tvcxb")]
 transform = Transform3D(-0.810931, 0, 0.585142, 0, 1, 0, -0.585142, 0, -0.810931, -5.80452, 0.25882, 2.08979)
 is_npc_pot = true
 
-[node name="Pot6" parent="MixingPots" instance=ExtResource("9_3v3wj")]
+[node name="Pot6" parent="MixingPots" instance=ExtResource("10_tvcxb")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.75357, 0.25882, 2.08979)
 is_npc_pot = true
 
-[node name="Pot7" parent="MixingPots" instance=ExtResource("9_3v3wj")]
+[node name="Pot7" parent="MixingPots" instance=ExtResource("10_tvcxb")]
 transform = Transform3D(-0.981128, 0, -0.193361, 0, 1, 0, 0.193361, 0, -0.981128, 5.32292, 0.25882, 2.08979)
 is_npc_pot = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("13_447rg")
+autoplay = true
