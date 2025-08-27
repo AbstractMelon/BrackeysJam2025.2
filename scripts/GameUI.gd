@@ -175,9 +175,7 @@ func _apply_modifier(modifier : Modifier):
 	ModifierManager.apply_modifier(modifier)
 	# Apply the selected modifier to the game
 	return
-	if "Double Vision" in modifier:
-		GameManager.shiny_chance_bonus += 0.1
-	elif "Height Advantage" in modifier:
+	if "Height Advantage" in modifier:
 		GameManager.player_height_bonus += 0.5
 	elif "Poison Resistance" in modifier:
 		GameManager.poison_resistance = 1.0
@@ -185,10 +183,6 @@ func _apply_modifier(modifier : Modifier):
 		var player = get_tree().get_first_node_in_group("player")
 		if player and player.has_method("set_pickup_speed_bonus"):
 			player.set_pickup_speed_bonus(0.25)
-	elif "Lucky Charm" in modifier:
-		ModifierManager.add_global_point_bonus(0.15)
-	elif "Iron Stomach" in modifier:
-		GameManager.poison_resistance = 1.0
 	elif "Master Chef" in modifier:
 		# Enable item value preview
 		_enable_item_preview()

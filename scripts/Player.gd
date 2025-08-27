@@ -23,12 +23,18 @@ var speed: float
 @onready var head: Node3D = $Head
 @onready var camera: Camera3D = $Head/Camera3D
 
+var stats : PlayerStats
+
 func _ready():
 	# Add to groups for detection
 	add_to_group("player")
 
 	# Capture the mouse cursor
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
+	# Set stats
+	update_stats()
+	ModifierManager.modifiers_changed.connect(update_stats)
 
 func _unhandled_input(event):
 	# Handle mouse look
@@ -44,13 +50,13 @@ func _physics_process(delta):
 
 	# Handle jump
 	if Input.is_action_just_pressed("jump") and is_on_floor():
-		velocity.y = jump_velocity
+		velocity.y = stats.jump_velocity
 
 	# Handle sprint
 	if Input.is_action_pressed("sprint"):
-		speed = sprint_speed
+		speed = stats.sprint_speed
 	else:
-		speed = walk_speed
+		speed = stats.walk_speed
 
 	# Get the input direction and handle the movement/deceleration
 	var input_dir = Vector2.ZERO
@@ -84,7 +90,7 @@ func _physics_process(delta):
 	camera.transform.origin = _headbob(t_bob)
 
 	# FOV
-	var velocity_clamped = clamp(velocity.length(), 0.5, sprint_speed * 2)
+	var velocity_clamped = clamp(velocity.length(), 0.5, stats.sprint_speed * 2)
 	var target_fov = base_fov + fov_change * velocity_clamped
 	camera.fov = lerp(camera.fov, target_fov, delta * 8.0)
 
@@ -95,6 +101,17 @@ func _headbob(time) -> Vector3:
 	pos.y = sin(time * bob_freq) * bob_amp
 	pos.x = cos(time * bob_freq / 2) * bob_amp
 	return pos
+
+func update_stats() -> void:
+	stats = PlayerStats.new()
+	stats.extra_height = 0.0
+	stats.jump_velocity = jump_velocity
+	stats.sprint_speed = sprint_speed
+	stats.walk_speed = walk_speed
+	
+	ModifierManager.get_modified_stats(stats)
+
+	# TODO: Extra height needs to affect things
 
 func _input(event):
 	# Toggle mouse capture with Escape key

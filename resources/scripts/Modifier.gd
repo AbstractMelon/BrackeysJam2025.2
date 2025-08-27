@@ -40,10 +40,11 @@ func _on_modifier_removed() -> void:
 
 
 #	"Double Vision - 2x chance for shiny items", 				DONE
-#	"Height Advantage - See over counters better",				
-#	"Poison Resistance - Immune to negative food effects",		
+#	"Height Advantage - See over counters better",				DONE
+#	"Poison Resistance - Immune to negative food effects",		DONE
 #	"Quick Hands - 25% faster item pickup",						
-#	"Lucky Charm - +1.15x point multiplier to all items",		
+#	"Lucky Charm - +1.15x point multiplier to all items",		DONE
 #	"Iron Stomach - Can eat questionable ingredients safely",	
 #	"Master Chef - Know item values before picking up",			
 #	"Time Lord - Slow down time by 10% during baking"			
+#	"Sugar Rush - Move 1.5x faster"								DONE

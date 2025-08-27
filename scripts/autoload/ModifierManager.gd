@@ -33,6 +33,7 @@ func _ready() -> void:
 		var modifier_instance : Modifier =  modifier.new()
 		modifier_instance._on_modifier_created()
 		_available_modifiers.append(modifier_instance)
+	
 
 # Returns modifiers
 func get_modifiers() -> Array[Modifier]:

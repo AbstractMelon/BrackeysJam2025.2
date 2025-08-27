@@ -17,3 +17,4 @@ enum Zones {
 @export var material: Material
 @export var is_shiny: bool = false
 @export var shiny_multiplier: float = 2.0
+@export var is_poisonous : bool = false
