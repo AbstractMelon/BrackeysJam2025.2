@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://cdrik6fn1c5i7"]
+[gd_scene load_steps=7 format=3 uid="uid://cdrik6fn1c5i7"]
 
 [ext_resource type="Script" uid="uid://cxtgcnd7q8uda" path="res://scripts/MixingPot.gd" id="1_syecd"]
+[ext_resource type="AudioStream" uid="uid://xlftinkatoud" path="res://assets/audio/SFX/pot1.ogg" id="2_mi2ro"]
 [ext_resource type="PackedScene" uid="uid://blte38ktl226o" path="res://assets/models/food/pot.glb" id="2_wborl"]
+[ext_resource type="AudioStream" uid="uid://djlucng0c5oee" path="res://assets/audio/SFX/pot2.ogg" id="3_ojv3r"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_jwlrf"]
 size = Vector3(0.602966, 0.497559, 0.777115)
@@ -11,6 +13,7 @@ size = Vector3(1, 0.439941, 1)
 
 [node name="MixingPot" type="StaticBody3D"]
 script = ExtResource("1_syecd")
+potAudio = Array[AudioStream]([ExtResource("2_mi2ro"), ExtResource("3_ojv3r")])
 
 [node name="MeshInstance3D" parent="." instance=ExtResource("2_wborl")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)

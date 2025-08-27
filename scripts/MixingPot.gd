@@ -4,6 +4,8 @@ class_name MixingPot
 @export var is_npc_pot: bool = false
 @export var npc_name: String = "" # Only used if is_npc_pot is true
 
+@export var potAudio: Array[AudioStream]
+
 @onready var mixing_area: Area3D = $MixingArea
 @onready var ui_label: Label3D = $UILabel
 
@@ -56,6 +58,7 @@ func mix_item(item: PickupableItem):
 	item.queue_free()
 	update_ui()
 	item_mixed.emit(item, points)
+	AudioManager.play_random_sfx_group(potAudio)
 
 func complete_mixing() -> int:
 	var final_points = score_data.points * score_data.multiplier

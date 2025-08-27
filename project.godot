@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="BakeOrBreak"
-run/main_scene="uid://cmgr105r1aynw"
+run/main_scene="uid://b5ma4kipgpd1s"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
