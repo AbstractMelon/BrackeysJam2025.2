@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bx2l2u26uttd6"]
+[gd_scene load_steps=32 format=3 uid="uid://bx2l2u26uttd6"]
 
 [ext_resource type="PackedScene" uid="uid://drmufre8h1ghu" path="res://scenes/player.tscn" id="1_uwrxv"]
 [ext_resource type="Texture2D" uid="uid://ww8mqihhdcf4" path="res://assets/images/ground/1K_tiling_17_basecolor.png" id="2_ir15t"]
@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://dowixpki25tvu" path="res://assets/models/Camera stand.glb" id="17_rysoc"]
 [ext_resource type="Script" uid="uid://ctnbqgf36a50c" path="res://scripts/GameController.gd" id="18_gamecontroller"]
 [ext_resource type="PackedScene" uid="uid://db3ipmukjssfw" path="res://scenes/UI/game_ui.tscn" id="19_gameui"]
+[ext_resource type="AudioStream" uid="uid://cjur5kpp1i4ih" path="res://assets/audio/IntroLoop.ogg" id="20_1kice"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yqjtg"]
 size = Vector3(20.6499, 0.205603, 40.7003)
@@ -236,7 +237,7 @@ transform = Transform3D(-0.847024, 0, 2.87794, 0, 3, 0, -2.87794, 0, -0.847024, 
 mesh = ExtResource("4_lbhrr")
 
 [node name="MixingPot" parent="." instance=ExtResource("5_u5sy4")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.07459, 0.28769, 1.96319)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.07459, 0.315876, 1.96319)
 
 [node name="ItemSpawner" parent="." instance=ExtResource("6_gee14")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.999795, -0.316886, -31.879)
@@ -352,6 +353,7 @@ spot_angle = 9.0
 [node name="GameUI" parent="." instance=ExtResource("19_gameui")]
 
 [node name="MixingPots" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0467436, 0)
 
 [node name="Pot1" parent="MixingPots" instance=ExtResource("5_u5sy4")]
 transform = Transform3D(-0.987452, 0, -0.157917, 0, 1, 0, 0.157917, 0, -0.987452, 1.849, 0.25882, -1.01)
@@ -380,3 +382,7 @@ is_npc_pot = true
 [node name="Pot7" parent="MixingPots" instance=ExtResource("5_u5sy4")]
 transform = Transform3D(-0.981128, 0, -0.193361, 0, 1, 0, 0.193361, 0, -0.981128, 5.32292, 0.25882, 2.08979)
 is_npc_pot = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("20_1kice")
+autoplay = true
