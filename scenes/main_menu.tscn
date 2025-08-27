@@ -102,6 +102,10 @@ offset_bottom = 0.159973
 layout_mode = 2
 text = "PLAY"
 
+[node name="Tutorial" type="Button" parent="UI/Control/ButtonList"]
+layout_mode = 2
+text = "TUTORIAL"
+
 [node name="Settings" type="Button" parent="UI/Control/ButtonList"]
 layout_mode = 2
 text = "SETTINGS"
@@ -411,6 +415,7 @@ transform = Transform3D(-0.981128, 0, -0.193361, 0, 1, 0, 0.193361, 0, -0.981128
 is_npc_pot = true
 
 [connection signal="pressed" from="UI/Control/ButtonList/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="UI/Control/ButtonList/Tutorial" to="." method="_on_tutorial_pressed"]
 [connection signal="pressed" from="UI/Control/ButtonList/Settings" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="UI/Control/ButtonList/Credits" to="." method="_on_credits_pressed"]
 [connection signal="pressed" from="UI/Control/ButtonList/Quit" to="." method="_on_quit_pressed"]
