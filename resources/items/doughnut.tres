@@ -18,4 +18,5 @@ mesh = SubResource("TorusMesh_8lo8k")
 material = SubResource("StandardMaterial3D_t1r04")
 is_shiny = false
 shiny_multiplier = 1.5
+is_poisonous = false
 metadata/_custom_type_script = "uid://dpsy87irbr46a"

@@ -15,4 +15,5 @@ mesh = ExtResource("1_ixkxx")
 material = SubResource("StandardMaterial3D_ytuuf")
 is_shiny = false
 shiny_multiplier = 2.0
+is_poisonous = false
 metadata/_custom_type_script = "uid://dpsy87irbr46a"
