@@ -23,7 +23,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_yqjtg"]
 size = Vector3(20.6499, 0.205603, 40.7003)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1kice"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_264po"]
 albedo_texture = ExtResource("2_ir15t")
 metallic = 1.0
 metallic_texture = ExtResource("4_rysoc")
@@ -35,18 +35,18 @@ heightmap_texture = ExtResource("3_ca42v")
 uv1_scale = Vector3(200, 200, 200)
 
 [sub_resource type="BoxMesh" id="BoxMesh_lnu2h"]
-material = SubResource("StandardMaterial3D_1kice")
+material = SubResource("StandardMaterial3D_264po")
 size = Vector3(20, 0.1, 20)
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lnu2h"]
 panorama = ExtResource("2_yqjtg")
 
-[sub_resource type="Sky" id="Sky_vtaks"]
+[sub_resource type="Sky" id="Sky_1kice"]
 sky_material = SubResource("PanoramaSkyMaterial_lnu2h")
 
 [sub_resource type="Environment" id="Environment_lnu2h"]
 background_mode = 2
-sky = SubResource("Sky_vtaks")
+sky = SubResource("Sky_1kice")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lnu2h"]
 size = Vector3(2.10938, 1.60205, 1.13171)
@@ -236,7 +236,7 @@ transform = Transform3D(-0.847024, 0, 2.87794, 0, 3, 0, -2.87794, 0, -0.847024, 
 mesh = ExtResource("4_lbhrr")
 
 [node name="MixingPot" parent="." instance=ExtResource("5_u5sy4")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.07459, 0.28769, 1.96319)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.07459, 0.315876, 1.96319)
 
 [node name="ItemSpawner" parent="." instance=ExtResource("6_gee14")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.999795, -0.316886, -31.879)
@@ -352,6 +352,7 @@ spot_angle = 9.0
 [node name="GameUI" parent="." instance=ExtResource("19_gameui")]
 
 [node name="MixingPots" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0467436, 0)
 
 [node name="Pot1" parent="MixingPots" instance=ExtResource("5_u5sy4")]
 transform = Transform3D(-0.987452, 0, -0.157917, 0, 1, 0, 0.157917, 0, -0.987452, 1.849, 0.25882, -1.01)
