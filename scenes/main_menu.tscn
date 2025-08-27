@@ -295,7 +295,7 @@ transform = Transform3D(-0.847024, 0, 2.87794, 0, 3, 0, -2.87794, 0, -0.847024, 
 mesh = ExtResource("4_tbmy8")
 
 [node name="MixingPot" parent="." instance=ExtResource("12_hstxw")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.07459, 0.28769, 1.96319)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -2.07459, 0.307832, 1.96319)
 
 [node name="Building" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.0559096)
@@ -380,6 +380,7 @@ spot_attenuation = -1.0
 spot_angle = 9.0
 
 [node name="MixingPots" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0440248, 0)
 
 [node name="Pot1" parent="MixingPots" instance=ExtResource("12_hstxw")]
 transform = Transform3D(-0.987452, 0, -0.157917, 0, 1, 0, 0.157917, 0, -0.987452, 1.849, 0.25882, -1.01)
