@@ -30,7 +30,9 @@ signal modifiers_changed()
 # Fills available modifiers
 func _ready() -> void:
 	for modifier in _all_modifiers:
-		_available_modifiers.append(modifier.new())
+		var modifier_instance : Modifier =  modifier.new()
+		modifier_instance._on_modifier_created()
+		_available_modifiers.append(modifier_instance)
 
 # Returns modifiers
 func get_modifiers() -> Array[Modifier]:
@@ -65,19 +67,19 @@ func apply_modifier(modifier : Modifier) -> bool:
 	_modifiers.append(modifier)
 	modifier._on_modifier_gained()
 	
-	if modifier._types.has(Globals.ModifierType.POINTADD) or modifier._types.has(Globals.ModifierType.MULTIPLIERADD):
+	if modifier.types.has(Globals.ModifierType.POINTADD) or modifier.types.has(Globals.ModifierType.MULTIPLIERADD):
 		get_additive_score.connect(modifier._get_additive_score)
 		
-	if modifier._types.has(Globals.ModifierType.MULTIPLIERMULT):
+	if modifier.types.has(Globals.ModifierType.MULTIPLIERMULT):
 		get_multiplicative_score.connect(modifier._get_multiplicitive_score)
 	
-	if modifier._types.has(Globals.ModifierType.STATADD):
+	if modifier.types.has(Globals.ModifierType.STATADD):
 		get_additive_player_stats.connect(modifier._get_additive_player_stats)
 	
-	if modifier._types.has(Globals.ModifierType.STATMULT):
+	if modifier.types.has(Globals.ModifierType.STATMULT):
 		get_multiplicative_player_stats.connect(modifier._get_multiplicative_player_stats)
 	
-	if modifier._types.has(Globals.ModifierType.OTHER):
+	if modifier.types.has(Globals.ModifierType.OTHER):
 		trigger_modifiers.connect(modifier._trigger)
 	
 	_available_modifiers.erase(modifier)
