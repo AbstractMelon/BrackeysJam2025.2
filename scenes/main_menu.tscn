@@ -1,10 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://cmgr105r1aynw"]
+[gd_scene load_steps=15 format=3 uid="uid://cmgr105r1aynw"]
 
 [ext_resource type="Script" uid="uid://dnewjk33x0d0u" path="res://scripts/menu/MenuController.gd" id="1_l6cm7"]
 [ext_resource type="Texture2D" uid="uid://l0i8il70ooj6" path="res://assets/images/skybox/skybox.png" id="2_rtw2f"]
 [ext_resource type="ArrayMesh" uid="uid://c5lvfrcde04w7" path="res://assets/models/kitchenCabinet.obj" id="3_oa1go"]
 [ext_resource type="ArrayMesh" uid="uid://b8mi0bya075br" path="res://assets/models/Trophy.obj" id="4_tbmy8"]
 [ext_resource type="Script" uid="uid://cw2e4m48nn4tk" path="res://scripts/menu/MenuCamera.gd" id="6_5dd4i"]
+[ext_resource type="AudioStream" uid="uid://c70t61mxf560l" path="res://assets/audio/IntroLoop.wav" id="6_rtw2f"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lgwnu"]
 size = Vector3(20, 0.1, 20)
@@ -264,6 +265,10 @@ target = NodePath("../RotationPoint")
 
 [node name="RotationPoint" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.62517, 0.743813)
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_rtw2f")
+autoplay = true
 
 [connection signal="pressed" from="UI/Control/ButtonList/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="UI/Control/ButtonList/Settings" to="." method="_on_settings_pressed"]

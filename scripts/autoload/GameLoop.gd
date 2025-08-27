@@ -223,6 +223,10 @@ func _handle_game_over():
 func _handle_victory():
 	print("Victory!")
 	game_over.emit(human_player)
+	
+	await wait(3.0)
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	SceneManager.goto_scene("res://scenes/main_menu.tscn", 3)
 
 func force_end_baking():
 	# Called when player presses end baking button
