@@ -43,7 +43,7 @@ func play_sfx(stream: AudioStream, pitch_variation: float = 0.0):
 	player.play()
 
 func play_random_sfx_group(streams: Array[AudioStream], pitch_variation: float = 0.0):
-	play_sfx(streams[randi_range(0, len(streams))], pitch_variation)
+	play_sfx(streams[randi_range(0, len(streams) - 1)], pitch_variation)
 
 func get_available_sfx_player() -> AudioStreamPlayer:
 	for player in sfx_players:
