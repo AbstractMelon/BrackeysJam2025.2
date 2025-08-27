@@ -20,6 +20,7 @@ signal modifier_selected(modifier_name: String)
 @onready var judge_panel: Panel = $Judging
 @onready var current_victim: Label = $Judging/CurrentVictim
 @onready var judge_comment: Label = $Judging/JudgeComment
+@onready var skip_judging_label: Label = $Judging/SkipJudgingButton
 
 func _ready():
 	add_to_group("game_ui")
@@ -43,6 +44,11 @@ func _ready():
 	
 	JudgeSystem.update_victim.connect(_on_update_victim)
 
+func _input(event: InputEvent) -> void:
+	if event.is_action("ui_accept") and GameState.State.JUDGING:
+		JudgeSystem.skip_judging()
+		skip_judging_label.text = "Skip requested, please wait..."
+
 func _on_state_changed(new_state: GameState.State):
 	match new_state:
 		GameState.State.BAKING:
@@ -58,7 +64,6 @@ func _on_state_changed(new_state: GameState.State):
 			pass
 
 func _show_baking_ui():
-
 	timer_label.show()
 	round_label.show()
 	player_count_label.show()
@@ -76,6 +81,7 @@ func _show_judging_ui():
 	end_baking_button.hide()
 	elimination_message.hide()
 	judge_panel.show()
+	skip_judging_label.show()
 	# Keep timer and round info visible during judging
 
 func _show_modifier_selection_ui():
@@ -88,6 +94,7 @@ func _show_game_over_ui(state: GameState.State):
 	modifier_panel.hide()
 	elimination_message.hide()
 	judge_comment.hide()
+	skip_judging_label.hide()
 
 	if state == GameState.State.VICTORY:
 		_show_victory_message()
@@ -105,6 +112,7 @@ func _hide_all_ui():
 	victory_message.hide()
 	defeat_message.hide()
 	judge_panel.hide()
+	skip_judging_label.hide()
 
 func _on_timer_updated(time_left: float):
 	var minutes = int(time_left / 60)
@@ -125,6 +133,7 @@ func _on_round_started(round_number: int):
 
 func _on_player_eliminated(player: GameState.PlayerData):
 	judge_panel.hide()
+	skip_judging_label.hide()
 	_update_player_count()
 	_show_elimination_message(player.name)
 
