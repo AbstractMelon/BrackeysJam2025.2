@@ -7,12 +7,12 @@ signal player_eliminated(player: GameState.PlayerData)
 signal game_over(winner: GameState.PlayerData)
 signal timer_updated(time_left: float)
 
-const BAKING_TIME: float = 30.0  # 5 minutes - 300 seconds
 const NPC_NAMES: Array[String] = [
 	"Chef Crumbleton", "Baker Betty", "Flour Power Fred",
 	"Dough Master Dan", "Sweet Sally", "Crispy Carl", "Buttery Bob"
 ]
 
+var baking_time: float = 30.0  # 5 minutes - 300 seconds
 var current_state: GameState.State = GameState.State.MENU
 var current_round: int = 1
 var baking_timer: float = 0.0
@@ -123,7 +123,7 @@ func _spawn_round_items():
 
 func _start_baking_phase():
 	print("Baking phase started! Round ", current_round)
-	baking_timer = BAKING_TIME
+	baking_timer = baking_time
 
 	round_started.emit(current_round)
 

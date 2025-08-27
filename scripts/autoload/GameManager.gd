@@ -6,7 +6,7 @@ var total_score: int = 0
 
 # Modifier effects
 var double_chance: float = 0.0
-var shiny_chance_bonus: float = 0.0
+var shiny_chance: float = 0.5
 var camera_flipped: bool = false
 var player_height_bonus: float = 0.0
 var poison_resistance: float = 0.0
@@ -59,5 +59,4 @@ func add_score(points: int):
 	score_updated.emit(total_score)
 
 func should_spawn_shiny_item() -> bool:
-	var base_chance = 0.05  # 5% base chance
-	return randf() < (base_chance + shiny_chance_bonus)
+	return randf() < shiny_chance
