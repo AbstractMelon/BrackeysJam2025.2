@@ -45,7 +45,7 @@ func _ready():
 	JudgeSystem.update_victim.connect(_on_update_victim)
 
 func _input(event: InputEvent) -> void:
-	if event.is_action("ui_accept") and GameState.State.JUDGING:
+	if event.is_action("skip") and GameState.State.JUDGING:
 		JudgeSystem.skip_judging()
 		skip_judging_label.text = "Skip requested, please wait..."
 
