@@ -2,9 +2,9 @@ extends Resource
 class_name Modifier
 
 # Array of ModifierTypes to hold data on what the modifier actually does
-#var _types : Array[Globals.ModifierType]
-#var _name : String
-#var _description : String
+var types : Array[Globals.ModifierType]
+var name : String
+var description : String
 
 func _get_additive_score(values : ScoreData) -> ScoreData:
 	# Called when getting base points and multiplier

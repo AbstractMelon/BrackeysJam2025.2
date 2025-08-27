@@ -21,17 +21,6 @@ signal modifier_selected(modifier_name: String)
 @onready var current_victim: Label = $Judging/CurrentVictim
 @onready var judge_comment: Label = $Judging/JudgeComment
 
-var available_modifiers: Array[String] = [
-	"Double Vision - 2x chance for shiny items",
-	"Height Advantage - See over counters better",
-	"Poison Resistance - Immune to negative food effects",
-	"Quick Hands - 25% faster item pickup",
-	"Lucky Charm - 15% point bonus to all items",
-	"Iron Stomach - Can eat questionable ingredients safely",
-	"Master Chef - Know item values before picking up",
-	"Time Lord - Slow down time by 10% during baking"
-]
-
 func _ready():
 	add_to_group("game_ui")
 	end_baking_button.pressed.connect(_on_end_baking_pressed)
@@ -157,43 +146,44 @@ func show_modifier_selection():
 		child.queue_free()
 
 	# Create buttons for 3 random modifiers
-	var selected_modifiers = available_modifiers.duplicate()
-	selected_modifiers.shuffle()
+	var selected_modifiers = ModifierManager.get_random_modifiers(3)
 
 	for i in range(min(3, selected_modifiers.size())):
 		var button = Button.new()
-		button.text = selected_modifiers[i]
+		button.text = "%s - %s" % [selected_modifiers[i].name, selected_modifiers[i].description] 
 		button.custom_minimum_size.y = 60
 		button.pressed.connect(_on_modifier_button_pressed.bind(selected_modifiers[i]))
 		modifier_buttons.add_child(button)
 
-func _on_modifier_button_pressed(modifier_name: String):
-	modifier_selected.emit(modifier_name)
-	_apply_modifier(modifier_name)
+func _on_modifier_button_pressed(modifier: Modifier):
+	modifier_selected.emit(modifier)
+	_apply_modifier(modifier)
 	modifier_panel.hide()
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	GameLoop.on_modifier_selected()
 
-func _apply_modifier(modifier_name: String):
+func _apply_modifier(modifier : Modifier):
+	ModifierManager.apply_modifier(modifier)
 	# Apply the selected modifier to the game
-	if "Double Vision" in modifier_name:
+	return
+	if "Double Vision" in modifier:
 		GameManager.shiny_chance_bonus += 0.1
-	elif "Height Advantage" in modifier_name:
+	elif "Height Advantage" in modifier:
 		GameManager.player_height_bonus += 0.5
-	elif "Poison Resistance" in modifier_name:
+	elif "Poison Resistance" in modifier:
 		GameManager.poison_resistance = 1.0
-	elif "Quick Hands" in modifier_name:
+	elif "Quick Hands" in modifier:
 		var player = get_tree().get_first_node_in_group("player")
 		if player and player.has_method("set_pickup_speed_bonus"):
 			player.set_pickup_speed_bonus(0.25)
-	elif "Lucky Charm" in modifier_name:
+	elif "Lucky Charm" in modifier:
 		ModifierManager.add_global_point_bonus(0.15)
-	elif "Iron Stomach" in modifier_name:
+	elif "Iron Stomach" in modifier:
 		GameManager.poison_resistance = 1.0
-	elif "Master Chef" in modifier_name:
+	elif "Master Chef" in modifier:
 		# Enable item value preview
 		_enable_item_preview()
-	elif "Time Lord" in modifier_name:
+	elif "Time Lord" in modifier:
 		Engine.time_scale = 0.9
 
 func _enable_item_preview():

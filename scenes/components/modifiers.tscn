@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://c03g3uc2erf6l"]
+[gd_scene load_steps=3 format=3 uid="uid://c03g3uc2erf6l"]
 
 [ext_resource type="Script" uid="uid://byfdqi8d1poej" path="res://scripts/autoload/ModifierManager.gd" id="1_jnttb"]
+[ext_resource type="Script" uid="uid://cpwhuye7kvbj2" path="res://resources/scripts/modifiers/DoubleVision.gd" id="2_vncqh"]
 
 [node name="Modifiers" type="Node"]
 script = ExtResource("1_jnttb")
+_all_modifiers = Array[Script]([ExtResource("2_vncqh")])
