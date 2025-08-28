@@ -3,6 +3,7 @@ class_name GameUI
 
 signal end_baking_pressed()
 signal modifier_selected(modifier_name: String)
+signal location_selected(location_scene: PackedScene)
 
 @onready var timer_label: Label = $TimerPanel/TimerLabel
 @onready var round_label: Label = $RoundPanel/RoundLabel
@@ -10,6 +11,8 @@ signal modifier_selected(modifier_name: String)
 @onready var end_baking_button: Button = $EndBakingButton
 @onready var modifier_panel: Panel = $ModifierPanel
 @onready var modifier_buttons: VBoxContainer = $ModifierPanel/VBoxContainer
+@onready var location_panel: Panel = $LocationPanel
+@onready var location_buttons: VBoxContainer = $LocationPanel/VBoxContainer
 
 # Message labels
 @onready var elimination_message: Label = $Labels/EliminationMessage
@@ -22,26 +25,35 @@ signal modifier_selected(modifier_name: String)
 @onready var judge_comment: Label = $Judging/JudgeComment
 @onready var skip_judging_label: Label = $Judging/SkipJudgingButton
 
+# Crate controls
+@onready var crate_controls: Label = $CrateControls
+
 func _ready():
 	add_to_group("game_ui")
 	end_baking_button.pressed.connect(_on_end_baking_pressed)
-	
+
 	# Hide panels
 	modifier_panel.hide()
+	location_panel.hide()
 	judge_panel.hide()
-	
+
 	# Hide all message elements initially
 	elimination_message.hide()
 	victory_message.hide()
 	defeat_message.hide()
 	judge_comment.hide()
 
+	# Setup crate controls
+	if crate_controls:
+		crate_controls.text = "Crate Controls: E to store items | X to dump contents"
+		crate_controls.show()
+
 	# Connect to GameLoop signals
 	GameLoop.state_changed.connect(_on_state_changed)
 	GameLoop.timer_updated.connect(_on_timer_updated)
 	GameLoop.round_started.connect(_on_round_started)
 	GameLoop.player_eliminated.connect(_on_player_eliminated)
-	
+
 	JudgeSystem.update_victim.connect(_on_update_victim)
 
 func _input(event: InputEvent) -> void:
@@ -69,8 +81,9 @@ func _show_baking_ui():
 	player_count_label.show()
 	end_baking_button.show()
 	modifier_panel.hide()
+	location_panel.hide()
 	judge_panel.hide()
-	
+
 	# Hide message elements during baking
 	elimination_message.hide()
 	victory_message.hide()
@@ -109,6 +122,7 @@ func _hide_all_ui():
 	player_count_label.hide()
 	end_baking_button.hide()
 	modifier_panel.hide()
+	location_panel.hide()
 	elimination_message.hide()
 	victory_message.hide()
 	defeat_message.hide()
@@ -160,7 +174,7 @@ func show_modifier_selection():
 
 	for i in range(min(3, selected_modifiers.size())):
 		var button = Button.new()
-		button.text = "%s - %s" % [selected_modifiers[i].name, selected_modifiers[i].description] 
+		button.text = "%s - %s" % [selected_modifiers[i].name, selected_modifiers[i].description]
 		button.custom_minimum_size.y = 60
 		button.pressed.connect(_on_modifier_button_pressed.bind(selected_modifiers[i]))
 		modifier_buttons.add_child(button)
@@ -169,8 +183,8 @@ func _on_modifier_button_pressed(modifier: Modifier):
 	modifier_selected.emit(modifier)
 	_apply_modifier(modifier)
 	modifier_panel.hide()
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	GameLoop.on_modifier_selected()
+	# Show location selection after modifier selection
+	_show_location_selection()
 
 func _apply_modifier(modifier : Modifier):
 	ModifierManager.apply_modifier(modifier)
@@ -222,6 +236,40 @@ func _show_defeat_message():
 func show_judge_comment(judge_name: String, comment: String):
 	judge_comment.text = judge_name + ": " + comment
 	judge_comment.show()
+
+func _show_location_selection():
+	location_panel.show()
+
+	# Clear existing buttons
+	for child in location_buttons.get_children():
+		child.queue_free()
+
+	# Get 3 random locations from LocationManager
+	var available_locations = LocationManager.get_random_locations(3)
+
+	for i in range(min(3, available_locations.size())):
+		var location_scene = available_locations[i]
+		var button = Button.new()
+
+		# Extract location name from scene path
+		var location_name = location_scene.resource_path.get_file().get_basename()
+		location_name = location_name.capitalize().replace("_", " ")
+
+		button.text = location_name
+		button.custom_minimum_size.y = 60
+		button.pressed.connect(_on_location_button_pressed.bind(location_scene))
+		location_buttons.add_child(button)
+
+func _on_location_button_pressed(location_scene: PackedScene):
+	location_selected.emit(location_scene)
+	location_panel.hide()
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+	# Teleport to selected location
+	LocationManager.teleport_to_location(location_scene)
+
+	# Continue with next round
+	GameLoop.on_modifier_selected()
 
 func _on_update_victim(player_name: String):
 	current_victim.text = "Currently Judging: " + player_name

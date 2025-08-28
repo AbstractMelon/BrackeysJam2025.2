@@ -57,7 +57,7 @@ func hide_tooltip():
 
 func update_tooltip_content(item_data: ItemData):
 	# Get zone information
-	var zone_name = format_zone_name(item_data.zone_type)
+	var zone_name = get_zone_name(item_data.zone_type)
 	
 	# Set item name
 	item_name_label.text = item_data.item_name + " - " + zone_name
@@ -78,20 +78,22 @@ func update_tooltip_content(item_data: ItemData):
 	# Adjust background size to fit content
 	await get_tree().process_frame  # Wait for labels to update
 
-func format_zone_name(zone_type: String) -> String:
-	match zone_type.to_lower():
-		"jungle":
+func get_zone_name(zone_type: ItemData.Zones) -> String:
+	match zone_type:
+		ItemData.Zones.JUNGLE:
 			return "Jungle"
-		"lava":
+		ItemData.Zones.LAVA:
 			return "Lava"
-		"ice":
+		ItemData.Zones.ICE:
 			return "Ice"
-		"cave": 
+		ItemData.Zones.CAVE:
 			return "Cave"
-		"cliff":
+		ItemData.Zones.CLIFF:
 			return "Cliff"
+		ItemData.Zones.UTILITY:
+			return "Utility"
 		_:
-			return zone_type.capitalize()
+			return str(zone_type)
 
 func position_tooltip(mouse_pos: Vector2):
 	# Get viewport size

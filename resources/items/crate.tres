@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3 uid="uid://xqg4cxcolvo8"]
+
+[ext_resource type="ArrayMesh" uid="uid://bgytar1dorqo0" path="res://assets/models/Crate.obj" id="1_7sxl1"]
+[ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="1_itemdata"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_crate"]
+albedo_color = Color(0.6, 0.4, 0.2, 1)
+roughness = 0.8
+
+[resource]
+script = ExtResource("1_itemdata")
+item_name = "Storage Crate"
+point_value = 0
+zone_type = 5
+mesh = ExtResource("1_7sxl1")
+material = SubResource("StandardMaterial3D_crate")
+is_shiny = false
+shiny_multiplier = 1.0
+is_poisonous = false

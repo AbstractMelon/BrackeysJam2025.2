@@ -6,12 +6,14 @@ enum Zones {
 	LAVA,
 	ICE,
 	CAVE,
-	CLIFF
+	CLIFF,
+	CITY,
+	UTILITY
 }
 
 @export var item_name: String = "New Item"
 @export var point_value: int = 10
-@export var zone_type: String = "jungle"  # jungle, lava, ice, cave, cliff
+@export var zone_type: Zones = Zones.JUNGLE
 @export var icon: Texture2D
 @export var mesh: Mesh
 @export var material: Material

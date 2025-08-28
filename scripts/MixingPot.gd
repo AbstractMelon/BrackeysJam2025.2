@@ -41,6 +41,9 @@ func _on_item_entered(body):
 	if is_npc_pot:
 		return # NPCs don’t mix this way
 	if body is PickupableItem and not body.is_being_carried:
+		# Don't accept utility items
+		if body.item_data.zone_type == ItemData.Zones.UTILITY:
+			return
 		mix_item(body)
 
 func mix_item(item: PickupableItem):
