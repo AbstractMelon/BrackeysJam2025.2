@@ -27,6 +27,7 @@ size = Vector3(20.6499, 0.205603, 40.7003)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_264po"]
 albedo_texture = ExtResource("2_ir15t")
 metallic = 1.0
+metallic_specular = 0.1
 metallic_texture = ExtResource("4_rysoc")
 roughness_texture = ExtResource("6_264po")
 normal_enabled = true
@@ -48,6 +49,25 @@ sky_material = SubResource("PanoramaSkyMaterial_lnu2h")
 [sub_resource type="Environment" id="Environment_lnu2h"]
 background_mode = 2
 sky = SubResource("Sky_1kice")
+tonemap_mode = 2
+tonemap_exposure = 1.2
+ssao_enabled = true
+ssao_intensity = 1.5
+glow_enabled = true
+glow_intensity = 0.4
+glow_bloom = 0.2
+glow_blend_mode = 0
+fog_enabled = true
+fog_light_color = Color(0.8, 0.85, 1, 1)
+fog_density = 0.005
+fog_sky_affect = 0.3
+volumetric_fog_enabled = true
+volumetric_fog_albedo = Color(0.9, 0.95, 1, 1)
+volumetric_fog_emission = Color(0.9, 0.95, 1, 1)
+volumetric_fog_emission_energy = 0.01
+adjustment_enabled = true
+adjustment_contrast = 1.1
+adjustment_saturation = 1.15
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lnu2h"]
 size = Vector3(2.10938, 1.60205, 1.13171)
@@ -339,16 +359,17 @@ transform = Transform3D(-0.909867, 0, -0.4149, 0, 1, 0, 0.4149, 0, -0.909867, 5.
 [node name="Lighting" type="Node3D" parent="."]
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0268533, 5.92852, 0.0218022)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0268533, 5.92852, 0.448877)
+shadow_enabled = true
 omni_range = 20.0
-omni_attenuation = -0.3
+omni_attenuation = 5.0
 
 [node name="SpotLight3D" type="SpotLight3D" parent="Lighting"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.00925872, 6.09239, 11.4135)
 shadow_enabled = true
-spot_range = 10.0
-spot_attenuation = -1.0
-spot_angle = 9.0
+spot_range = 26.198
+spot_attenuation = -0.5
+spot_angle_attenuation = 3.73209
 
 [node name="GameUI" parent="." instance=ExtResource("19_gameui")]
 
