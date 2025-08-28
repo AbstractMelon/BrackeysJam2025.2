@@ -36,16 +36,6 @@ uv1_scale = Vector3(200, 200, 200)
 material = SubResource("StandardMaterial3D_1kice")
 size = Vector3(20, 0.1, 20)
 
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_qywvv"]
-panorama = ExtResource("2_rtw2f")
-
-[sub_resource type="Sky" id="Sky_vtaks"]
-sky_material = SubResource("PanoramaSkyMaterial_qywvv")
-
-[sub_resource type="Environment" id="Environment_3wgol"]
-background_mode = 2
-sky = SubResource("Sky_vtaks")
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_1acrt"]
 size = Vector3(2.10938, 1.60205, 1.13171)
 
@@ -59,6 +49,35 @@ size = Vector3(0.115723, 1.83704, 5.09988)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_engjn"]
 size = Vector3(0.109955, 1.11775, 4.82421)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_1ajci"]
+panorama = ExtResource("2_rtw2f")
+
+[sub_resource type="Sky" id="Sky_1kice"]
+sky_material = SubResource("PanoramaSkyMaterial_1ajci")
+
+[sub_resource type="Environment" id="Environment_7b55j"]
+background_mode = 2
+sky = SubResource("Sky_1kice")
+tonemap_mode = 2
+tonemap_exposure = 1.2
+ssao_enabled = true
+ssao_intensity = 1.5
+glow_enabled = true
+glow_intensity = 0.4
+glow_bloom = 0.2
+glow_blend_mode = 0
+fog_enabled = true
+fog_light_color = Color(0.8, 0.85, 1, 1)
+fog_density = 0.005
+fog_sky_affect = 0.3
+volumetric_fog_enabled = true
+volumetric_fog_albedo = Color(0.9, 0.95, 1, 1)
+volumetric_fog_emission = Color(0.9, 0.95, 1, 1)
+volumetric_fog_emission_energy = 0.01
+adjustment_enabled = true
+adjustment_contrast = 1.1
+adjustment_saturation = 1.15
 
 [node name="MainMenu" type="Node3D"]
 script = ExtResource("1_l6cm7")
@@ -146,9 +165,6 @@ shape = SubResource("BoxShape3D_svtp6")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
 transform = Transform3D(1.00133, 0, 0, 0, 2.03654, 0, 0, 0, 2.03654, -0.0431976, 0.0278702, -0.00214958)
 mesh = SubResource("BoxMesh_1dfpl")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_3wgol")
 
 [node name="Tables" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.36397, -0.745472, -1.74285)
@@ -375,20 +391,6 @@ transform = Transform3D(0.888128, 0, 0.459595, 0, 1, 0, -0.459595, 0, 0.888128, 
 [node name="Camera stand6" parent="Building" instance=ExtResource("14_gw5y6")]
 transform = Transform3D(-0.909867, 0, -0.4149, 0, 1, 0, 0.4149, 0, -0.909867, 5.09771, 1.6073, 14.0786)
 
-[node name="Lighting" type="Node3D" parent="."]
-
-[node name="OmniLight3D" type="OmniLight3D" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0268533, 5.92852, 0.0218022)
-omni_range = 20.0
-omni_attenuation = -0.3
-
-[node name="SpotLight3D" type="SpotLight3D" parent="Lighting"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.00925872, 6.09239, 11.4135)
-shadow_enabled = true
-spot_range = 10.0
-spot_attenuation = -1.0
-spot_angle = 9.0
-
 [node name="MixingPots" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0440248, 0)
 
@@ -419,6 +421,24 @@ is_npc_pot = true
 [node name="Pot7" parent="MixingPots" instance=ExtResource("12_hstxw")]
 transform = Transform3D(-0.981128, 0, -0.193361, 0, 1, 0, 0.193361, 0, -0.981128, 5.32292, 0.25882, 2.08979)
 is_npc_pot = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_7b55j")
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0268533, 5.92852, 0.448877)
+shadow_enabled = true
+omni_range = 20.0
+omni_attenuation = 5.0
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.00925872, 6.09239, 11.4135)
+shadow_enabled = true
+spot_range = 26.198
+spot_attenuation = -0.5
+spot_angle_attenuation = 3.73209
 
 [connection signal="pressed" from="UI/Control/ButtonList/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="UI/Control/ButtonList/Tutorial" to="." method="_on_tutorial_pressed"]

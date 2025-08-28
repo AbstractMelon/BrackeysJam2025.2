@@ -25,6 +25,11 @@ GameState="*res://scripts/autoload/GameState.gd"
 GameLoop="*res://scripts/autoload/GameLoop.gd"
 JudgeSystem="*res://scripts/autoload/JudgeSystem.gd"
 
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
 [global_group]
 
 storage_crates="Needed to identify storage crates"
