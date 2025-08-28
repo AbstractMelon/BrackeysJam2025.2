@@ -6,7 +6,7 @@ var total_score: int = 0
 
 # Modifier effects
 var double_chance: float = 0.0
-var shiny_chance: float = 0.5
+var shiny_chance: float = 0.05
 var camera_flipped: bool = false
 var player_height_bonus: float = 0.0
 var poison_resistance: float = 0.0
