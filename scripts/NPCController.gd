@@ -6,7 +6,7 @@ signal npc_action_completed(npc: GameState.PlayerData, action: String)
 var active_npcs: Array[GameState.PlayerData] = []
 var baking_difficulty: float = 1.0
 var is_baking: bool = false
-var MixingPotScene := preload("res://scenes/components/mixing_pot.tscn")
+@export var MixingPotScene := preload("res://scenes/components/mixing_pot.tscn")
 
 # NPC behavior timers
 var npc_timers: Dictionary = {}

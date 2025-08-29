@@ -22,9 +22,9 @@ AudioManager="*res://scripts/autoload/AudioManager.gd"
 SceneManager="*res://scripts/autoload/SceneManager.gd"
 ModifierManager="*res://scenes/components/modifiers.tscn"
 GameState="*res://scripts/autoload/GameState.gd"
-GameLoop="*res://scripts/autoload/GameLoop.gd"
 JudgeSystem="*res://scripts/autoload/JudgeSystem.gd"
 LocationManager="*res://scripts/autoload/LocationManager.gd"
+GameLoop="*res://scenes/components/game_loop.tscn"
 
 [display]
 

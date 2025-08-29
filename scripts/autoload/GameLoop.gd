@@ -7,12 +7,15 @@ signal player_eliminated(player: GameState.PlayerData)
 signal game_over(winner: GameState.PlayerData)
 signal timer_updated(time_left: float)
 
-const NPC_NAMES: Array[String] = [
+# NPC Names
+@export var NPC_NAMES: Array[String] = [
 	"Chef Crumbleton", "Baker Betty", "Flour Power Fred",
 	"Dough Master Dan", "Sweet Sally", "Crispy Carl", "Buttery Bob"
 ]
 
-var baking_time: float = 30.0  # 5 minutes - 300 seconds
+# Exports
+@export var baking_time: float = 30.0  # 5 minutes
+
 var current_state: GameState.State = GameState.State.MENU
 var current_round: int = 1
 var baking_timer: float = 0.0
@@ -22,13 +25,11 @@ var alive_players: Array[GameState.PlayerData] = []
 var stations: Array[Vector3] = [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), ]
 var round_difficulty: float = 1.0
 
-@onready var timer: Timer = Timer.new()
-@onready var npc_controller = NPCController.new()
+@onready var timer: Timer = $Timer
+@onready var npc_controller = $NPCController
 
 func _ready():
-	add_child(timer)
-	add_child(npc_controller)
-	timer.timeout.connect(_on_timer_timeout)
+	pass
 
 func start_new_game():
 	_initialize_players()

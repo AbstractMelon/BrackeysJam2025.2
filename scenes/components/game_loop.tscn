@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://chb6fptmqidgj"]
+
+[ext_resource type="Script" uid="uid://nuig7hxx5y58" path="res://scripts/autoload/GameLoop.gd" id="1_4rpi2"]
+[ext_resource type="Script" uid="uid://be2na812acy6t" path="res://scripts/NPCController.gd" id="2_y4rrr"]
+
+[node name="GameLoop" type="Node"]
+script = ExtResource("1_4rpi2")
+
+[node name="NPCController" type="Node" parent="."]
+script = ExtResource("2_y4rrr")
+metadata/_custom_type_script = "uid://be2na812acy6t"
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
