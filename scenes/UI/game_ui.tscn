@@ -1,6 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://db3ipmukjssfw"]
+[gd_scene load_steps=6 format=3 uid="uid://db3ipmukjssfw"]
 
 [ext_resource type="Script" uid="uid://bj6ncu2hxw7q2" path="res://scripts/GameUI.gd" id="1_gameui"]
+[ext_resource type="PackedScene" uid="uid://bkq8x5y0x8dxm" path="res://scenes/UI/pause_menu.tscn" id="2_168mx"]
+[ext_resource type="Script" uid="uid://w56g6k60xbq7" path="res://scripts/TypewriterEffect.gd" id="3_typewriter"]
+[ext_resource type="PackedScene" uid="uid://bk8j7n4p5m3x" path="res://scenes/UI/biscuit_info_display.tscn" id="4_yr8ot"]
 
 [sub_resource type="Theme" id="Theme_1"]
 
@@ -281,7 +284,7 @@ offset_right = -272.3
 offset_bottom = -0.0320015
 scale = Vector2(8.56, 1)
 
-[node name="JudgeComment" type="Label" parent="Judging"]
+[node name="JudgeComment" type="RichTextLabel" parent="Judging"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.021
@@ -296,8 +299,9 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Granny Butterworth: Sweetie, this reminds me of my neighbor's cooking. God rest her soul, but that woman couldn't boil water!
 "
-horizontal_alignment = 1
-autowrap_mode = 3
+fit_content = true
+scroll_active = false
+script = ExtResource("3_typewriter")
 
 [node name="SkipJudgingButton" type="Label" parent="Judging"]
 layout_mode = 1
@@ -314,3 +318,18 @@ grow_vertical = 2
 text = "Press \"R\" to skip"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="PauseMenu" parent="." instance=ExtResource("2_168mx")]
+visible = false
+layout_mode = 1
+
+[node name="BiscuitInfoDisplay" parent="." instance=ExtResource("4_yr8ot")]
+layout_mode = 1
+anchor_left = 0.236
+anchor_top = 0.187
+anchor_right = 0.771
+anchor_bottom = 0.582
+offset_left = 0.127991
+offset_top = -0.176003
+offset_right = -0.192017
+offset_bottom = -0.136017

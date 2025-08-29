@@ -6,7 +6,7 @@ class_name ItemInteractionSystem
 @export var carry_height_offset: float = -0.5
 @export var player: FirstPersonController
 @export var camera: Camera3D
-@export var tooltip_scene: PackedScene  # Assign the ItemTooltip scene here
+@export var tooltip_scene: PackedScene
 
 var carried_item: PickupableItem = null
 var highlighted_item: PickupableItem = null

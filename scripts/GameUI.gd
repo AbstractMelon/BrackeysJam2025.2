@@ -14,6 +14,9 @@ signal location_selected(location_scene: PackedScene)
 @onready var location_panel: Panel = $LocationPanel
 @onready var location_buttons: VBoxContainer = $LocationPanel/VBoxContainer
 
+# Pause menu
+@onready var pause_menu: Control = $PauseMenu
+
 # Message labels
 @onready var elimination_message: Label = $Labels/EliminationMessage
 @onready var victory_message: Label = $Labels/VictoryMessage
@@ -22,8 +25,11 @@ signal location_selected(location_scene: PackedScene)
 # Judge commenting
 @onready var judge_panel: Panel = $Judging
 @onready var current_victim: Label = $Judging/CurrentVictim
-@onready var judge_comment: Label = $Judging/JudgeComment
+@onready var judge_comment: TypewriterEffect = $Judging/JudgeComment
 @onready var skip_judging_label: Label = $Judging/SkipJudgingButton
+
+# Biscuit info display
+@onready var biscuit_info: BiscuitInfoDisplay = $BiscuitInfoDisplay
 
 func _ready():
 	add_to_group("game_ui")
@@ -47,9 +53,15 @@ func _ready():
 	GameLoop.player_eliminated.connect(_on_player_eliminated)
 
 	JudgeSystem.update_victim.connect(_on_update_victim)
+	JudgeSystem.judge_comment.connect(_on_judge_comment)
+	JudgeSystem.judging_started.connect(_on_judging_started)
+	JudgeSystem.judging_complete.connect(_on_judging_complete)
 
 func _input(event: InputEvent) -> void:
-	if event.is_action("skip") and GameState.State.JUDGING:
+	if event.is_action_pressed("pause") and GameLoop.current_state == GameState.State.BAKING:
+		pause_menu.pause_game()
+
+	elif event.is_action("skip") and GameLoop.current_state == GameState.State.JUDGING:
 		JudgeSystem.skip_judging()
 		skip_judging_label.text = "Skip requested, please wait..."
 
@@ -213,7 +225,11 @@ func _show_defeat_message():
 	print("Showed death message")
 
 func show_judge_comment(judge_name: String, comment: String):
-	judge_comment.text = judge_name + ": " + comment
+	var formatted_comment = judge_name + ": " + comment
+	if judge_comment is TypewriterEffect:
+		judge_comment.start_typewriter(formatted_comment)
+	else:
+		judge_comment.text = formatted_comment
 	judge_comment.show()
 
 func _show_location_selection():
@@ -252,3 +268,31 @@ func _on_location_button_pressed(location_scene: PackedScene):
 
 func _on_update_victim(player_name: String):
 	current_victim.text = "Currently Judging: " + player_name
+
+	# Show biscuit info for the player being judged
+	var player = _find_player_by_name(player_name)
+	if player:
+		show_biscuit_info(player)
+
+func _on_judge_comment(judge_name: String, comment: String, comment_type: int):
+	show_judge_comment(judge_name, comment)
+
+func get_typewriter_effect() -> TypewriterEffect:
+	return judge_comment if judge_comment is TypewriterEffect else null
+
+func _on_judging_started():
+	pass
+
+func _on_judging_complete():
+	# Hide biscuit info display when judging ends
+	biscuit_info.hide_biscuit_info()
+
+func show_biscuit_info(player: GameState.PlayerData):
+	if biscuit_info and player.current_biscuit:
+		biscuit_info.show_biscuit_info(player.current_biscuit)
+
+func _find_player_by_name(player_name: String) -> GameState.PlayerData:
+	for player in GameLoop.get_alive_players():
+		if player.name == player_name:
+			return player
+	return null

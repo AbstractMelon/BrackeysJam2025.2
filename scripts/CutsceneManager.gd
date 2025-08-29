@@ -3,8 +3,10 @@ class_name CutsceneManager
 
 signal cutscene_started(cutscene_type: String)
 signal cutscene_finished(cutscene_type: String)
+signal dialogue_line_displayed(speaker: String, text: String)
 
 enum CutsceneType {
+	INTRO,
 	JUDGING,
 	ELIMINATION,
 	VICTORY,
@@ -18,10 +20,38 @@ var original_player_position: Vector3
 var original_camera_transform: Transform3D
 var cutscene_camera: Camera3D
 
+# Intro cutscene variables
+var intro_dialogue: Array[Dictionary] = []
+var current_dialogue_index: int = 0
+var dialogue_skip_requested: bool = false
+
 @onready var tween: Tween
 
 func _ready():
 	add_to_group("cutscene_manager")
+	_setup_intro_dialogue()
+
+func start_intro_cutscene():
+	if is_playing:
+		return
+
+	current_cutscene = CutsceneType.INTRO
+	is_playing = true
+	dialogue_skip_requested = false
+	current_dialogue_index = 0
+	cutscene_started.emit("intro")
+
+	_setup_cutscene_camera()
+
+	# Start intro music if available
+	if AudioManager.has_method("play_intro_music"):
+		AudioManager.play_intro_music()
+
+	await _play_intro_sequence()
+	_cleanup_cutscene()
+
+	cutscene_finished.emit("intro")
+	is_playing = false
 
 func start_judging_cutscene(players: Array[GameState.PlayerData]):
 	if is_playing:
@@ -328,3 +358,112 @@ func _get_cutscene_name() -> String:
 
 func is_cutscene_playing() -> bool:
 	return is_playing
+
+func _setup_intro_dialogue():
+	intro_dialogue = [
+		{
+			"speaker": "Narrator",
+			"text": "Welcome to the most prestigious baking competition in the world...",
+			"camera_position": Vector3(0, 8, 15),
+			"camera_target": Vector3(0, 0, 0),
+			"duration": 4.0
+		},
+		{
+			"speaker": "Narrator",
+			"text": "Where only the finest bakers compete for ultimate glory!",
+			"camera_position": Vector3(-10, 6, 8),
+			"camera_target": Vector3(0, 2, 0),
+			"duration": 4.0
+		},
+		{
+			"speaker": "Narrator",
+			"text": "You must gather ingredients, create the perfect biscuit...",
+			"camera_position": Vector3(5, 4, -8),
+			"camera_target": Vector3(0, 1, 0),
+			"duration": 4.5
+		},
+		{
+			"speaker": "Narrator",
+			"text": "And survive the harsh judgment of our three expert judges!",
+			"camera_position": Vector3(0, 5, 12),
+			"camera_target": Vector3(0, 2, 8),
+			"duration": 4.5
+		},
+		{
+			"speaker": "Granny Butterworth",
+			"text": "Oh sweetie, I do hope you're ready for this!",
+			"camera_position": Vector3(-3, 3, 10),
+			"camera_target": Vector3(-1, 2, 8),
+			"duration": 3.5
+		},
+		{
+			"speaker": "Rordan Gamsey",
+			"text": "This kitchen will separate the wheat from the chaff!",
+			"camera_position": Vector3(0, 3, 10),
+			"camera_target": Vector3(0, 2, 8),
+			"duration": 3.5
+		},
+		{
+			"speaker": "Professor Biscotti",
+			"text": "Indeed. Only scientific precision will yield success here.",
+			"camera_position": Vector3(3, 3, 10),
+			"camera_target": Vector3(1, 2, 8),
+			"duration": 4.0
+		},
+		{
+			"speaker": "Narrator",
+			"text": "Do you have what it takes to become the ultimate baking champion?",
+			"camera_position": Vector3(0, 10, 20),
+			"camera_target": Vector3(0, 0, 0),
+			"duration": 5.0
+		}
+	]
+
+func _play_intro_sequence() -> void:
+	print("=== INTRO CUTSCENE BEGINS ===")
+
+	for i in range(intro_dialogue.size()):
+		if dialogue_skip_requested:
+			break
+
+		current_dialogue_index = i
+		var dialogue_data = intro_dialogue[i]
+		await _play_dialogue_line(dialogue_data)
+
+	print("=== INTRO CUTSCENE ENDS ===")
+
+func _play_dialogue_line(dialogue_data: Dictionary) -> void:
+	if not cutscene_camera:
+		return
+
+	# Move camera to specified position
+	tween = create_tween()
+	tween.parallel().tween_property(cutscene_camera, "global_position",
+		dialogue_data.camera_position, 2.0)
+	tween.parallel().tween_method(_look_at_target,
+		cutscene_camera.global_transform.basis.z,
+		(dialogue_data.camera_target - dialogue_data.camera_position).normalized(), 2.0)
+
+	# Emit dialogue for UI to display
+	dialogue_line_displayed.emit(dialogue_data.speaker, dialogue_data.text)
+
+	# Wait for camera movement + dialogue duration
+	await tween.finished
+	await get_tree().create_timer(dialogue_data.duration).timeout
+
+func _look_at_target(direction: Vector3):
+	if cutscene_camera:
+		cutscene_camera.look_at(cutscene_camera.global_position - direction, Vector3.UP)
+
+func skip_intro_dialogue():
+	dialogue_skip_requested = true
+
+	# Skip to end of current dialogue
+	if tween:
+		tween.kill()
+
+	# Show final dialogue line briefly then end
+	if current_dialogue_index < intro_dialogue.size():
+		var final_dialogue = intro_dialogue[intro_dialogue.size() - 1]
+		dialogue_line_displayed.emit(final_dialogue.speaker, final_dialogue.text)
+		await get_tree().create_timer(1.0).timeout

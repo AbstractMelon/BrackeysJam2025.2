@@ -179,6 +179,14 @@ func _start_judging_phase():
 	# This will trigger the judge cutscene
 	JudgeSystem.start_judging(alive_players)
 
+	# Connect to judging complete signal to proceed to elimination
+	if not JudgeSystem.judging_complete.is_connected(_on_judging_complete):
+		JudgeSystem.judging_complete.connect(_on_judging_complete)
+
+func _on_judging_complete():
+	print("Judging completed, transitioning to elimination phase")
+	change_state(GameState.State.ELIMINATION)
+
 func _start_elimination_phase():
 	print("Elimination phase started!")
 
@@ -186,6 +194,10 @@ func _start_elimination_phase():
 	var worst_player = _find_worst_player()
 	if worst_player:
 		_eliminate_player(worst_player)
+	else:
+		print("No player to eliminate, proceeding to next round")
+		await wait(2.0)
+		change_state(GameState.State.MODIFIER_SELECTION)
 
 func _find_worst_player() -> GameState.PlayerData:
 	var worst_score = INF
@@ -205,10 +217,18 @@ func _find_worst_player() -> GameState.PlayerData:
 	if worst_candidates.size() == 1:
 		return worst_candidates[0]
 
+	# If everyone has zero points or there's a tie, human player should be eliminated first
+	if worst_score == 0:
+		var human_in_worst = worst_candidates.filter(func(p): return p.is_human)
+		if not human_in_worst.is_empty():
+			return human_in_worst[0]  # Eliminate human player first when tied at zero
+
+	# For other ties, prefer eliminating NPCs
 	var npc_candidates = worst_candidates.filter(func(p): return not p.is_human)
 	if not npc_candidates.is_empty():
 		return npc_candidates[randi() % npc_candidates.size()]
 
+	# If only human player left in tie (shouldn't happen but safety)
 	return worst_candidates[0]
 
 
@@ -224,7 +244,7 @@ func _eliminate_player(player: GameState.PlayerData):
 	elif alive_players.size() <= 1:
 		change_state(GameState.State.VICTORY)
 	else:
-		await wait(3)
+		await wait(3.0)
 		change_state(GameState.State.MODIFIER_SELECTION)
 
 func _start_modifier_selection():
@@ -284,9 +304,9 @@ func _is_human_player_in_kitchen() -> bool:
 
 	var player_pos = player.global_position
 
-	# Define kitchen boundaries 
+	# Define kitchen boundaries
 	var kitchen_center = Vector3(0, 0, 0)
-	var kitchen_radius = 15.0 
+	var kitchen_radius = 15.0
 
 	var distance_from_kitchen = player_pos.distance_to(kitchen_center)
 	return distance_from_kitchen <= kitchen_radius

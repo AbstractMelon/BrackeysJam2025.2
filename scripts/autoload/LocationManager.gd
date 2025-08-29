@@ -2,6 +2,7 @@ extends Node
 
 signal teleport_started()
 signal teleport_completed()
+signal soundtrack_changed(intro_track: AudioStream, loop_track: AudioStream)
 
 var available_locations: Array[PackedScene] = []
 var current_location: Node3D = null
@@ -9,9 +10,23 @@ var main_kitchen_scene: PackedScene = preload("res://scenes/kitchen.tscn")
 var player: Node3D = null
 var player_crate: Node3D = null
 
+# Soundtrack system
+var location_soundtracks: Dictionary = {}
+var current_intro_track: AudioStream = null
+var current_loop_track: AudioStream = null
+var soundtrack_player_intro: AudioStreamPlayer
+var soundtrack_player_loop: AudioStreamPlayer
+var is_playing_intro: bool = false
+
 func _ready():
+	# Setup soundtrack players
+	_setup_soundtrack_players()
+
 	# Load all location scenes from the locations folder
 	_load_available_locations()
+
+	# Load soundtrack mappings
+	_load_location_soundtracks()
 
 func _load_available_locations():
 	available_locations.clear()
@@ -30,6 +45,51 @@ func _load_available_locations():
 
 	print("[LocationManager] Total locations loaded: ", available_locations.size())
 
+func _setup_soundtrack_players():
+	soundtrack_player_intro = AudioStreamPlayer.new()
+	soundtrack_player_loop = AudioStreamPlayer.new()
+
+	add_child(soundtrack_player_intro)
+	add_child(soundtrack_player_loop)
+
+	soundtrack_player_intro.finished.connect(_on_intro_finished)
+	soundtrack_player_loop.finished.connect(_on_loop_finished)
+
+	# Set volumes (can be adjusted)
+	soundtrack_player_intro.volume_db = -5.0
+	soundtrack_player_loop.volume_db = -5.0
+
+func _load_location_soundtracks():
+	# Map location names to their soundtrack files
+	location_soundtracks = {
+		"Kitchen": {
+			"intro": _try_load_audio("res://assets/audio/IntroLoop.ogg"),
+			"loop": _try_load_audio("res://assets/audio/IntroLoop.ogg")
+		},
+		 "Lava Location": {
+			 "intro": _try_load_audio("res://assets/audio/music/volcano_intro.ogg"),
+			 "loop": _try_load_audio("res://assets/audio/music/volcano_loop.ogg")
+		 },
+	}
+
+func _try_load_audio(path: String) -> AudioStream:
+	if ResourceLoader.exists(path):
+		return load(path)
+	else:
+		print("[LocationManager] Audio file not found: ", path)
+		return null
+
+func _on_intro_finished():
+	if current_loop_track and is_playing_intro:
+		is_playing_intro = false
+		soundtrack_player_loop.stream = current_loop_track
+		soundtrack_player_loop.play()
+
+func _on_loop_finished():
+	# Loop the loop track
+	if current_loop_track:
+		soundtrack_player_loop.play()
+
 func get_random_locations(count: int) -> Array[PackedScene]:
 	if available_locations.is_empty():
 		print("[LocationManager] No locations available!")
@@ -41,7 +101,7 @@ func get_random_locations(count: int) -> Array[PackedScene]:
 
 func teleport_to_location(location_scene: PackedScene):
 	print("[LocationManager] teleport_to_location called with scene: ", location_scene.resource_path if location_scene else "null")
-	
+
 	if not location_scene:
 		print("[LocationManager] Invalid location scene!")
 		return
@@ -51,7 +111,7 @@ func teleport_to_location(location_scene: PackedScene):
 	# Store reference to player and their crate
 	player = get_tree().get_first_node_in_group("player")
 	print("[LocationManager] Player found: ", player != null)
-	
+
 	player_crate = _find_player_crate()
 	print("[LocationManager] Player crate found: ", player_crate != null)
 
@@ -63,6 +123,9 @@ func teleport_to_location(location_scene: PackedScene):
 	print("[LocationManager] Loading new location: ", location_scene.resource_path)
 	_load_location(location_scene)
 
+	# Change soundtrack for new location
+	_change_location_soundtrack()
+
 	# Fade back in
 	print("[LocationManager] Starting fade from black")
 	await _fade_screen(false)
@@ -72,7 +135,7 @@ func teleport_to_location(location_scene: PackedScene):
 
 func return_to_kitchen():
 	print("[LocationManager] return_to_kitchen called")
-	
+
 	if not main_kitchen_scene:
 		print("[LocationManager] Main kitchen scene not found!")
 		return
@@ -82,7 +145,7 @@ func return_to_kitchen():
 	# Store player and crate references
 	player = get_tree().get_first_node_in_group("player")
 	print("[LocationManager] Player found: ", player != null)
-	
+
 	player_crate = _find_player_crate()
 	print("[LocationManager] Player crate found: ", player_crate != null)
 
@@ -94,6 +157,9 @@ func return_to_kitchen():
 	print("[LocationManager] Loading kitchen scene: ", main_kitchen_scene.resource_path)
 	_load_location(main_kitchen_scene)
 
+	# Change to kitchen soundtrack
+	_change_location_soundtrack()
+
 	# Fade back in
 	print("[LocationManager] Starting fade from black")
 	await _fade_screen(false)
@@ -103,7 +169,7 @@ func return_to_kitchen():
 
 func _find_player_crate() -> Node3D:
 	print("[LocationManager] Looking for player crate")
-	
+
 	# Look for a crate being carried by the player
 	var interaction_system = get_tree().get_first_node_in_group("item_interaction")
 	if interaction_system and interaction_system.has_method("get_carried_item"):
@@ -115,7 +181,7 @@ func _find_player_crate() -> Node3D:
 	# Look for crates in the scene
 	var crates = get_tree().get_nodes_in_group("crates")
 	print("[LocationManager] Found ", crates.size(), " crates in scene")
-	
+
 	for crate in crates:
 		if crate.has_method("belongs_to_player") and crate.belongs_to_player():
 			print("[LocationManager] Found crate belonging to player")
@@ -127,7 +193,7 @@ func _find_player_crate() -> Node3D:
 func _load_location(location_scene: PackedScene) -> void:
 	print("[LocationManager] _load_location called with: ", location_scene.resource_path)
 	print("[LocationManager] Current location before loading: ", current_location.name if current_location else "null")
-	
+
 	# Store player reference before clearing scene
 	if not player:
 		player = get_tree().get_first_node_in_group("player")
@@ -146,39 +212,39 @@ func _load_location(location_scene: PackedScene) -> void:
 	# Find the location container in the main scene
 	var main_scene = get_tree().current_scene
 	print("[LocationManager] Current scene: ", main_scene.name if main_scene else "null")
-	
+
 	var location_container = main_scene.get_node_or_null("LocationContainer")
-	
+
 	if not location_container:
 		push_error("[LocationManager] LocationContainer not found in main scene!")
 		print("[LocationManager] Available nodes in main scene:")
 		for child in main_scene.get_children():
 			print("  - ", child.name)
 		return
-	
+
 	print("[LocationManager] Found LocationContainer: ", location_container.name)
-	
+
 	# Clear ALL existing locations from container, not just current_location
 	print("[LocationManager] Clearing all locations from container")
 	var children_to_remove = []
 	for child in location_container.get_children():
 		# Check if this child is a location (has 3D nodes or specific properties)
-		if child is Node3D:  
+		if child is Node3D:
 			print("[LocationManager] Removing location from container: ", child.name)
 			children_to_remove.append(child)
-	
+
 	# Remove children after iteration to avoid modification during iteration
 	for child in children_to_remove:
 		location_container.remove_child(child)
 		child.queue_free()
-	
+
 	print("[LocationManager] Location container cleared. Remaining children: ", location_container.get_children().size())
 
 	# Load new location and add to container
 	print("[LocationManager] Instantiating new location")
 	var new_location = location_scene.instantiate()
 	print("[LocationManager] New location instantiated: ", new_location.name)
-	
+
 	location_container.add_child(new_location)
 	current_location = new_location
 	print("[LocationManager] New location added to container: ", current_location.name)
@@ -193,7 +259,7 @@ func _load_location(location_scene: PackedScene) -> void:
 
 	# Move crate to location if it exists
 	await _position_crate_in_location()
-	
+
 	print("[LocationManager] Location loading complete: ", location_scene.resource_path)
 
 func _position_player_in_location():
@@ -217,21 +283,21 @@ func _position_crate_in_location():
 	if not player_crate:
 		print("[LocationManager] No crate to position")
 		return
-		
+
 	if not player or not player.is_inside_tree():
 		print("[LocationManager] Player not in tree yet, deferring crate positioning")
 		call_deferred("_position_crate_in_location")
 		return
 
 	print("[LocationManager] Positioning crate in new location")
-	
+
 	# Re-parent crate to new scene if needed FIRST
 	var crate_parent = player_crate.get_parent()
 	if crate_parent and crate_parent != current_location:
 		print("[LocationManager] Re-parenting crate from ", crate_parent.name, " to ", current_location.name)
 		crate_parent.remove_child(player_crate)
 		current_location.add_child(player_crate)
-		
+
 		# Wait for next frame to ensure crate is properly in the tree
 		await get_tree().process_frame
 	else:
@@ -250,7 +316,7 @@ func _position_crate_in_location():
 
 func _fade_screen(fade_in: bool) -> void:
 	print("[LocationManager] _fade_screen: ", "fade_in" if fade_in else "fade_out")
-	
+
 	var overlay = ColorRect.new()
 	overlay.color = Color.BLACK
 	overlay.color.a = 1.0 if fade_in else 0.0
@@ -261,7 +327,7 @@ func _fade_screen(fade_in: bool) -> void:
 	# Add to current scene's UI layer or root
 	var ui_parent = _get_ui_parent()
 	print("[LocationManager] UI parent found: ", ui_parent.name if ui_parent else "null")
-	
+
 	ui_parent.add_child(overlay)
 
 	# Animate fade
@@ -316,3 +382,47 @@ func get_current_location_name() -> String:
 	var result = file_name.capitalize().replace("_", " ")
 	print("[LocationManager] get_current_location_name: ", result)
 	return result
+
+func _change_location_soundtrack():
+	var location_name = get_current_location_name()
+	print("[LocationManager] Changing soundtrack for location: ", location_name)
+
+	if location_name in location_soundtracks:
+		var soundtrack_data = location_soundtracks[location_name]
+		current_intro_track = soundtrack_data.get("intro", null)
+		current_loop_track = soundtrack_data.get("loop", null)
+	else:
+		# Use default/kitchen soundtrack or silence
+		current_intro_track = location_soundtracks.get("Kitchen", {}).get("intro", null)
+		current_loop_track = location_soundtracks.get("Kitchen", {}).get("loop", null)
+
+	_play_location_soundtrack()
+	soundtrack_changed.emit(current_intro_track, current_loop_track)
+
+func _play_location_soundtrack():
+	# Stop any currently playing tracks
+	soundtrack_player_intro.stop()
+	soundtrack_player_loop.stop()
+
+	if current_intro_track:
+		is_playing_intro = true
+		soundtrack_player_intro.stream = current_intro_track
+		soundtrack_player_intro.play()
+		print("[LocationManager] Playing intro track")
+	elif current_loop_track:
+		# If no intro, play loop directly
+		is_playing_intro = false
+		soundtrack_player_loop.stream = current_loop_track
+		soundtrack_player_loop.play()
+		print("[LocationManager] Playing loop track directly")
+	else:
+		print("[LocationManager] No soundtrack available for this location")
+
+func stop_all_soundtracks():
+	soundtrack_player_intro.stop()
+	soundtrack_player_loop.stop()
+	is_playing_intro = false
+
+func set_soundtrack_volume(volume_db: float):
+	soundtrack_player_intro.volume_db = volume_db
+	soundtrack_player_loop.volume_db = volume_db

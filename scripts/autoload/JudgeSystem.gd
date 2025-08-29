@@ -53,21 +53,26 @@ var current_players: Array[GameState.PlayerData] = []
 var judging_in_progress: bool = false
 var judge_mood_modifiers: Dictionary = {}
 var skip_requested: bool = false
+var typewriter_effect: TypewriterEffect
 
 # Settings
 var single_comment_per_judge: bool = true  # Set to false for multiple comments
 var comment_display_time: float = 4.0     # Time to display each comment
+var typing_speed: float = 0.03            # Speed for typewriter effect
 
 func start_judging(players: Array[GameState.PlayerData]):
 	current_players = players
 	judging_in_progress = true
 	skip_requested = false
 	_initialize_judge_moods()
+	_setup_typewriter_effect()
 	judging_started.emit()
 	_begin_judging_sequence()
 
 func skip_judging():
 	skip_requested = true
+	if typewriter_effect and typewriter_effect.is_currently_typing():
+		typewriter_effect.skip_to_end()
 
 func _initialize_judge_moods():
 	judge_mood_modifiers = {
@@ -76,11 +81,21 @@ func _initialize_judge_moods():
 		Judge.PROFESSOR_BISCOTTI: {"curiosity": 1.0, "precision": 1.0}
 	}
 
+func _setup_typewriter_effect():
+	# Get the game UI and setup typewriter effect
+	var game_ui = get_tree().get_first_node_in_group("game_ui")
+	if game_ui:
+		typewriter_effect = game_ui.get_typewriter_effect()
+		if typewriter_effect:
+			typewriter_effect.set_typing_speed(typing_speed)
+			if not typewriter_effect.typing_finished.is_connected(_on_typewriter_finished):
+				typewriter_effect.typing_finished.connect(_on_typewriter_finished)
+
 func _begin_judging_sequence():
 	print("=== JUDGING BEGINS ===")
 	var sorted_players = current_players.duplicate()
 	sorted_players.sort_custom(func(a, b): return a.round_score < b.round_score)
-	
+
 	for player in sorted_players:
 		if skip_requested:
 			break
@@ -88,19 +103,19 @@ func _begin_judging_sequence():
 		if not skip_requested:
 			await get_tree().create_timer(1.0).timeout  # Brief pause between players
 		_update_judge_moods(player)
-	
+
 	judging_complete.emit()
 	judging_in_progress = false
 
 func _judge_player_biscuit(player: GameState.PlayerData):
 	if not player.current_biscuit or skip_requested:
 		return
-	
+
 	print("\n--- Judging ", player.name, "'s biscuit ---")
-	
+
 	# Tell the UI who is being judged
 	update_victim.emit(player.name)
-	
+
 	if single_comment_per_judge:
 		await _single_judge_comments(player)
 	else:
@@ -110,26 +125,26 @@ func _single_judge_comments(player: GameState.PlayerData):
 	# Each judge gives one comment, randomly selected from their full repertoire
 	await _granny_single_comment(player)
 	if skip_requested: return
-	await get_tree().create_timer(comment_display_time).timeout
-	
+	await _wait_for_comment_completion()
+
 	await _rordan_single_comment(player)
 	if skip_requested: return
-	await get_tree().create_timer(comment_display_time).timeout
-	
+	await _wait_for_comment_completion()
+
 	await _professor_single_comment(player)
 	if skip_requested: return
-	await get_tree().create_timer(comment_display_time).timeout
+	await _wait_for_comment_completion()
 
 func _multiple_judge_comments(player: GameState.PlayerData):
 	# Original multiple comment system
 	await _granny_butterworth_judges(player)
 	if skip_requested: return
 	await get_tree().create_timer(1.5).timeout
-	
+
 	await _rordan_gamsey_judges(player)
 	if skip_requested: return
 	await get_tree().create_timer(1.5).timeout
-	
+
 	await _professor_biscotti_judges(player)
 	if skip_requested: return
 	await get_tree().create_timer(1.0).timeout
@@ -138,19 +153,19 @@ func _update_judge_moods(player: GameState.PlayerData):
 	var biscuit = player.current_biscuit
 	if not biscuit:
 		return
-	
+
 	# Granny gets more patient with good biscuits, less with bad ones
 	if biscuit.total_points > 70:
 		judge_mood_modifiers[Judge.GRANNY_BUTTERWORTH]["patience"] += 0.1
 	else:
 		judge_mood_modifiers[Judge.GRANNY_BUTTERWORTH]["patience"] -= 0.1
-	
+
 	# Rordan gets angrier with bad biscuits, calmer with excellent ones
 	if biscuit.total_points < 30:
 		judge_mood_modifiers[Judge.RORDAN_GAMSEY]["rage"] += 0.2
 	elif biscuit.total_points > 90:
 		judge_mood_modifiers[Judge.RORDAN_GAMSEY]["rage"] -= 0.1
-	
+
 	# Professor gets more curious with complex biscuits
 	if biscuit.ingredients.size() > 5:
 		judge_mood_modifiers[Judge.PROFESSOR_BISCOTTI]["curiosity"] += 0.1
@@ -160,11 +175,11 @@ func _granny_single_comment(player: GameState.PlayerData):
 	var biscuit = player.current_biscuit
 	var patience = judge_mood_modifiers[Judge.GRANNY_BUTTERWORTH]["patience"]
 	var nostalgia = judge_mood_modifiers[Judge.GRANNY_BUTTERWORTH]["nostalgia"]
-	
+
 	# Randomly choose comment type
 	var comment_types = ["primary", "story", "technical", "emotional"]
 	var chosen_type = comment_types.pick_random()
-	
+
 	match chosen_type:
 		"primary":
 			await _granny_primary_assessment(biscuit, patience)
@@ -178,13 +193,13 @@ func _granny_single_comment(player: GameState.PlayerData):
 func _rordan_single_comment(player: GameState.PlayerData):
 	var biscuit = player.current_biscuit
 	var rage = judge_mood_modifiers[Judge.RORDAN_GAMSEY]["rage"]
-	
+
 	# Randomly choose comment type
 	var comment_types = ["primary", "technical", "comparison"]
 	if rage > 1.2:
 		comment_types.append("outburst")
 	var chosen_type = comment_types.pick_random()
-	
+
 	match chosen_type:
 		"primary":
 			await _rordan_primary_assessment(biscuit, rage)
@@ -198,13 +213,13 @@ func _rordan_single_comment(player: GameState.PlayerData):
 func _professor_single_comment(player: GameState.PlayerData):
 	var biscuit = player.current_biscuit
 	var curiosity = judge_mood_modifiers[Judge.PROFESSOR_BISCOTTI]["curiosity"]
-	
+
 	# Randomly choose comment type
 	var comment_types = ["scientific", "complexity", "theoretical"]
 	if curiosity > 1.1:
 		comment_types.append("research")
 	var chosen_type = comment_types.pick_random()
-	
+
 	match chosen_type:
 		"scientific":
 			await _professor_scientific_analysis(biscuit)
@@ -215,29 +230,47 @@ func _professor_single_comment(player: GameState.PlayerData):
 		"research":
 			await _professor_research_suggestions(biscuit)
 
-# ---------------- Granny Butterworth ----------------
+func _wait_for_comment_completion():
+	if typewriter_effect and typewriter_effect.is_currently_typing():
+		await typewriter_effect.typing_finished
+	else:
+		await get_tree().create_timer(comment_display_time).timeout
+
+func _on_typewriter_finished():
+	# Called when typewriter effect finishes typing
+	pass
+
+func emit_judge_comment_with_typewriter(judge_name: String, comment: String, comment_type: String):
+	if typewriter_effect:
+		var formatted_comment = judge_name + ": " + comment
+		typewriter_effect.start_typewriter(formatted_comment)
+	else:
+		# Fallback to regular emission
+		judge_comment.emit(judge_name, comment, comment_type)
+
+# ---------------- Multiple Comment Versions ----------------
 func _granny_butterworth_judges(player: GameState.PlayerData):
 	var biscuit = player.current_biscuit
 	var patience = judge_mood_modifiers[Judge.GRANNY_BUTTERWORTH]["patience"]
 	var nostalgia = judge_mood_modifiers[Judge.GRANNY_BUTTERWORTH]["nostalgia"]
-	
+
 	# Primary assessment
 	await _granny_primary_assessment(biscuit, patience)
 	if skip_requested: return
 	await get_tree().create_timer(0.8).timeout
-	
+
 	# Personal story or memory
 	if randf() < 0.6:
 		await _granny_personal_story(biscuit, nostalgia)
 		if skip_requested: return
 		await get_tree().create_timer(0.6).timeout
-	
+
 	# Technical observation
 	if randf() < 0.7:
 		await _granny_technical_observation(biscuit)
 		if skip_requested: return
 		await get_tree().create_timer(0.5).timeout
-	
+
 	# Emotional response
 	if randf() < 0.5:
 		await _granny_emotional_response(biscuit, patience)
@@ -246,7 +279,7 @@ func _granny_butterworth_judges(player: GameState.PlayerData):
 
 func _granny_primary_assessment(biscuit: GameState.BiscuitData, _patience: float):
 	var comments = []
-	
+
 	if biscuit.total_points > 80:
 		comments = [
 			"Oh darling, this could win the county fair three years running!",
@@ -291,14 +324,14 @@ func _granny_primary_assessment(biscuit: GameState.BiscuitData, _patience: float
 			"Bless your heart, but this is pure evil in biscuit form.",
 			"My goodness, this should be studied by scientists... for what NOT to do."
 		]
-	
+
 	var comment = comments.pick_random()
 	judge_comment.emit("Granny Butterworth", comment, CommentType.PRAISE if biscuit.total_points > 50 else CommentType.CRITICISM)
 	print("Granny Butterworth: ", comment)
 
 func _granny_personal_story(biscuit: GameState.BiscuitData, _nostalgia: float):
 	var stories = []
-	
+
 	if "Sweet" in biscuit.special_attributes:
 		stories = [
 			"Reminds me of the time little Tommy tried to make cookies and used a whole bag of sugar. Oh, that boy was bouncing off the walls for days!",
@@ -323,7 +356,7 @@ func _granny_personal_story(biscuit: GameState.BiscuitData, _nostalgia: float):
 			"Oh honey, this brings back memories of the time I forgot to add flour. The results were... educational.",
 			"Sweetie, this reminds me of my neighbor's cooking. God rest her soul, but that woman couldn't boil water!"
 		]
-	
+
 	if stories.size() > 0:
 		var story = stories.pick_random()
 		judge_comment.emit("Granny Butterworth", story, CommentType.PERSONAL_STORY)
@@ -331,7 +364,7 @@ func _granny_personal_story(biscuit: GameState.BiscuitData, _nostalgia: float):
 
 func _granny_technical_observation(biscuit: GameState.BiscuitData):
 	var observations = []
-	
+
 	if biscuit.ingredients.size() < 3:
 		observations = [
 			"Lazy baking, dear. Where's the love?",
@@ -348,7 +381,7 @@ func _granny_technical_observation(biscuit: GameState.BiscuitData):
 			"Oh my, this is like a culinary treasure hunt!",
 			"Bless your heart, but you might be overcomplicating things."
 		]
-	
+
 	if "Radioactive" in biscuit.special_attributes:
 		observations.append_array([
 			"It's glowing! I suppose that makes it festive?",
@@ -357,7 +390,7 @@ func _granny_technical_observation(biscuit: GameState.BiscuitData):
 			"Sweetie, I think you've invented a new form of lighting!",
 			"Oh my, this could power a small village!"
 		])
-	
+
 	if observations.size() > 0:
 		var observation = observations.pick_random()
 		judge_comment.emit("Granny Butterworth", observation, CommentType.OBSERVATION)
@@ -365,7 +398,7 @@ func _granny_technical_observation(biscuit: GameState.BiscuitData):
 
 func _granny_emotional_response(biscuit: GameState.BiscuitData, _patience: float):
 	var responses = []
-	
+
 	if biscuit.total_points > 80:
 		responses = [
 			"*wipes away a tear* Oh, this is just beautiful!",
@@ -380,7 +413,7 @@ func _granny_emotional_response(biscuit: GameState.BiscuitData, _patience: float
 			"*looks concerned* Sweetie, are you feeling alright?",
 			"*takes a deep breath* Well, at least you tried..."
 		]
-	
+
 	if responses.size() > 0:
 		var response = responses.pick_random()
 		judge_reaction.emit("Granny Butterworth", response)
@@ -390,24 +423,24 @@ func _granny_emotional_response(biscuit: GameState.BiscuitData, _patience: float
 func _rordan_gamsey_judges(player: GameState.PlayerData):
 	var biscuit = player.current_biscuit
 	var rage = judge_mood_modifiers[Judge.RORDAN_GAMSEY]["rage"]
-	
+
 	# Primary assessment
 	await _rordan_primary_assessment(biscuit, rage)
 	if skip_requested: return
 	await get_tree().create_timer(0.8).timeout
-	
+
 	# Technical criticism
 	if randf() < 0.8:
 		await _rordan_technical_criticism(biscuit)
 		if skip_requested: return
 		await get_tree().create_timer(0.6).timeout
-	
+
 	# Comparison to standards
 	if randf() < 0.6:
 		await _rordan_comparison(biscuit)
 		if skip_requested: return
 		await get_tree().create_timer(0.5).timeout
-	
+
 	# Emotional outburst
 	if rage > 1.2 and randf() < 0.7:
 		await _rordan_emotional_outburst(biscuit)
@@ -416,7 +449,7 @@ func _rordan_gamsey_judges(player: GameState.PlayerData):
 
 func _rordan_primary_assessment(biscuit: GameState.BiscuitData, _rage: float):
 	var comments = []
-	
+
 	if biscuit.total_points > 90:
 		comments = [
 			"THIS IS WHAT I'M TALKING ABOUT! Perfect texture, perfect flavor! BEAUTIFUL!",
@@ -461,14 +494,14 @@ func _rordan_primary_assessment(biscuit: GameState.BiscuitData, _rage: float):
 			"I've seen better food in prison cafeterias!",
 			"This is proof that some people shouldn't be allowed in kitchens!"
 		]
-	
+
 	var comment = comments.pick_random()
 	judge_comment.emit("Rordan Gamsey", comment, CommentType.CRITICISM if biscuit.total_points < 60 else CommentType.PRAISE)
 	print("Rordan Gamsey: ", comment)
 
 func _rordan_technical_criticism(biscuit: GameState.BiscuitData):
 	var criticisms = []
-	
+
 	if biscuit.ingredients.size() < 3:
 		criticisms = [
 			"WHERE ARE THE INGREDIENTS?! This is baking, not a minimalist art project!",
@@ -477,7 +510,7 @@ func _rordan_technical_criticism(biscuit: GameState.BiscuitData):
 			"I've seen more complexity in a saltine cracker!",
 			"You call this a recipe? I call this laziness!"
 		]
-	
+
 	if "Spicy" in biscuit.special_attributes:
 		criticisms.append_array([
 			"TOO MUCH SPICE! Are you trying to kill me?!",
@@ -486,7 +519,7 @@ func _rordan_technical_criticism(biscuit: GameState.BiscuitData):
 			"This is assault with a deadly biscuit!",
 			"I need a fire extinguisher for my mouth!"
 		])
-	
+
 	if "Rotten" in biscuit.special_attributes:
 		criticisms.append_array([
 			"GET THIS GARBAGE OUT OF MY SIGHT!",
@@ -495,7 +528,7 @@ func _rordan_technical_criticism(biscuit: GameState.BiscuitData):
 			"This is what nightmares are made of!",
 			"I'm calling the CDC! This is a biohazard!"
 		])
-	
+
 	if biscuit.total_points < 25:
 		criticisms.append_array([
 			"The texture is WRONG! The flavor is WRONG! Everything is WRONG!",
@@ -504,7 +537,7 @@ func _rordan_technical_criticism(biscuit: GameState.BiscuitData):
 			"This is what happens when you ignore basic technique!",
 			"I'm questioning your right to own an oven!"
 		])
-	
+
 	if criticisms.size() > 0:
 		var criticism = criticisms.pick_random()
 		judge_comment.emit("Rordan Gamsey", criticism, CommentType.TECHNICAL_ANALYSIS)
@@ -512,7 +545,7 @@ func _rordan_technical_criticism(biscuit: GameState.BiscuitData):
 
 func _rordan_comparison(biscuit: GameState.BiscuitData):
 	var comparisons = []
-	
+
 	if biscuit.total_points > 80:
 		comparisons = [
 			"This could stand up to the finest Parisian patisseries!",
@@ -529,7 +562,7 @@ func _rordan_comparison(biscuit: GameState.BiscuitData):
 			"This is worse than hospital food!",
 			"I've had better biscuits from a vending machine!"
 		]
-	
+
 	if comparisons.size() > 0:
 		var comparison = comparisons.pick_random()
 		judge_comment.emit("Rordan Gamsey", comparison, CommentType.COMPARISON)
@@ -543,7 +576,7 @@ func _rordan_emotional_outburst(_biscuit: GameState.BiscuitData):
 		"*stares at ceiling* SOMEONE SAVE ME FROM THIS HELL!",
 		"*clutches head* MY BRAIN IS MELTING FROM THIS INCOMPETENCE!"
 	]
-	
+
 	var outburst = outbursts.pick_random()
 	judge_reaction.emit("Rordan Gamsey", outburst)
 	print("Rordan Gamsey: ", outburst)
@@ -552,24 +585,24 @@ func _rordan_emotional_outburst(_biscuit: GameState.BiscuitData):
 func _professor_biscotti_judges(player: GameState.PlayerData):
 	var biscuit = player.current_biscuit
 	var curiosity = judge_mood_modifiers[Judge.PROFESSOR_BISCOTTI]["curiosity"]
-	
+
 	# Scientific analysis
 	await _professor_scientific_analysis(biscuit)
 	if skip_requested: return
 	await get_tree().create_timer(0.8).timeout
-	
+
 	# Complexity assessment
 	if randf() < 0.7:
 		await _professor_complexity_assessment(biscuit)
 		if skip_requested: return
 		await get_tree().create_timer(0.6).timeout
-	
+
 	# Theoretical implications
 	if randf() < 0.5:
 		await _professor_theoretical_implications(biscuit)
 		if skip_requested: return
 		await get_tree().create_timer(0.5).timeout
-	
+
 	# Research suggestions
 	if curiosity > 1.1 and randf() < 0.4:
 		await _professor_research_suggestions(biscuit)
@@ -579,7 +612,7 @@ func _professor_biscotti_judges(player: GameState.PlayerData):
 func _professor_scientific_analysis(biscuit: GameState.BiscuitData):
 	var complexity_score = biscuit.ingredients.size() + biscuit.special_attributes.size()
 	var comments = []
-	
+
 	if complexity_score > 8:
 		comments = [
 			"Fascinating! The interplay here demonstrates sophisticated flavor chemistry.",
@@ -624,14 +657,14 @@ func _professor_scientific_analysis(biscuit: GameState.BiscuitData):
 			"Poor execution undermines any theoretical promise.",
 			"This belongs in a case study of culinary failure."
 		]
-	
+
 	var comment = comments.pick_random()
 	judge_comment.emit("Professor Biscotti", comment, CommentType.TECHNICAL_ANALYSIS)
 	print("Professor Biscotti: ", comment)
 
 func _professor_complexity_assessment(biscuit: GameState.BiscuitData):
 	var assessments = []
-	
+
 	if biscuit.ingredients.size() > 6:
 		assessments = [
 			"The ingredient complexity suggests advanced understanding of flavor interactions.",
@@ -648,7 +681,7 @@ func _professor_complexity_assessment(biscuit: GameState.BiscuitData):
 			"The lack of complexity suggests limited understanding of baking science.",
 			"This represents an oversimplified approach to culinary arts."
 		]
-	
+
 	if "Radioactive" in biscuit.special_attributes:
 		assessments.append_array([
 			"Intriguing use of radioactive elements! Unconventional indeed.",
@@ -657,7 +690,7 @@ func _professor_complexity_assessment(biscuit: GameState.BiscuitData):
 			"The radioactive properties present interesting research opportunities.",
 			"This could revolutionize the field of luminescent gastronomy."
 		])
-	
+
 	if assessments.size() > 0:
 		var assessment = assessments.pick_random()
 		judge_comment.emit("Professor Biscotti", assessment, CommentType.OBSERVATION)
@@ -665,7 +698,7 @@ func _professor_complexity_assessment(biscuit: GameState.BiscuitData):
 
 func _professor_theoretical_implications(biscuit: GameState.BiscuitData):
 	var implications = []
-	
+
 	if biscuit.total_points > 75:
 		implications = [
 			"Clearly demonstrates technical proficiency.",
@@ -682,7 +715,7 @@ func _professor_theoretical_implications(biscuit: GameState.BiscuitData):
 			"The results contradict fundamental baking principles.",
 			"This demonstrates the importance of proper methodology."
 		]
-	
+
 	if implications.size() > 0:
 		var implication = implications.pick_random()
 		judge_comment.emit("Professor Biscotti", implication, CommentType.TECHNICAL_ANALYSIS)
@@ -696,7 +729,7 @@ func _professor_research_suggestions(_biscuit: GameState.BiscuitData):
 		"Further experimentation could yield valuable insights.",
 		"This could form the basis of a comprehensive research paper."
 	]
-	
+
 	var suggestion = suggestions.pick_random()
 	judge_comment.emit("Professor Biscotti", suggestion, CommentType.SUGGESTION)
 	print("Professor Biscotti: ", suggestion)
@@ -742,7 +775,7 @@ func get_comment_display_time() -> float:
 # ---------------- Advanced Dialogue System ----------------
 func generate_contextual_response(judge: Judge, _biscuit: GameState.BiscuitData, context: String) -> String:
 	var responses = []
-	
+
 	match judge:
 		Judge.GRANNY_BUTTERWORTH:
 			if context == "ingredient_quality":
@@ -757,7 +790,7 @@ func generate_contextual_response(judge: Judge, _biscuit: GameState.BiscuitData,
 					"My grandmother used to say, 'Watch the clock, not the recipe.'",
 					"Dearie, patience in baking is a virtue."
 				]
-		
+
 		Judge.RORDAN_GAMSEY:
 			if context == "ingredient_quality":
 				responses = [
@@ -771,7 +804,7 @@ func generate_contextual_response(judge: Judge, _biscuit: GameState.BiscuitData,
 					"The difference between good and great is in the timing!",
 					"Baking is a science! You can't ignore the laws of physics!"
 				]
-		
+
 		Judge.PROFESSOR_BISCOTTI:
 			if context == "ingredient_quality":
 				responses = [
@@ -785,12 +818,12 @@ func generate_contextual_response(judge: Judge, _biscuit: GameState.BiscuitData,
 					"The relationship between time and temperature is fundamental to success.",
 					"Proper timing ensures proper molecular transformation."
 				]
-	
+
 	return responses.pick_random() if responses.size() > 0 else "Interesting observation."
 
 func generate_emotional_reaction(judge: Judge, intensity: float) -> String:
 	var reactions = []
-	
+
 	match judge:
 		Judge.GRANNY_BUTTERWORTH:
 			if intensity > 0.8:
@@ -799,7 +832,7 @@ func generate_emotional_reaction(judge: Judge, intensity: float) -> String:
 				reactions = ["*nods approvingly*", "*smiles warmly*", "*chuckles softly*"]
 			else:
 				reactions = ["*sighs*", "*shakes head gently*", "*looks concerned*"]
-		
+
 		Judge.RORDAN_GAMSEY:
 			if intensity > 0.8:
 				reactions = ["*throws hands up*", "*slams table*", "*pulls hair*"]
@@ -807,7 +840,7 @@ func generate_emotional_reaction(judge: Judge, intensity: float) -> String:
 				reactions = ["*crosses arms*", "*narrows eyes*", "*taps foot*"]
 			else:
 				reactions = ["*rolls eyes*", "*scoffs*", "*turns away*"]
-		
+
 		Judge.PROFESSOR_BISCOTTI:
 			if intensity > 0.8:
 				reactions = ["*adjusts glasses excitedly*", "*leans forward*", "*scribbles notes*"]
@@ -815,5 +848,5 @@ func generate_emotional_reaction(judge: Judge, intensity: float) -> String:
 				reactions = ["*nods thoughtfully*", "*strokes chin*", "*raises eyebrow*"]
 			else:
 				reactions = ["*sighs*", "*shakes head*", "*looks disappointed*"]
-	
+
 	return reactions.pick_random() if reactions.size() > 0 else "*reacts*"

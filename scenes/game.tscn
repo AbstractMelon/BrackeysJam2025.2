@@ -37,10 +37,10 @@ mouse_filter = 2
 [node name="Cursor" type="Sprite2D" parent="GameUI/Overlay/CenterContainer"]
 texture = ExtResource("10_vtaks")
 
-[node name="AudioManager" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("20_1kice")
-autoplay = true
-
 [node name="LocationContainer" type="Node3D" parent="."]
 
 [node name="Kitchen" parent="LocationContainer" instance=ExtResource("6_p57ef")]
+
+[node name="AudioManager" type="AudioStreamPlayer" parent="LocationContainer/Kitchen"]
+stream = ExtResource("20_1kice")
+autoplay = true

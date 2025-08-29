@@ -74,11 +74,13 @@ func _assign_pots_to_players():
 
 	for contestant in alive_players:
 		if contestant.is_human:
-			contestant.mixing_pot = mixing_pot
+			if is_instance_valid(mixing_pot):
+				contestant.mixing_pot = mixing_pot
 		else:
 			if pot_index < npc_mixing_pots.size():
-				contestant.mixing_pot = npc_mixing_pots[pot_index]
-				pot_index += 1
+				if is_instance_valid(npc_mixing_pots[pot_index]):
+					contestant.mixing_pot = npc_mixing_pots[pot_index]
+					pot_index += 1
 
 func _start_baking():
 	print("[GameController] Starting baking phase")

@@ -164,15 +164,15 @@ func _npc_add_item_to_pot(npc: GameState.PlayerData, item: PickupableItem):
 	# Update NPC pot score data first
 	npc.mixing_pot.update_score_data()
 
-	# Update NPC round score
-	npc.round_score += npc.mixing_pot.get_current_points() - (npc.round_score if npc.round_score > 0 else 0)
+	# Update NPC round score to match current pot points
+	npc.round_score = npc.mixing_pot.get_current_points()
 
 	# Remove item from world
 	item.queue_free()
 
 	npc_action_completed.emit(npc, "item_collected")
 
-	print("NPC ", npc.name, " collected ", item.item_data.item_name, " for ", points, " points. Total: ", npc.round_score)
+	print("NPC ", npc.name, " collected ", item.item_data.item_name, " for ", points, " points. Total pot: ", npc.round_score)
 
 func get_npc_progress(npc: GameState.PlayerData) -> Dictionary:
 	var progress = {
