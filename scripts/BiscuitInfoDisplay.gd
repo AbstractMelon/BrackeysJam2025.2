@@ -82,15 +82,15 @@ func update_biscuit_display(biscuit: GameState.BiscuitData):
 	for attribute in biscuit.special_attributes:
 		match attribute:
 			"Radioactive":
-				attributes_text += "[color=green]☢️ Radioactive[/color] "
+				attributes_text += "[color=green]Radioactive[/color] "
 			"Spicy":
-				attributes_text += "[color=red]🌶️ Spicy[/color] "
+				attributes_text += "[color=red]Spicy[/color] "
 			"Sweet":
-				attributes_text += "[color=pink]🍯 Sweet[/color] "
+				attributes_text += "[color=pink]Sweet[/color] "
 			"Rotten":
-				attributes_text += "[color=brown]🦠 Rotten[/color] "
+				attributes_text += "[color=brown]Rotten[/color] "
 			"Shiny":
-				attributes_text += "[color=gold]✨ Shiny[/color] "
+				attributes_text += "[color=gold]Shiny[/color] "
 			_:
 				attributes_text += "[color=gray]" + attribute + "[/color] "
 

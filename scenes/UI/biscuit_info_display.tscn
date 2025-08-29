@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://bk8j7n4p5m3x"]
 
-[ext_resource type="Script" path="res://scripts/BiscuitInfoDisplay.gd" id="1_biscuit"]
+[ext_resource type="Script" uid="uid://cg3hvb0b8wa4s" path="res://scripts/BiscuitInfoDisplay.gd" id="1_biscuit"]
 
 [node name="BiscuitInfoDisplay" type="Control"]
 layout_mode = 3
@@ -13,6 +13,7 @@ mouse_filter = 2
 script = ExtResource("1_biscuit")
 
 [node name="Panel" type="Panel" parent="."]
+modulate = Color(1, 1, 1, 0.9)
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -25,7 +26,6 @@ offset_right = 300.0
 offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
-modulate = Color(1, 1, 1, 0.9)
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel"]
 layout_mode = 1
@@ -79,8 +79,8 @@ layout_mode = 2
 
 [node name="TotalPointsLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/PointsContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(1, 0.8, 0, 1)
+theme_override_font_sizes/font_size = 18
 text = "Total: 100"
 
 [node name="HSeparator2" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer"]
@@ -92,19 +92,19 @@ theme_override_font_sizes/font_size = 14
 text = "Ingredients:"
 
 [node name="IngredientsList" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
 custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
 theme_override_font_sizes/normal_font_size = 12
-fit_content = true
 text = "• Flour (10 pts)
 • Sugar (15 pts)
 • Butter (20 pts)
 • Magic Sparkles (30 pts)"
+fit_content = true
 
 [node name="SpecialAttributes" type="RichTextLabel" parent="Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
 custom_minimum_size = Vector2(0, 30)
-theme_override_font_sizes/normal_font_size = 12
+layout_mode = 2
 theme_override_colors/default_color = Color(0.8, 0.6, 1, 1)
+theme_override_font_sizes/normal_font_size = 12
+text = "[color=gold]✨ Shiny[/color] [color=red]Spicy[/color]"
 fit_content = true
-text = "[color=gold]✨ Shiny[/color] [color=red]🌶️ Spicy[/color]"
