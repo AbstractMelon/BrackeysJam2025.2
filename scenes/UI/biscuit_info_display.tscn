@@ -15,23 +15,26 @@ script = ExtResource("1_biscuit")
 [node name="Panel" type="Panel" parent="."]
 modulate = Color(1, 1, 1, 0.9)
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -300.0
-offset_top = -200.0
-offset_right = 300.0
-offset_bottom = -20.0
+anchors_preset = -1
+anchor_left = 0.24
+anchor_top = 0.606
+anchor_right = 0.76
+anchor_bottom = 0.969
+offset_left = -0.480011
+offset_top = 0.311981
+offset_right = 0.479919
+offset_bottom = 0.0879517
 grow_horizontal = 2
 grow_vertical = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
+anchor_top = -0.062
 anchor_right = 1.0
-anchor_bottom = 1.0
+anchor_bottom = 1.062
+offset_top = 14.57
+offset_bottom = -14.57
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 20
@@ -106,5 +109,6 @@ custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_colors/default_color = Color(0.8, 0.6, 1, 1)
 theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
 text = "[color=gold]✨ Shiny[/color] [color=red]Spicy[/color]"
 fit_content = true
