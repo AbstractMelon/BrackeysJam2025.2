@@ -46,5 +46,5 @@ func _on_modifier_removed() -> void:
 #	"Lucky Charm - +1.15x point multiplier to all items",		DONE
 #	"Iron Stomach - Can eat questionable ingredients safely",	
 #	"Master Chef - Know item values before picking up",			
-#	"Time Lord - Slow down time by 10% during baking"			
+#	"Time Lord - Slow down time by 10% during baking"			DONE
 #	"Sugar Rush - Move 1.5x faster"								DONE

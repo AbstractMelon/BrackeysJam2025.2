@@ -125,7 +125,7 @@ func _find_player_crate() -> Node3D:
 	print("[LocationManager] No player crate found")
 	return null
 
-func _load_location(location_scene: PackedScene):
+func _load_location(location_scene: PackedScene) -> void:
 	print("[LocationManager] _load_location called with: ", location_scene.resource_path)
 	print("[LocationManager] Current location before loading: ", current_location.name if current_location else "null")
 	
@@ -193,7 +193,7 @@ func _load_location(location_scene: PackedScene):
 		print("[LocationManager] No player to add to location")
 
 	# Move crate to location if it exists
-	_position_crate_in_location()
+	await _position_crate_in_location()
 	
 	print("[LocationManager] Location loading complete: ", location_scene.resource_path)
 
@@ -218,23 +218,36 @@ func _position_crate_in_location():
 	if not player_crate:
 		print("[LocationManager] No crate to position")
 		return
+		
+	if not player or not player.is_inside_tree():
+		print("[LocationManager] Player not in tree yet, deferring crate positioning")
+		call_deferred("_position_crate_in_location")
+		return
 
 	print("[LocationManager] Positioning crate in new location")
 	
-	# Position crate near player
-	var crate_position = player.global_position + Vector3(2, 0, 0)
-	player_crate.global_position = crate_position
-
-	# Re-parent crate to new scene if needed
+	# Re-parent crate to new scene if needed FIRST
 	var crate_parent = player_crate.get_parent()
 	if crate_parent and crate_parent != current_location:
 		print("[LocationManager] Re-parenting crate from ", crate_parent.name, " to ", current_location.name)
 		crate_parent.remove_child(player_crate)
 		current_location.add_child(player_crate)
+		
+		# Wait for next frame to ensure crate is properly in the tree
+		await get_tree().process_frame
 	else:
 		print("[LocationManager] Crate already in correct parent")
 
-	print("[LocationManager] Crate positioned in new location at: ", crate_position)
+	# Now that crate is in the tree, position it near player
+	if player_crate.is_inside_tree():
+		var crate_position = player.global_position + Vector3(2, 0, 0)
+		player_crate.global_position = crate_position
+		print("[LocationManager] Crate positioned in new location at: ", crate_position)
+	else:
+		# Fallback: use position instead of global_position
+		var crate_position = player.position + Vector3(2, 0, 0)
+		player_crate.position = crate_position
+		print("[LocationManager] Crate positioned using local position at: ", crate_position)
 
 func _fade_screen(fade_in: bool) -> void:
 	print("[LocationManager] _fade_screen: ", "fade_in" if fade_in else "fade_out")

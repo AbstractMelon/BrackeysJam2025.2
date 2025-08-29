@@ -65,6 +65,9 @@ func _assign_mixing_pots():
 	var mixing_pot = game_scene.get_node("LocationContainer/Kitchen/MixingPot") as MixingPot
 	if mixing_pot:
 		human_player.mixing_pot = mixing_pot
+		mixing_pot.is_npc_pot = false
+		mixing_pot.npc_name = human_player.name
+		mixing_pot.update_ui()
 
 	# NPC pots
 	var npc_pots_parent = game_scene.get_node("LocationContainer/Kitchen/MixingPots")
@@ -72,11 +75,15 @@ func _assign_mixing_pots():
 		var pots = npc_pots_parent.get_children()
 		var npc_index = 0
 		
-		# Assign pots to NPC players only
 		for player in players:
 			if not player.is_human and npc_index < pots.size():
-				player.mixing_pot = pots[npc_index]
+				var pot = pots[npc_index] as MixingPot
+				player.mixing_pot = pot
+				pot.is_npc_pot = true
+				pot.npc_name = player.name
+				pot.update_ui()
 				npc_index += 1
+
 
 func change_state(new_state: GameState.State):
 	var old_state = current_state
@@ -156,7 +163,7 @@ func end_baking_phase():
 func _generate_all_biscuits():
 	for player in alive_players:
 		if player.mixing_pot:
-			var points = player.mixing_pot.get_current_points()
+			var points = player.mixing_pot.complete_mixing()
 			player.current_biscuit = GameState.BiscuitData.new()
 			player.current_biscuit.generate_from_pot(player.mixing_pot, points)
 			player.round_score = points

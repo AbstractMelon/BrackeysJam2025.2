@@ -79,12 +79,17 @@ func update_ui():
 		# Just show NPC info
 		ui_label.text = "%s's Pot\nPoints: %d" % [npc_name, get_current_points()]
 	else:
-		# Full breakdown for human pot
-		ui_label.text = "Your Pot\nMixed: %d items\nBase points: %d\nModified points: %d" % [
-			mixed_items.size(),
-			base_points,
-			get_current_points()
-		]
+		if get_current_points() != base_points:
+			ui_label.text = "Your Pot\nMixed: %d items\nPoints: %d (Base: %d)" % [
+				mixed_items.size(),
+				get_current_points(),
+				base_points
+			]
+		else:
+			ui_label.text = "Your Pot\nMixed: %d items\nPoints: %d" % [
+				mixed_items.size(),
+				base_points
+			]
 
 func get_current_points() -> int:
 	return score_data.points * score_data.multiplier
