@@ -72,12 +72,12 @@ func _assign_pots_to_players():
 	var alive_players = GameLoop.get_alive_players()
 	var pot_index = 0
 
-	for player in alive_players:
-		if player.is_human:
-			player.mixing_pot = mixing_pot
+	for contestant in alive_players:
+		if contestant.is_human:
+			contestant.mixing_pot = mixing_pot
 		else:
 			if pot_index < npc_mixing_pots.size():
-				player.mixing_pot = npc_mixing_pots[pot_index]
+				contestant.mixing_pot = npc_mixing_pots[pot_index]
 				pot_index += 1
 
 func _start_baking():
@@ -141,12 +141,12 @@ func _on_round_started(round_number: int):
 func _on_round_ended(round_number: int):
 	print("[GameController] Round ", round_number, " ended")
 
-func _on_player_eliminated(player: GameState.PlayerData):
-	print("[GameController] Player eliminated: ", player.name)
+func _on_player_eliminated(contestant: GameState.PlayerData):
+	print("[GameController] Player eliminated: ", contestant.name)
 
 	# Hide their mixing pot if it's an NPC
-	if not player.is_human and player.mixing_pot:
-		player.mixing_pot.visible = false
+	if not contestant.is_human and contestant.mixing_pot:
+		contestant.mixing_pot.visible = false
 
 func _on_game_over(winner: GameState.PlayerData):
 	if winner:

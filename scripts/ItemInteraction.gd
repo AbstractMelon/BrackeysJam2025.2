@@ -85,7 +85,7 @@ func _input(event):
 			carry_distance = clamp(carry_distance - 0.2, 0.5, 5.0)
 			print("Carry distance:", carry_distance)
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	# Add null checks
 	if not is_setup_valid():
 		return

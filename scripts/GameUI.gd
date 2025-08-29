@@ -179,22 +179,9 @@ func _on_modifier_button_pressed(modifier: Modifier):
 	_show_location_selection()
 
 func _apply_modifier(modifier : Modifier):
-	ModifierManager.apply_modifier(modifier)
 	# Apply the selected modifier to the game
+	ModifierManager.apply_modifier(modifier)
 	return
-	if "Height Advantage" in modifier:
-		GameManager.player_height_bonus += 0.5
-	elif "Poison Resistance" in modifier:
-		GameManager.poison_resistance = 1.0
-	elif "Quick Hands" in modifier:
-		var player = get_tree().get_first_node_in_group("player")
-		if player and player.has_method("set_pickup_speed_bonus"):
-			player.set_pickup_speed_bonus(0.25)
-	elif "Master Chef" in modifier:
-		# Enable item value preview
-		_enable_item_preview()
-	elif "Time Lord" in modifier:
-		Engine.time_scale = 0.9
 
 func _enable_item_preview():
 	# Enable tooltips showing item values

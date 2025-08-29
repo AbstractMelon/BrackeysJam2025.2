@@ -6,7 +6,7 @@ class_name ItemTooltip
 @onready var points_label: Label = $Background/Points
 @onready var shiny_label: Label = $Background/ShinyBonus
 
-var is_visible: bool = false
+var tooltip_visible: bool = false
 var fade_tween: Tween
 
 func _ready():
@@ -36,7 +36,7 @@ func show_tooltip(item_data: ItemData, mouse_position: Vector2):
 	
 	# Show with fade animation
 	visible = true
-	is_visible = true
+	tooltip_visible = true
 	
 	if fade_tween:
 		fade_tween.kill()
@@ -44,10 +44,10 @@ func show_tooltip(item_data: ItemData, mouse_position: Vector2):
 	fade_tween.tween_property(self, "modulate:a", 1.0, 0.2)
 
 func hide_tooltip():
-	if not is_visible:
+	if not tooltip_visible:
 		return
 		
-	is_visible = false
+	tooltip_visible = false
 	
 	if fade_tween:
 		fade_tween.kill()
