@@ -1,6 +1,5 @@
 extends Node
 
-signal location_selected(location_scene: PackedScene)
 signal teleport_started()
 signal teleport_completed()
 

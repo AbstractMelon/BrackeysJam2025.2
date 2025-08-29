@@ -119,7 +119,7 @@ func get_random_modifiers(count : int) -> Array[Modifier]:
 	shuffled.shuffle()
 	return shuffled.slice(0, min(count, shuffled.size()))
 
-func _on_game_over(winner: GameState.PlayerData) -> void:
+func _on_game_over(_winner: GameState.PlayerData) -> void:
 	reset_modifiers()
 
 func reset_modifiers() -> void:

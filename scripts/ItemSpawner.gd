@@ -149,10 +149,10 @@ func spawn_item(item_data: ItemData, position: Vector3):
 	active_items.append(item_instance)
 	print("[ItemSpawner] Spawned item:", item_data.item_name, " at", position, " Active items:", active_items.size())
 
-func _on_item_picked_up(item: PickupableItem):
+func _on_item_picked_up(_item: PickupableItem):
 	pass
 
-func _on_item_dropped(item: PickupableItem):
+func _on_item_dropped(_item: PickupableItem):
 	pass
 
 func remove_item(item: PickupableItem):
