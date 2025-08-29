@@ -22,7 +22,6 @@ var alive_players: Array[GameState.PlayerData] = []
 var stations: Array[Vector3] = [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), ]
 var round_difficulty: float = 1.0
 
-
 @onready var timer: Timer = Timer.new()
 @onready var npc_controller = NPCController.new()
 
