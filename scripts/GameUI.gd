@@ -25,9 +25,6 @@ signal location_selected(location_scene: PackedScene)
 @onready var judge_comment: Label = $Judging/JudgeComment
 @onready var skip_judging_label: Label = $Judging/SkipJudgingButton
 
-# Crate controls
-@onready var crate_controls: Label = $CrateControls
-
 func _ready():
 	add_to_group("game_ui")
 	end_baking_button.pressed.connect(_on_end_baking_pressed)
@@ -42,11 +39,6 @@ func _ready():
 	victory_message.hide()
 	defeat_message.hide()
 	judge_comment.hide()
-
-	# Setup crate controls
-	if crate_controls:
-		crate_controls.text = "Crate Controls: E to store items | X to dump contents"
-		crate_controls.show()
 
 	# Connect to GameLoop signals
 	GameLoop.state_changed.connect(_on_state_changed)

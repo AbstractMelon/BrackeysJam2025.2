@@ -61,17 +61,18 @@ func _assign_mixing_pots():
 	if not game_scene:
 		return
 
-	# Human pot
-	var mixing_pot = game_scene.get_node("MixingPot") as MixingPot
+	# Human pot 
+	var mixing_pot = game_scene.get_node("LocationContainer/Kitchen/MixingPot") as MixingPot
 	if mixing_pot:
 		human_player.mixing_pot = mixing_pot
 
-	# NPC pots (must exist in a parent node called "MixingPots")
-	var npc_pots_parent = game_scene.get_node("MixingPots")
+	# NPC pots
+	var npc_pots_parent = game_scene.get_node("LocationContainer/Kitchen/MixingPots")
 	if npc_pots_parent:
 		var pots = npc_pots_parent.get_children()
 		var npc_index = 0
-
+		
+		# Assign pots to NPC players only
 		for player in players:
 			if not player.is_human and npc_index < pots.size():
 				player.mixing_pot = pots[npc_index]

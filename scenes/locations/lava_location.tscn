@@ -1,28 +1,39 @@
-[gd_scene load_steps=8 format=3 uid="uid://d3x5y6z7a8b9c"]
+[gd_scene load_steps=13 format=3 uid="uid://d3x5y607a8cac"]
 
 [ext_resource type="PackedScene" uid="uid://djyx8akx6ie7d" path="res://scenes/components/item_spawner.tscn" id="2_spawner"]
-[ext_resource type="Script" path="res://scripts/BaseLocation.gd" id="3_baselocation"]
+[ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="3_3jnxk"]
+[ext_resource type="Script" uid="uid://ddiiviug3efyx" path="res://scripts/BaseLocation.gd" id="3_baselocation"]
+[ext_resource type="Resource" uid="uid://chv5hh53mshow" path="res://resources/items/banana.tres" id="4_yycko"]
+[ext_resource type="Resource" uid="uid://b1wwo5e3c2mrs" path="res://resources/items/doughnut.tres" id="5_tbshm"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
 size = Vector3(28, 0.2, 28)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lava"]
-albedo_color = Color(0.8, 0.2, 0.1, 1.0)
-emission = Color(0.8, 0.3, 0.1, 1.0)
-emission_energy = 0.3
+albedo_color = Color(0.8, 0.2, 0.1, 1)
 roughness = 0.2
+emission = Color(0.8, 0.3, 0.1, 1)
+emission_energy_multiplier = 0.3
 
 [sub_resource type="BoxMesh" id="BoxMesh_floor"]
 material = SubResource("StandardMaterial3D_lava")
 size = Vector3(28, 0.2, 28)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_pad"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_wpe3s"]
 size = Vector3(2, 0.1, 2)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pad"]
-albedo_color = Color(0.8, 0.8, 0.2, 1.0)
-emission = Color(0.8, 0.8, 0.2, 1.0)
-emission_energy = 0.5
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ndr7m"]
+albedo_color = Color(0.8, 0.8, 0.2, 1)
+emission = Color(0.8, 0.8, 0.2, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cave"]
+albedo_color = Color(0.3, 0.3, 0.3, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_35xsa"]
+material = SubResource("StandardMaterial3D_cave")
+size = Vector3(25, 0.2, 25)
 
 [node name="LavaLocation" type="Node3D"]
 script = ExtResource("3_baselocation")
@@ -39,22 +50,20 @@ mesh = SubResource("BoxMesh_floor")
 [node name="PlayerSpawn" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-
-
 [node name="ItemSpawner" parent="." instance=ExtResource("2_spawner")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
-
-[node name="ReturnPad" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, -12)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ReturnPad"]
-shape = SubResource("BoxShape3D_pad")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="ReturnPad"]
-mesh = SubResource("BoxMesh_floor")
-material_override = SubResource("StandardMaterial3D_pad")
+available_items = Array[ExtResource("3_3jnxk")]([ExtResource("4_yycko"), ExtResource("5_tbshm")])
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 5, 0)
+light_color = Color(1, 0.8, 0.6, 1)
 light_energy = 0.8
-light_color = Color(1.0, 0.8, 0.6, 1.0)
+
+[node name="ReturnPad" type="Area3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, -0.9, -8)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ReturnPad"]
+shape = SubResource("BoxShape3D_wpe3s")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ReturnPad"]
+material_override = SubResource("StandardMaterial3D_ndr7m")
+mesh = SubResource("BoxMesh_35xsa")

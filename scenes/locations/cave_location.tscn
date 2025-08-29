@@ -1,17 +1,19 @@
-[gd_scene load_steps=8 format=3 uid="uid://c2x4y506a7b8c"]
+[gd_scene load_steps=10 format=3 uid="uid://c2x4y506a7b8c"]
 
 [ext_resource type="PackedScene" uid="uid://djyx8akx6ie7d" path="res://scenes/components/item_spawner.tscn" id="2_spawner"]
 [ext_resource type="Script" uid="uid://ddiiviug3efyx" path="res://scripts/BaseLocation.gd" id="3_baselocation"]
+[ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="3_uk18e"]
+[ext_resource type="Resource" uid="uid://b1wwo5e3c2mrs" path="res://resources/items/doughnut.tres" id="4_rwi7k"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
 size = Vector3(25, 0.2, 25)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cave"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4dggd"]
 albedo_color = Color(0.3, 0.3, 0.3, 1)
 roughness = 0.8
 
 [sub_resource type="BoxMesh" id="BoxMesh_floor"]
-material = SubResource("StandardMaterial3D_cave")
+material = SubResource("StandardMaterial3D_4dggd")
 size = Vector3(25, 0.2, 25)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pad"]
@@ -38,9 +40,10 @@ mesh = SubResource("BoxMesh_floor")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="ItemSpawner" parent="." instance=ExtResource("2_spawner")]
+available_items = Array[ExtResource("3_uk18e")]([ExtResource("4_rwi7k")])
 
 [node name="ReturnPad" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -8)
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, -0.9, -8)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ReturnPad"]
 shape = SubResource("BoxShape3D_pad")

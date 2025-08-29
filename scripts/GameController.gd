@@ -5,8 +5,8 @@ signal game_started()
 signal game_ended()
 
 @onready var player: FirstPersonController = $Player
-@onready var mixing_pot: MixingPot = $MixingPot
-@onready var item_spawner: ItemSpawner = $ItemSpawner
+@onready var mixing_pot: MixingPot = $LocationContainer/Kitchen/MixingPot
+@onready var item_spawner: ItemSpawner = $LocationContainer/Kitchen/ItemSpawner
 @onready var game_ui: GameUI = $GameUI
 
 @export var npc_mixing_pots: Array[MixingPot] = []
@@ -93,9 +93,9 @@ func _start_judging():
 	print("[GameController] Starting judging phase")
 
 	# Disable player movement during judging
-	if player:
-		player.set_physics_process(false)
-		player.set_process_input(false)
+	#if player:
+		#player.set_physics_process(false)
+		#player.set_process_input(false)
 
 func _handle_elimination():
 	print("[GameController] Handling elimination")
