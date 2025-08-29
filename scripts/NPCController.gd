@@ -6,7 +6,7 @@ signal npc_action_completed(npc: GameState.PlayerData, action: String)
 var active_npcs: Array[GameState.PlayerData] = []
 var baking_difficulty: float = 1.0
 var is_baking: bool = false
-var MixingPotScene := preload("res://scenes/components/mixing_pot.tscn") 
+var MixingPotScene := preload("res://scenes/components/mixing_pot.tscn")
 
 # NPC behavior timers
 var npc_timers: Dictionary = {}
@@ -37,7 +37,7 @@ func _process(delta):
 	if not is_baking:
 		return
 
-	for npc in active_npcs: 
+	for npc in active_npcs:
 		if npc.player_id in npc_timers:
 			npc_timers[npc.player_id] += delta
 			_update_npc_behavior(npc, delta)
@@ -161,15 +161,18 @@ func _npc_add_item_to_pot(npc: GameState.PlayerData, item: PickupableItem):
 	npc.mixing_pot.base_points += points
 	npc.mixing_pot.mixed_items.append(item.item_data)
 
+	# Update NPC pot score data first
+	npc.mixing_pot.update_score_data()
+
+	# Update NPC round score
+	npc.round_score += npc.mixing_pot.get_current_points() - (npc.round_score if npc.round_score > 0 else 0)
+
 	# Remove item from world
 	item.queue_free()
 
-	# Update NPC pot score data
-	npc.mixing_pot.update_score_data()
-
 	npc_action_completed.emit(npc, "item_collected")
 
-	print("NPC ", npc.name, " collected ", item.item_data.item_name, " for ", points, " points")
+	print("NPC ", npc.name, " collected ", item.item_data.item_name, " for ", points, " points. Total: ", npc.round_score)
 
 func get_npc_progress(npc: GameState.PlayerData) -> Dictionary:
 	var progress = {

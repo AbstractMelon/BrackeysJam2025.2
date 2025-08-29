@@ -13,7 +13,7 @@ func goto_scene(path: String, transition_duration: float = 0.3):
 	if is_transitioning:
 		return
 	is_transitioning = true
-	
+
 	# Simple fade transition
 	var tween = create_tween()
 	var overlay = ColorRect.new()
@@ -22,10 +22,12 @@ func goto_scene(path: String, transition_duration: float = 0.3):
 	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	get_tree().root.add_child(overlay)
-	
+
+	# Fade out
 	tween.tween_property(overlay, "color:a", 1.0, transition_duration / 2)
 	await tween.finished
-	
+
+	# Change scene immediately without additional fade
 	call_deferred("_deferred_goto_scene", path, overlay, transition_duration / 2)
 
 func _deferred_goto_scene(path: String, overlay: ColorRect, fade_out_time: float):
@@ -34,7 +36,7 @@ func _deferred_goto_scene(path: String, overlay: ColorRect, fade_out_time: float
 	current_scene = new_scene.instantiate()
 	get_tree().root.add_child(current_scene)
 	get_tree().current_scene = current_scene
-	
+
 	var tween = create_tween()
 	tween.tween_property(overlay, "color:a", 0.0, fade_out_time)
 	await tween.finished

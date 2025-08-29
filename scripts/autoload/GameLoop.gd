@@ -61,7 +61,7 @@ func _assign_mixing_pots():
 	if not game_scene:
 		return
 
-	# Human pot 
+	# Human pot
 	var mixing_pot = game_scene.get_node("LocationContainer/Kitchen/MixingPot") as MixingPot
 	if mixing_pot:
 		human_player.mixing_pot = mixing_pot
@@ -74,7 +74,7 @@ func _assign_mixing_pots():
 	if npc_pots_parent:
 		var pots = npc_pots_parent.get_children()
 		var npc_index = 0
-		
+
 		for player in players:
 			if not player.is_human and npc_index < pots.size():
 				var pot = pots[npc_index] as MixingPot
@@ -155,6 +155,12 @@ func end_baking_phase():
 	timer.stop()
 	npc_controller.stop_baking()
 
+	# Check if human player is in kitchen
+	if not _is_human_player_in_kitchen():
+		print("Player not in kitchen when time expired - eliminating!")
+		_eliminate_player(human_player)
+		return
+
 	# Generate biscuits for all players
 	_generate_all_biscuits()
 
@@ -183,14 +189,28 @@ func _start_elimination_phase():
 
 func _find_worst_player() -> GameState.PlayerData:
 	var worst_score = INF
-	var worst_player = null
+	var worst_candidates: Array[GameState.PlayerData] = []
 
 	for player in alive_players:
-		if player.current_biscuit and player.round_score < worst_score:
-			worst_score = player.round_score
-			worst_player = player
+		if player.current_biscuit:
+			if player.round_score < worst_score:
+				worst_score = player.round_score
+				worst_candidates = [player]
+			elif player.round_score == worst_score:
+				worst_candidates.append(player)
 
-	return worst_player
+	if worst_candidates.is_empty():
+		return null  # No candidates, nothing to eliminate
+
+	if worst_candidates.size() == 1:
+		return worst_candidates[0]
+
+	var npc_candidates = worst_candidates.filter(func(p): return not p.is_human)
+	if not npc_candidates.is_empty():
+		return npc_candidates[randi() % npc_candidates.size()]
+
+	return worst_candidates[0]
+
 
 func _eliminate_player(player: GameState.PlayerData):
 	print("Eliminating player: ", player.name)
@@ -223,7 +243,7 @@ func on_modifier_selected():
 func _handle_game_over():
 	print("Game Over!")
 	game_over.emit(null)
-		
+
 	await wait(3.0)
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	SceneManager.goto_scene("res://scenes/main_menu.tscn", 3)
@@ -231,7 +251,7 @@ func _handle_game_over():
 func _handle_victory():
 	print("Victory!")
 	game_over.emit(human_player)
-	
+
 	await wait(3.0)
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	SceneManager.goto_scene("res://scenes/main_menu.tscn", 3)
@@ -255,3 +275,18 @@ func is_human_player_alive() -> bool:
 
 func wait(seconds: float) -> void:
 	await get_tree().create_timer(seconds).timeout
+
+func _is_human_player_in_kitchen() -> bool:
+	# Check if the human player is in the main kitchen area
+	var player = get_tree().get_first_node_in_group("player") as FirstPersonController
+	if not player:
+		return false
+
+	var player_pos = player.global_position
+
+	# Define kitchen boundaries 
+	var kitchen_center = Vector3(0, 0, 0)
+	var kitchen_radius = 15.0 
+
+	var distance_from_kitchen = player_pos.distance_to(kitchen_center)
+	return distance_from_kitchen <= kitchen_radius

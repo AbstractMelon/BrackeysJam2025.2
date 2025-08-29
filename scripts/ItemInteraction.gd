@@ -192,7 +192,7 @@ func drop_item():
 
 	# Position item properly before dropping
 	if is_setup_valid():
-		var drop_position = camera.global_position + camera.global_transform.basis.z * -2.0
+		var drop_position = camera.global_position + camera.global_transform.basis.z * -carry_distance
 		# Make sure we're not dropping inside the ground
 		drop_position.y = max(drop_position.y, player.global_position.y)
 		carried_item.global_position = drop_position

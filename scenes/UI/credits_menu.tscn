@@ -1,0 +1,181 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxlaj2n5p3m2"]
+
+[ext_resource type="Script" uid="uid://b2vmtgdvnove3" path="res://scripts/menu/CreditsController.gd" id="1_credits"]
+
+[node name="CreditsMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_credits")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.05, 0.05, 0.1, 1)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Spacer1" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "BAKE OR BREAK"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Credits"
+horizontal_alignment = 1
+
+[node name="Spacer2" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="GameDevelopment" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GameDevTitle" type="Label" parent="ScrollContainer/VBoxContainer/GameDevelopment"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Game Development"
+horizontal_alignment = 1
+
+[node name="GameDevContent" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/GameDevelopment"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+bbcode_enabled = true
+text = "[center]Lead Developer: Abstractmelon
+Programmer: PIzzaman730
+Game Design: Abstractmelon/Pizzaman730/Brian Dean Ullery
+Level Design: Abstractmelon[/center]"
+fit_content = true
+
+[node name="Spacer3" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="ArtAssets" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ArtTitle" type="Label" parent="ScrollContainer/VBoxContainer/ArtAssets"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Art & Assets"
+horizontal_alignment = 1
+
+[node name="ArtContent" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/ArtAssets"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+bbcode_enabled = true
+text = "[center]3D Models: Various Artists
+UI Design: Abstractmelon
+Visual Effects: Godot Community[/center]"
+fit_content = true
+
+[node name="Spacer4" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Audio" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="AudioTitle" type="Label" parent="ScrollContainer/VBoxContainer/Audio"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Audio"
+horizontal_alignment = 1
+
+[node name="AudioContent" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/Audio"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+bbcode_enabled = true
+text = "[center]
+Audio Engineering: Brian Dean Ullery
+Sound Effects: Various Sources
+[/center]"
+fit_content = true
+
+[node name="Spacer5" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="SpecialThanks" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ThanksTitle" type="Label" parent="ScrollContainer/VBoxContainer/SpecialThanks"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Special Thanks"
+horizontal_alignment = 1
+
+[node name="ThanksContent" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/SpecialThanks"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+bbcode_enabled = true
+text = "[center]Godot Engine Community
+Open Source Contributors
+All Playtesters and Supporters
+
+Made with love and lots of doritoes![/center]"
+fit_content = true
+
+[node name="Spacer6" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+
+[node name="EngineInfo" type="VBoxContainer" parent="ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="EngineTitle" type="Label" parent="ScrollContainer/VBoxContainer/EngineInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Technology"
+horizontal_alignment = 1
+
+[node name="EngineContent" type="RichTextLabel" parent="ScrollContainer/VBoxContainer/EngineInfo"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+bbcode_enabled = true
+text = "[center]Built with Godot Engine 4.4
+Programming Language: GDScript
+Platform: Cross-Platform[/center]"
+fit_content = true
+
+[node name="Spacer7" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
+text = "Back to Main Menu"
+
+[node name="Spacer8" type="Control" parent="ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[connection signal="pressed" from="ScrollContainer/VBoxContainer/BackButton" to="." method="_on_back_pressed"]

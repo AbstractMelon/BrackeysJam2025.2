@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://pqa61x803gb7"]
+[gd_scene load_steps=3 format=3 uid="uid://pqa61x803gb7"]
 
 [ext_resource type="VideoStream" uid="uid://xbbmbygltvbm" path="res://assets/video/smooth_background.ogv" id="1_c13y7"]
+[ext_resource type="Script" uid="uid://dqpn5roj0vm1h" path="res://scripts/TutorialController.gd" id="2_tutorial"]
 
 [node name="Tutorial" type="Control"]
 layout_mode = 3
@@ -9,6 +10,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("2_tutorial")
 
 [node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="."]
 layout_mode = 1
@@ -20,3 +22,21 @@ grow_vertical = 2
 stream = ExtResource("1_c13y7")
 autoplay = true
 expand = true
+
+[node name="SkipLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -50.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Press ESC to skip"
+horizontal_alignment = 2
+
+[connection signal="finished" from="VideoStreamPlayer" to="." method="_on_video_finished"]

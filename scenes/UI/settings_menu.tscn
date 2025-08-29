@@ -1,0 +1,188 @@
+[gd_scene load_steps=2 format=3 uid="uid://bwxk8j5n4p2m1"]
+
+[ext_resource type="Script" path="res://scripts/menu/SettingsController.gd" id="1_settings"]
+
+[node name="SettingsMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_settings")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.1, 0.1, 0.8)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="CenterContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(600, 500)
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "SETTINGS"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="AudioSection" type="VBoxContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="AudioLabel" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Audio"
+
+[node name="MasterVolumeContainer" type="HBoxContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+
+[node name="MasterVolumeLabel" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/AudioSection/MasterVolumeContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 0)
+text = "Master Volume:"
+
+[node name="MasterVolumeSlider" type="HSlider" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/AudioSection/MasterVolumeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="MasterVolumeValue" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/AudioSection/MasterVolumeContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(50, 0)
+text = "100%"
+
+[node name="MusicVolumeContainer" type="HBoxContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+
+[node name="MusicVolumeLabel" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/AudioSection/MusicVolumeContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 0)
+text = "Music Volume:"
+
+[node name="MusicVolumeSlider" type="HSlider" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/AudioSection/MusicVolumeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="MusicVolumeValue" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/AudioSection/MusicVolumeContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(50, 0)
+text = "100%"
+
+[node name="SFXVolumeContainer" type="HBoxContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/AudioSection"]
+layout_mode = 2
+
+[node name="SFXVolumeLabel" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/AudioSection/SFXVolumeContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 0)
+text = "SFX Volume:"
+
+[node name="SFXVolumeSlider" type="HSlider" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/AudioSection/SFXVolumeContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="SFXVolumeValue" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/AudioSection/SFXVolumeContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(50, 0)
+text = "100%"
+
+[node name="HSeparator2" type="HSeparator" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GameplaySection" type="VBoxContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GameplayLabel" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/GameplaySection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Gameplay"
+
+[node name="SensitivityContainer" type="HBoxContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/GameplaySection"]
+layout_mode = 2
+
+[node name="SensitivityLabel" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/GameplaySection/SensitivityContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(150, 0)
+text = "Mouse Sensitivity:"
+
+[node name="SensitivitySlider" type="HSlider" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/GameplaySection/SensitivityContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.001
+max_value = 0.01
+step = 0.0001
+value = 0.003
+
+[node name="SensitivityValue" type="Label" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/GameplaySection/SensitivityContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(50, 0)
+text = "0.003"
+
+[node name="HSeparator3" type="HSeparator" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ButtonContainer" type="HBoxContainer" parent="CenterContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="ResetButton" type="Button" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(120, 40)
+text = "Reset to Default"
+
+[node name="Spacer" type="Control" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(20, 0)
+
+[node name="BackButton" type="Button" parent="CenterContainer/Panel/MarginContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(120, 40)
+text = "Back"
+
+[connection signal="value_changed" from="CenterContainer/Panel/MarginContainer/VBoxContainer/AudioSection/MasterVolumeContainer/MasterVolumeSlider" to="." method="_on_master_volume_changed"]
+[connection signal="value_changed" from="CenterContainer/Panel/MarginContainer/VBoxContainer/AudioSection/MusicVolumeContainer/MusicVolumeSlider" to="." method="_on_music_volume_changed"]
+[connection signal="value_changed" from="CenterContainer/Panel/MarginContainer/VBoxContainer/AudioSection/SFXVolumeContainer/SFXVolumeSlider" to="." method="_on_sfx_volume_changed"]
+[connection signal="value_changed" from="CenterContainer/Panel/MarginContainer/VBoxContainer/GameplaySection/SensitivityContainer/SensitivitySlider" to="." method="_on_sensitivity_changed"]
+[connection signal="pressed" from="CenterContainer/Panel/MarginContainer/VBoxContainer/ButtonContainer/ResetButton" to="." method="_on_reset_pressed"]
+[connection signal="pressed" from="CenterContainer/Panel/MarginContainer/VBoxContainer/ButtonContainer/BackButton" to="." method="_on_back_pressed"]
