@@ -19,20 +19,20 @@ emission_energy_multiplier = 0.3
 material = SubResource("StandardMaterial3D_lava")
 size = Vector3(28, 0.2, 28)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_wpe3s"]
-size = Vector3(2, 0.1, 2)
+[sub_resource type="BoxShape3D" id="BoxShape3D_3jnxk"]
+size = Vector3(25, 5, 25)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ndr7m"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yycko"]
 albedo_color = Color(0.8, 0.8, 0.2, 1)
 emission = Color(0.8, 0.8, 0.2, 1)
 emission_energy_multiplier = 0.5
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cave"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tbshm"]
 albedo_color = Color(0.3, 0.3, 0.3, 1)
 roughness = 0.8
 
-[sub_resource type="BoxMesh" id="BoxMesh_35xsa"]
-material = SubResource("StandardMaterial3D_cave")
+[sub_resource type="BoxMesh" id="BoxMesh_axhro"]
+material = SubResource("StandardMaterial3D_tbshm")
 size = Vector3(25, 0.2, 25)
 
 [node name="LavaLocation" type="Node3D"]
@@ -62,8 +62,8 @@ light_energy = 0.8
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, -0.9, -8)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ReturnPad"]
-shape = SubResource("BoxShape3D_wpe3s")
+shape = SubResource("BoxShape3D_3jnxk")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="ReturnPad"]
-material_override = SubResource("StandardMaterial3D_ndr7m")
-mesh = SubResource("BoxMesh_35xsa")
+material_override = SubResource("StandardMaterial3D_yycko")
+mesh = SubResource("BoxMesh_axhro")

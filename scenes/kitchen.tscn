@@ -290,21 +290,6 @@ transform = Transform3D(0.997953, -1.08002e-12, 0, 2.22045e-16, 0.954384, 0, 0, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 4.44089e-16, 0, 1, 0.00413513, 0.599304, -0.000587463)
 shape = SubResource("BoxShape3D_j5uij")
 
-[node name="Camera stand" parent="Building" instance=ExtResource("10_k0mf2")]
-transform = Transform3D(0.721289, 0, -0.692634, 0, 1, 0, 0.692634, 0, 0.721289, -1.79757, 0.219834, 14.1669)
-
-[node name="Camera stand2" parent="Building" instance=ExtResource("10_k0mf2")]
-transform = Transform3D(-0.988486, -0.00819072, 0.151091, 0, -0.998534, -0.0541312, 0.151312, -0.0535079, 0.987037, 3.44342, 3.63336, 14.335)
-
-[node name="Camera stand3" parent="Building" instance=ExtResource("10_k0mf2")]
-transform = Transform3D(2.78394, 0, -1.11789, 0, 3, 0, 1.11789, 0, 2.78394, -6.72918, 0, 15.5829)
-
-[node name="Camera stand4" parent="Building" instance=ExtResource("10_k0mf2")]
-transform = Transform3D(0.888128, 0, 0.459595, 0, 1, 0, -0.459595, 0, 0.888128, 8.11035, 0, 13.1082)
-
-[node name="Camera stand6" parent="Building" instance=ExtResource("10_k0mf2")]
-transform = Transform3D(-0.909867, 0, -0.4149, 0, 1, 0, 0.4149, 0, -0.909867, 5.09771, 1.6073, 14.0786)
-
 [node name="Stand" type="StaticBody3D" parent="Building"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.219834, 7.81234)
 
@@ -321,6 +306,23 @@ transform = Transform3D(-0.847024, 0, 2.87794, 0, 3, 0, -2.87794, 0, -0.847024, 
 mesh = ExtResource("11_1gswy")
 skeleton = NodePath("../../../..")
 
+[node name="Cameras" type="Node3D" parent="Building"]
+
+[node name="Camera stand" parent="Building/Cameras" instance=ExtResource("10_k0mf2")]
+transform = Transform3D(0.721289, 0, -0.692634, 0, 1, 0, 0.692634, 0, 0.721289, -1.79757, 0.219834, 14.1669)
+
+[node name="Camera stand2" parent="Building/Cameras" instance=ExtResource("10_k0mf2")]
+transform = Transform3D(-0.988486, -0.00819072, 0.151091, 0, -0.998534, -0.0541312, 0.151312, -0.0535079, 0.987037, 3.44342, 3.63336, 14.335)
+
+[node name="Camera stand3" parent="Building/Cameras" instance=ExtResource("10_k0mf2")]
+transform = Transform3D(2.78394, 0, -1.11789, 0, 3, 0, 1.11789, 0, 2.78394, -6.72918, 0, 15.5829)
+
+[node name="Camera stand4" parent="Building/Cameras" instance=ExtResource("10_k0mf2")]
+transform = Transform3D(0.888128, 0, 0.459595, 0, 1, 0, -0.459595, 0, 0.888128, 8.11035, 0, 13.1082)
+
+[node name="Camera stand6" parent="Building/Cameras" instance=ExtResource("10_k0mf2")]
+transform = Transform3D(-0.909867, 0, -0.4149, 0, 1, 0, 0.4149, 0, -0.909867, 5.09771, 1.6073, 14.0786)
+
 [node name="Lighting" type="Node3D" parent="."]
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Lighting"]
@@ -335,10 +337,6 @@ shadow_enabled = true
 spot_range = 26.198
 spot_attenuation = -0.5
 spot_angle_attenuation = 3.73209
-
-[node name="TestCrateSpawner" type="Node3D" parent="."]
-script = ExtResource("12_ls4fu")
-spawn_position = Vector3(5, 1, 5)
 
 [node name="MixingPots" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0467436, 0)
@@ -376,3 +374,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.999795, -0.316886, -31.879)
 max_items = 50
 spawn_interval = 1.0
 available_items = Array[ExtResource("14_mbcyj")]([ExtResource("15_psp1i"), ExtResource("16_lxurs")])
+
+[node name="TestCrateSpawner" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)
+script = ExtResource("12_ls4fu")
+spawn_position = Vector3(0, 7.5, 0)
+metadata/_custom_type_script = "uid://bx721rs0r115l"

@@ -49,7 +49,8 @@ func _on_item_entered(body):
 func mix_item(item: PickupableItem):
 	if is_npc_pot:
 		return # Ignore human-style mixing
-	if not item or item in mixed_items:
+
+	if not item or item.item_data in mixed_items:
 		return
 	
 	var points : float = GameManager.calculate_item_points(item)
