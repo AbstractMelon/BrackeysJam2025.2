@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bomy1jbd4lktn"]
+[gd_scene load_steps=37 format=3 uid="uid://bomy1jbd4lktn"]
 
 [ext_resource type="Texture2D" uid="uid://ww8mqihhdcf4" path="res://assets/images/ground/1K_tiling_17_basecolor.png" id="1_88wuv"]
 [ext_resource type="Texture2D" uid="uid://wceqeafm1vcj" path="res://assets/images/ground/1K_tiling_17_height.png" id="2_acu1m"]
@@ -19,6 +19,12 @@
 [ext_resource type="PackedScene" uid="uid://c2b0yyfp4by2q" path="res://assets/models/players/character-male-e.glb" id="17_k1cyo"]
 [ext_resource type="PackedScene" uid="uid://1seiuhu0eg3j" path="res://assets/models/players/character-female-d.glb" id="18_3fy06"]
 [ext_resource type="PackedScene" uid="uid://dodfqy0lqse6f" path="res://assets/models/players/character-male-d.glb" id="19_e7cmp"]
+[ext_resource type="PackedScene" uid="uid://dkeit144xdjqi" path="res://assets/models/players/character-female-b.glb" id="20_3fy06"]
+[ext_resource type="PackedScene" uid="uid://do5h3m5e117q0" path="res://assets/models/players/character-male-b.glb" id="21_e7cmp"]
+[ext_resource type="PackedScene" uid="uid://dqjbo4xj1mm2b" path="res://assets/models/players/character-male-c.glb" id="22_f125y"]
+[ext_resource type="PackedScene" uid="uid://cla6qwuovpmbi" path="res://assets/models/players/character-male-f.glb" id="23_n55t6"]
+[ext_resource type="PackedScene" uid="uid://d3g826dsj1u5" path="res://assets/models/players/character-female-f.glb" id="24_fr5pv"]
+[ext_resource type="PackedScene" uid="uid://dk0a2fudjx7e3" path="res://assets/models/players/character-male-a.glb" id="25_k0mf2"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7vcjq"]
 size = Vector3(20.6499, 0.205603, 40.7003)
@@ -348,6 +354,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0467436, 0)
 transform = Transform3D(-0.987452, 0, -0.157917, 0, 1, 0, 0.157917, 0, -0.987452, 1.849, 0.25882, -1.01)
 is_npc_pot = true
 
+[node name="ChefCrumbleton" parent="MixingPots/Pot1" instance=ExtResource("23_n55t6")]
+transform = Transform3D(-2.76487, 0, 0.442168, 0, 2.8, 0, -0.442168, 0, -2.76487, 0.0994046, -1.04461, 1.49833)
+
 [node name="Pot2" parent="MixingPots" instance=ExtResource("8_n55t6")]
 transform = Transform3D(-0.982241, 0, 0.187621, 0, 1, 0, -0.187621, 0, -0.982241, 5.00482, 0.25882, -1.01)
 is_npc_pot = true
@@ -356,17 +365,29 @@ is_npc_pot = true
 transform = Transform3D(-0.994582, 0, -0.103956, 0, 1, 0, 0.103956, 0, -0.994582, -1.37413, 0.25882, -1.01)
 is_npc_pot = true
 
+[node name="FlourFred" parent="MixingPots/Pot3" instance=ExtResource("22_f125y")]
+transform = Transform3D(-2.78483, 0, 0.291077, 0, 2.8, 0, -0.291077, 0, -2.78483, 0.369322, -1.04461, 1.41645)
+
 [node name="Pot4" parent="MixingPots" instance=ExtResource("8_n55t6")]
 transform = Transform3D(-0.996053, 0, 0.0887551, 0, 1, 0, -0.0887551, 0, -0.996053, -5.15324, 0.25882, -1.01)
 is_npc_pot = true
+
+[node name="DoughMasterDan" parent="MixingPots/Pot4" instance=ExtResource("21_e7cmp")]
+transform = Transform3D(-2.78895, 0, -0.248515, 0, 2.8, 0, 0.248515, 0, -2.78895, 0.317015, -1.04461, 1.49981)
 
 [node name="Pot5" parent="MixingPots" instance=ExtResource("8_n55t6")]
 transform = Transform3D(-0.810931, 0, 0.585142, 0, 1, 0, -0.585142, 0, -0.810931, -5.80452, 0.25882, 2.08979)
 is_npc_pot = true
 
+[node name="SweetSally" parent="MixingPots/Pot5" instance=ExtResource("20_3fy06")]
+transform = Transform3D(-2.27061, 0, -1.6384, 0, 2.8, 0, 1.6384, 0, -2.27061, 0.576239, -1.04461, 1.05475)
+
 [node name="Pot6" parent="MixingPots" instance=ExtResource("8_n55t6")]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 1.75357, 0.25882, 2.08979)
 is_npc_pot = true
+
+[node name="CrispyCarl" parent="MixingPots/Pot6" instance=ExtResource("19_e7cmp")]
+transform = Transform3D(-2.8, 0, 2.44784e-07, 0, 2.8, 0, -2.44784e-07, 0, -2.8, 0.25807, -1.04461, 1.18177)
 
 [node name="Pot7" parent="MixingPots" instance=ExtResource("8_n55t6")]
 transform = Transform3D(-0.981128, 0, -0.193361, 0, 1, 0, 0.193361, 0, -0.981128, 5.32292, 0.25882, 2.08979)
@@ -384,11 +405,19 @@ script = ExtResource("12_ls4fu")
 spawn_position = Vector3(0, 7.5, 0)
 metadata/_custom_type_script = "uid://bx721rs0r115l"
 
-[node name="character-male-e2" parent="." instance=ExtResource("17_k1cyo")]
+[node name="Judges" type="Node3D" parent="."]
+
+[node name="Biscotti" parent="Judges" instance=ExtResource("17_k1cyo")]
 transform = Transform3D(-2, 0, -1.74846e-07, 0, 2, 0, 1.74846e-07, 0, -2, -1.97357, 0.0360018, 9.23916)
 
-[node name="character-female-d2" parent="." instance=ExtResource("18_3fy06")]
+[node name="Grandma" parent="Judges" instance=ExtResource("18_3fy06")]
 transform = Transform3D(-2, 0, 1.74846e-07, 0, 2, 0, -1.74846e-07, 0, -2, -0.0378358, 0.0195008, 9.28994)
 
-[node name="character-male-d2" parent="." instance=ExtResource("19_e7cmp")]
+[node name="Rordon" parent="Judges" instance=ExtResource("19_e7cmp")]
 transform = Transform3D(-2, 0, 1.74846e-07, 0, 2, 0, -1.74846e-07, 0, -2, 1.89545, -0.0170673, 9.23986)
+
+[node name="character-female-f2" parent="." instance=ExtResource("24_fr5pv")]
+transform = Transform3D(2.8, 0, 0, 0, 2.8, 0, 0, 0, 2.8, 5.34063, -0.739043, -2.64512)
+
+[node name="character-male-a2" parent="." instance=ExtResource("25_k0mf2")]
+transform = Transform3D(2.8, 0, 0, 0, 2.8, 0, 0, 0, 2.8, 5.32788, -0.739043, 0.927591)
