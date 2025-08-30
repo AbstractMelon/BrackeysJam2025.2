@@ -1,10 +1,10 @@
 [gd_scene load_steps=13 format=3 uid="uid://d3x5y607a8cac"]
 
-[ext_resource type="PackedScene" uid="uid://djyx8akx6ie7d" path="res://scenes/components/item_spawner.tscn" id="2_spawner"]
-[ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="3_3jnxk"]
-[ext_resource type="Script" uid="uid://ddiiviug3efyx" path="res://scripts/BaseLocation.gd" id="3_baselocation"]
-[ext_resource type="Resource" uid="uid://chv5hh53mshow" path="res://resources/items/banana.tres" id="4_yycko"]
-[ext_resource type="Resource" uid="uid://b1wwo5e3c2mrs" path="res://resources/items/doughnut.tres" id="5_tbshm"]
+[ext_resource type="Script" uid="uid://ddiiviug3efyx" path="res://scripts/BaseLocation.gd" id="1_hjm20"]
+[ext_resource type="PackedScene" uid="uid://djyx8akx6ie7d" path="res://scenes/components/item_spawner.tscn" id="2_wbucu"]
+[ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="3_t7cx1"]
+[ext_resource type="Resource" uid="uid://chv5hh53mshow" path="res://resources/items/banana.tres" id="4_u33w6"]
+[ext_resource type="Resource" uid="uid://b1wwo5e3c2mrs" path="res://resources/items/doughnut.tres" id="5_obsk7"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
 size = Vector3(28, 0.2, 28)
@@ -36,7 +36,7 @@ material = SubResource("StandardMaterial3D_tbshm")
 size = Vector3(25, 0.2, 25)
 
 [node name="LavaLocation" type="Node3D"]
-script = ExtResource("3_baselocation")
+script = ExtResource("1_hjm20")
 
 [node name="Floor" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
@@ -50,8 +50,8 @@ mesh = SubResource("BoxMesh_floor")
 [node name="PlayerSpawn" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-[node name="ItemSpawner" parent="." instance=ExtResource("2_spawner")]
-available_items = Array[ExtResource("3_3jnxk")]([ExtResource("4_yycko"), ExtResource("5_tbshm")])
+[node name="ItemSpawner" parent="." instance=ExtResource("2_wbucu")]
+available_items = Array[ExtResource("3_t7cx1")]([ExtResource("4_u33w6"), ExtResource("5_obsk7")])
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 5, 0)

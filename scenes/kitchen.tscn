@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://bomy1jbd4lktn"]
+[gd_scene load_steps=31 format=3 uid="uid://bomy1jbd4lktn"]
 
 [ext_resource type="Texture2D" uid="uid://ww8mqihhdcf4" path="res://assets/images/ground/1K_tiling_17_basecolor.png" id="1_88wuv"]
 [ext_resource type="Texture2D" uid="uid://wceqeafm1vcj" path="res://assets/images/ground/1K_tiling_17_height.png" id="2_acu1m"]
@@ -16,6 +16,9 @@
 [ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="14_mbcyj"]
 [ext_resource type="Resource" uid="uid://chv5hh53mshow" path="res://resources/items/banana.tres" id="15_psp1i"]
 [ext_resource type="Resource" uid="uid://b1wwo5e3c2mrs" path="res://resources/items/doughnut.tres" id="16_lxurs"]
+[ext_resource type="PackedScene" uid="uid://c2b0yyfp4by2q" path="res://assets/models/players/character-male-e.glb" id="17_k1cyo"]
+[ext_resource type="PackedScene" uid="uid://1seiuhu0eg3j" path="res://assets/models/players/character-female-d.glb" id="18_3fy06"]
+[ext_resource type="PackedScene" uid="uid://dodfqy0lqse6f" path="res://assets/models/players/character-male-d.glb" id="19_e7cmp"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_7vcjq"]
 size = Vector3(20.6499, 0.205603, 40.7003)
@@ -380,3 +383,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)
 script = ExtResource("12_ls4fu")
 spawn_position = Vector3(0, 7.5, 0)
 metadata/_custom_type_script = "uid://bx721rs0r115l"
+
+[node name="character-male-e2" parent="." instance=ExtResource("17_k1cyo")]
+transform = Transform3D(-2, 0, -1.74846e-07, 0, 2, 0, 1.74846e-07, 0, -2, -1.97357, 0.0360018, 9.23916)
+
+[node name="character-female-d2" parent="." instance=ExtResource("18_3fy06")]
+transform = Transform3D(-2, 0, 1.74846e-07, 0, 2, 0, -1.74846e-07, 0, -2, -0.0378358, 0.0195008, 9.28994)
+
+[node name="character-male-d2" parent="." instance=ExtResource("19_e7cmp")]
+transform = Transform3D(-2, 0, 1.74846e-07, 0, 2, 0, -1.74846e-07, 0, -2, 1.89545, -0.0170673, 9.23986)
