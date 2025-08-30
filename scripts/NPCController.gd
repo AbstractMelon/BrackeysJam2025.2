@@ -87,20 +87,17 @@ func _get_npc_skill_level(npc: GameState.PlayerData) -> float:
 func _npc_collect_item(npc: GameState.PlayerData):
 	print("Collecting item")
 	if not item_spawner or not npc.mixing_pot:
-		print("couldn't find needed things")
 		print(item_spawner)
 		return
 
 	# Get available items from spawner
 	var available_items = _get_available_items()
 	if available_items.is_empty():
-		print("Item list is empty")
 		return
 
 	# NPC item selection strategy based on skill and round
 	var selected_item = _select_item_for_npc(npc, available_items)
 	if selected_item:
-		print("Item selected and adding")
 		_npc_add_item_to_pot(npc, selected_item)
 
 func _get_available_items() -> Array:
@@ -109,7 +106,7 @@ func _get_available_items() -> Array:
 	var pickup_items = get_tree().get_nodes_in_group("pickup_items")
 
 	for item in pickup_items:
-		if item is PickupableItem and not item.is_being_carried:
+		if item is PickupableItem and not item.is_being_carried and not item.is_in_group("crates"):
 			items.append(item)
 
 	return items

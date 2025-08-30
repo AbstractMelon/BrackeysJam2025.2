@@ -169,9 +169,9 @@ func end_baking_phase():
 func _generate_all_biscuits():
 	for player in alive_players:
 		if player.mixing_pot:
-			var points = player.mixing_pot.complete_mixing()
 			player.current_biscuit = GameState.BiscuitData.new()
-			player.current_biscuit.generate_from_pot(player.mixing_pot, points)
+			player.current_biscuit.generate_from_pot(player.mixing_pot, player.mixing_pot.get_current_points())
+			var points = player.mixing_pot.complete_mixing()
 			player.round_score = points
 
 func _start_judging_phase():

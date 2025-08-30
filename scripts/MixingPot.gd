@@ -66,7 +66,7 @@ func mix_item(item: PickupableItem):
 	AudioManager.play_random_sfx_group(potAudio)
 
 func complete_mixing() -> int:
-	var final_points = score_data.points * score_data.multiplier
+	var final_points = get_current_points()
 	mixed_items.clear()
 	base_points = 0
 	update_ui()
