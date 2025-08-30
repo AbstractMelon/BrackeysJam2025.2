@@ -28,24 +28,12 @@ enum CommentType {
 var judge_data = {
 	Judge.GRANNY_BUTTERWORTH: {
 		"name": "Granny Butterworth",
-		"personality": "sweet_but_brutal",
-		"speech_pattern": "southern_gentle",
-		"expertise": "traditional_baking",
-		"quirks": ["nostalgic", "compassionate", "brutally_honest"]
 	},
 	Judge.RORDAN_GAMSEY: {
 		"name": "Rordan Gamsey",
-		"personality": "angry_perfectionist",
-		"speech_pattern": "explosive_chef",
-		"expertise": "fine_dining",
-		"quirks": ["volatile", "passionate", "unforgiving"]
 	},
 	Judge.PROFESSOR_BISCOTTI: {
 		"name": "Professor Biscotti",
-		"personality": "academic_analyzer",
-		"speech_pattern": "scientific_formal",
-		"expertise": "food_science",
-		"quirks": ["analytical", "curious", "detached"]
 	}
 }
 
@@ -738,39 +726,9 @@ func _professor_research_suggestions(_biscuit: GameState.BiscuitData):
 func get_judge_name(judge: Judge) -> String:
 	return judge_data[judge].name
 
-func get_judge_personality(judge: Judge) -> String:
-	return judge_data[judge].personality
-
-func get_judge_speech_pattern(judge: Judge) -> String:
-	return judge_data[judge].speech_pattern
-
-func get_judge_expertise(judge: Judge) -> String:
-	return judge_data[judge].expertise
-
-func get_judge_quirks(judge: Judge) -> Array[String]:
-	return judge_data[judge].quirks
 
 func is_judging() -> bool:
 	return judging_in_progress
-
-func get_judge_mood(judge: Judge) -> Dictionary:
-	return judge_mood_modifiers.get(judge, {})
-
-func reset_judge_moods():
-	_initialize_judge_moods()
-
-# ---------------- Settings Functions ----------------
-func set_single_comment_mode(enabled: bool):
-	single_comment_per_judge = enabled
-
-func set_comment_display_time(time: float):
-	comment_display_time = time
-
-func get_single_comment_mode() -> bool:
-	return single_comment_per_judge
-
-func get_comment_display_time() -> float:
-	return comment_display_time
 
 # ---------------- Advanced Dialogue System ----------------
 func generate_contextual_response(judge: Judge, _biscuit: GameState.BiscuitData, context: String) -> String:
