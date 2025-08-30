@@ -37,6 +37,11 @@ func _process(delta):
 	if not is_baking:
 		return
 
+	if not item_spawner:
+		item_spawner = get_tree().get_first_node_in_group("item_spawner")
+		if not item_spawner:
+			return
+
 	for npc in active_npcs:
 		if npc.player_id in npc_timers:
 			npc_timers[npc.player_id] += delta
@@ -80,17 +85,22 @@ func _get_npc_skill_level(npc: GameState.PlayerData) -> float:
 			return 0.5  # Default
 
 func _npc_collect_item(npc: GameState.PlayerData):
+	print("Collecting item")
 	if not item_spawner or not npc.mixing_pot:
+		print("couldn't find needed things")
+		print(item_spawner)
 		return
 
 	# Get available items from spawner
 	var available_items = _get_available_items()
 	if available_items.is_empty():
+		print("Item list is empty")
 		return
 
 	# NPC item selection strategy based on skill and round
 	var selected_item = _select_item_for_npc(npc, available_items)
 	if selected_item:
+		print("Item selected and adding")
 		_npc_add_item_to_pot(npc, selected_item)
 
 func _get_available_items() -> Array:
@@ -171,6 +181,9 @@ func _npc_add_item_to_pot(npc: GameState.PlayerData, item: PickupableItem):
 	item.queue_free()
 
 	npc_action_completed.emit(npc, "item_collected")
+	
+	npc.mixing_pot.update_score_data()
+	npc.mixing_pot.update_ui()
 
 	print("NPC ", npc.name, " collected ", item.item_data.item_name, " for ", points, " points. Total pot: ", npc.round_score)
 

@@ -35,7 +35,8 @@ func update_score_data() -> void:
 		ingredients.append(data)
 	score_data.ingredients = ingredients
 	
-	ModifierManager.get_modified_score(score_data)
+	if not is_npc_pot:
+		ModifierManager.get_modified_score(score_data)
 
 func _on_item_entered(body):
 	if is_npc_pot:
