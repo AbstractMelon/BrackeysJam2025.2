@@ -361,6 +361,9 @@ transform = Transform3D(-2.76487, 0, 0.442168, 0, 2.8, 0, -0.442168, 0, -2.76487
 transform = Transform3D(-0.982241, 0, 0.187621, 0, 1, 0, -0.187621, 0, -0.982241, 5.00482, 0.25882, -1.01)
 is_npc_pot = true
 
+[node name="BakerBetty" parent="MixingPots/Pot2" instance=ExtResource("24_fr5pv")]
+transform = Transform3D(-2.75028, 0, -0.525339, 0, 2.8, 0, 0.525339, 0, -2.75028, -0.0230608, -1.04461, 1.66909)
+
 [node name="Pot3" parent="MixingPots" instance=ExtResource("8_n55t6")]
 transform = Transform3D(-0.994582, 0, -0.103956, 0, 1, 0, 0.103956, 0, -0.994582, -1.37413, 0.25882, -1.01)
 is_npc_pot = true
@@ -393,6 +396,9 @@ transform = Transform3D(-2.8, 0, 2.44784e-07, 0, 2.8, 0, -2.44784e-07, 0, -2.8, 
 transform = Transform3D(-0.981128, 0, -0.193361, 0, 1, 0, 0.193361, 0, -0.981128, 5.32292, 0.25882, 2.08979)
 is_npc_pot = true
 
+[node name="ButteryBob" parent="MixingPots/Pot7" instance=ExtResource("25_k0mf2")]
+transform = Transform3D(-2.74716, 0, 0.54141, 0, 2.8, 0, -0.54141, 0, -2.74716, -0.22959, -1.04461, 1.13931)
+
 [node name="ItemSpawner" parent="." instance=ExtResource("13_j1h31")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.999795, -0.316886, -31.879)
 max_items = 50
@@ -415,9 +421,3 @@ transform = Transform3D(-2, 0, 1.74846e-07, 0, 2, 0, -1.74846e-07, 0, -2, -0.037
 
 [node name="Rordon" parent="Judges" instance=ExtResource("19_e7cmp")]
 transform = Transform3D(-2, 0, 1.74846e-07, 0, 2, 0, -1.74846e-07, 0, -2, 1.89545, -0.0170673, 9.23986)
-
-[node name="character-female-f2" parent="." instance=ExtResource("24_fr5pv")]
-transform = Transform3D(2.8, 0, 0, 0, 2.8, 0, 0, 0, 2.8, 5.34063, -0.739043, -2.64512)
-
-[node name="character-male-a2" parent="." instance=ExtResource("25_k0mf2")]
-transform = Transform3D(2.8, 0, 0, 0, 2.8, 0, 0, 0, 2.8, 5.32788, -0.739043, 0.927591)
