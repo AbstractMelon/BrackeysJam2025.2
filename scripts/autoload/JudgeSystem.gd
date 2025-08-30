@@ -319,20 +319,8 @@ func _granny_primary_assessment(biscuit: GameState.BiscuitData, _patience: float
 
 func _granny_personal_story(biscuit: GameState.BiscuitData, _nostalgia: float):
 	var stories = []
-
-	if "Sweet" in biscuit.special_attributes:
-		stories = [
-			"Reminds me of the time little Tommy tried to make cookies and used a whole bag of sugar. Oh, that boy was bouncing off the walls for days!",
-			"The sweetness brings back memories of my grandmother's honey biscuits. She'd always say, 'A little extra sugar never hurt nobody.'",
-			"This takes me back to the church bake sale of '63. Sister Margaret's sweet rolls were the talk of the town!"
-		]
-	elif "Spicy" in biscuit.special_attributes:
-		stories = [
-			"My word, this reminds me of when cousin Edna tried to make 'exotic' food. We all learned that day that not everything needs hot sauce!",
-			"Oh my, this brings back memories of the chili cook-off disaster of '78. Poor Reverend Johnson never lived that down!",
-			"Sweetie, this reminds me of the time I accidentally used cayenne instead of cinnamon. The family still talks about it!"
-		]
-	elif biscuit.total_points > 70:
+	
+	if biscuit.total_points > 70:
 		stories = [
 			"This reminds me of my mother's kitchen on Sunday mornings. The whole house would smell like heaven!",
 			"Oh darling, this takes me back to my wedding day. The baker made the most perfect biscuits I've ever tasted.",
@@ -498,16 +486,6 @@ func _rordan_technical_criticism(biscuit: GameState.BiscuitData):
 			"I've seen more complexity in a saltine cracker!",
 			"You call this a recipe? I call this laziness!"
 		]
-
-	if "Spicy" in biscuit.special_attributes:
-		criticisms.append_array([
-			"TOO MUCH SPICE! Are you trying to kill me?!",
-			"This isn't a biscuit, it's a weapon!",
-			"My tongue is on fire! Who let this happen?!",
-			"This is assault with a deadly biscuit!",
-			"I need a fire extinguisher for my mouth!"
-		])
-
 	if "Rotten" in biscuit.special_attributes:
 		criticisms.append_array([
 			"GET THIS GARBAGE OUT OF MY SIGHT!",
@@ -725,7 +703,6 @@ func _professor_research_suggestions(_biscuit: GameState.BiscuitData):
 # ---------------- Utility Functions ----------------
 func get_judge_name(judge: Judge) -> String:
 	return judge_data[judge].name
-
 
 func is_judging() -> bool:
 	return judging_in_progress
