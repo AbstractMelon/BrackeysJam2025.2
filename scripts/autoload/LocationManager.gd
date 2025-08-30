@@ -66,7 +66,7 @@ func _load_location_soundtracks():
 			"intro": _try_load_audio("res://assets/audio/IntroLoop.ogg"),
 			"loop": _try_load_audio("res://assets/audio/IntroLoop.ogg")
 		},
-		 "Lava Location": {
+		 "Volcano": {
 			 "intro": _try_load_audio("res://assets/audio/music/volcano_intro.ogg"),
 			 "loop": _try_load_audio("res://assets/audio/music/volcano_loop.ogg")
 		 },
