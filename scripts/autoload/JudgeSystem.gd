@@ -231,11 +231,18 @@ func _judge_player_biscuit(player: GameState.PlayerData):
 
 func _get_available_comment_types(judge_key: String) -> Array[String]:
 	var judge = judge_data[judge_key]
-	var pool = judge.get("comment_pool", []).duplicate()
+
+	# Cast to Array and then rebuild into Array[String]
+	var raw_pool: Array = judge.get("comment_pool", [])
+	var pool: Array[String] = []
+	for item in raw_pool:
+		pool.append(str(item))  # force as string in case the array has mixed types
+
 	if _check_mood_condition(judge_key, {"condition": "rage_gt", "value": 1.2}):
 		pool.append("outburst")
 	if _check_mood_condition(judge_key, {"condition": "curiosity_gt", "value": 1.1}):
 		pool.append("research")
+
 	return pool
 
 func _deliver_comment(judge_key: String, biscuit: GameState.BiscuitData, category: String):
@@ -245,21 +252,27 @@ func _deliver_comment(judge_key: String, biscuit: GameState.BiscuitData, categor
 
 	var comment_lines: Array[String] = []
 	if "lines" in category_data:
-		comment_lines = category_data["lines"]
+		var raw_lines: Array = category_data["lines"]
+		for l in raw_lines:
+			comment_lines.append(str(l))
 	elif "conditionals" in category_data:
 		for conditional in category_data["conditionals"]:
 			if _check_biscuit_condition(biscuit, conditional):
-				comment_lines.append_array(conditional["lines"])
+				for l in conditional["lines"]:
+					comment_lines.append(str(l))
 	elif "score_tiers" in category_data:
 		var score = biscuit.total_points
-		if category == "scientific": score = biscuit.ingredients.size() + biscuit.special_attributes.size()
+		if category == "scientific":
+			score = biscuit.ingredients.size() + biscuit.special_attributes.size()
 
 		var tiers = category_data["score_tiers"].keys()
 		tiers.sort()
 		tiers.reverse()
 		for tier_score in tiers:
 			if score >= tier_score:
-				comment_lines = category_data["score_tiers"][tier_score]
+				var raw_lines: Array = category_data["score_tiers"][tier_score]
+				for l in raw_lines:
+					comment_lines.append(str(l))
 				break
 
 	if comment_lines.is_empty(): return
