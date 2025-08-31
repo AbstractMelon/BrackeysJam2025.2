@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://bldnpr6f5jwqv"]
+[gd_scene load_steps=11 format=3 uid="uid://bldnpr6f5jwqv"]
 
 [ext_resource type="PackedScene" uid="uid://djyx8akx6ie7d" path="res://scenes/components/item_spawner.tscn" id="1_t4ie7"]
 [ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="2_2jwuu"]
 [ext_resource type="Resource" uid="uid://chv5hh53mshow" path="res://resources/items/banana.tres" id="3_1acgv"]
-[ext_resource type="PackedScene" uid="uid://53nblxbwf0d5" path="res://assets/models/building/wall-low.glb" id="4_2jwuu"]
+[ext_resource type="ArrayMesh" uid="uid://da0tv2mjxe002" path="res://assets/models/Untitled.obj" id="4_1acgv"]
+[ext_resource type="Shader" uid="uid://cqxinxpgswxlk" path="res://assets/shader/beach.gdshader" id="5_1acgv"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5h6yu"]
 size = Vector3(25, 5, 25)
@@ -21,21 +22,22 @@ roughness = 0.8
 material = SubResource("StandardMaterial3D_4dggd")
 size = Vector3(25, 0.2, 25)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_t4ie7"]
-size = Vector3(32.4389, 0.396094, 30)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jungle"]
-albedo_color = Color(0.835294, 0.67451, 0.321569, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_2jwuu"]
-material = SubResource("StandardMaterial3D_jungle")
-size = Vector3(30, 0.2, 30)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_1acgv"]
-size = Vector3(0.470137, 1.83704, 6.23469)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_2jwuu"]
-size = Vector3(0.0709229, 1.74414, 5.1925)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rajdw"]
+render_priority = 0
+shader = ExtResource("5_1acgv")
+shader_parameter/water_level = 0.0
+shader_parameter/sand_level = 2.0
+shader_parameter/grass_level = 5.0
+shader_parameter/rock_level = 110.0
+shader_parameter/water_color = Color(0.2, 0.4, 0.8, 1)
+shader_parameter/wet_sand_color = Color(0.6, 0.4, 0.2, 1)
+shader_parameter/dry_sand_color = Color(0.9, 0.8, 0.6, 1)
+shader_parameter/grass_color = Color(0.3, 0.6, 0.2, 1)
+shader_parameter/rock_color = Color(0.4, 0.4, 0.4, 1)
+shader_parameter/snow_color = Color(0.95, 0.95, 0.95, 1)
+shader_parameter/transition_smoothness = 1.0
+shader_parameter/noise_scale = 2.0
+shader_parameter/noise_strength = 0.3
 
 [node name="Ocean" type="Node3D"]
 
@@ -58,34 +60,7 @@ shape = SubResource("BoxShape3D_5h6yu")
 material_override = SubResource("StandardMaterial3D_rp4u8")
 mesh = SubResource("BoxMesh_i2u2a")
 
-[node name="Borders" type="Node" parent="."]
-
-[node name="Floor" type="StaticBody3D" parent="Borders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Borders/Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.49502, -0.121777, 0)
-shape = SubResource("BoxShape3D_t4ie7")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Borders/Floor"]
-mesh = SubResource("BoxMesh_2jwuu")
-
-[node name="Wall" type="StaticBody3D" parent="."]
-transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, -10.6001, -0.873932, 4.58765)
-
-[node name="Model" parent="Wall" instance=ExtResource("4_2jwuu")]
-transform = Transform3D(1, 0, 0, 0, 1.02327, 0, 0, 0, 2.56036, -0.512733, 0, -0.794706)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.701817, 0.313083, -0.315869)
-shape = SubResource("BoxShape3D_1acgv")
-
-[node name="Wall2" type="StaticBody3D" parent="."]
-transform = Transform3D(-2.62268e-07, 0, 6, 0, 6, 0, -6, 0, -2.62268e-07, 6.38694, -0.873932, 12.0246)
-
-[node name="Model" parent="Wall2" instance=ExtResource("4_2jwuu")]
-transform = Transform3D(1, 0, 0, 0, 1.02327, 0, 0, 0, 2.56036, -0.512733, 0, -0.794706)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall2"]
-transform = Transform3D(1, 0, 0, 0, 1.00005, 0, 0, 0, 1, -0.498231, 0.372085, -0.743225)
-shape = SubResource("BoxShape3D_2jwuu")
+[node name="Ground" type="MeshInstance3D" parent="."]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+mesh = ExtResource("4_1acgv")
+surface_material_override/0 = SubResource("ShaderMaterial_rajdw")
