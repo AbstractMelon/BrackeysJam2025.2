@@ -1,0 +1,26 @@
+[gd_scene load_steps=2 format=3 uid="uid://bqw8x7n0p1u4c"]
+
+[ext_resource type="Script" uid="uid://cddvels7taji2" path="res://scripts/components/JudgePresentation.gd" id="1_presentation"]
+
+[node name="JudgePresentation" type="Node3D"]
+script = ExtResource("1_presentation")
+
+[node name="CameraRig" type="Node3D" parent="."]
+
+[node name="JudgeCamera" type="Camera3D" parent="CameraRig"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 2, 3)
+fov = 60.0
+
+[node name="AudioPlayers" type="Node" parent="."]
+
+[node name="GrannyAudio" type="AudioStreamPlayer3D" parent="AudioPlayers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0378358, 0.0195008, 9.28994)
+bus = &"Voice"
+
+[node name="RordanAudio" type="AudioStreamPlayer3D" parent="AudioPlayers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.89545, -0.0170673, 9.23986)
+bus = &"Voice"
+
+[node name="ProfessorAudio" type="AudioStreamPlayer3D" parent="AudioPlayers"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.97357, 0.0360018, 9.23916)
+bus = &"Voice"

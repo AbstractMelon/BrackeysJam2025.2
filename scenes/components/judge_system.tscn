@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c0li8qci1qhri"]
+
+[ext_resource type="Script" uid="uid://tgl3qiqlsx7q" path="res://scripts/autoload/JudgeSystem.gd" id="1_es3fs"]
+
+[node name="JudgeSystem" type="Node"]
+script = ExtResource("1_es3fs")

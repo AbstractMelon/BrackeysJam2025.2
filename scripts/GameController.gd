@@ -8,6 +8,7 @@ signal game_ended()
 @onready var mixing_pot: MixingPot = $LocationContainer/Kitchen/MixingPot
 @onready var item_spawner: ItemSpawner = $LocationContainer/Kitchen/ItemSpawner
 @onready var game_ui: GameUI = $GameUI
+@onready var judge_presentation: JudgePresentation = $JudgePresentation
 
 @export var npc_mixing_pots: Array[MixingPot] = []
 
@@ -28,6 +29,8 @@ func _initialize_game():
 	JudgeSystem.judging_started.connect(_on_judging_started)
 	JudgeSystem.judge_comment.connect(_on_judge_comment)
 	JudgeSystem.judging_complete.connect(_on_judging_complete)
+	JudgeSystem.judge_focus_requested.connect(_on_judge_focus_requested)
+	JudgeSystem.judge_voice_requested.connect(_on_judge_voice_requested)
 
 	# Start the game
 	GameLoop.start_new_game()
@@ -167,6 +170,14 @@ func _on_judge_comment(judge_name: String, comment: String, comment_type: int):
 func _on_judging_complete():
 	print("[GameController] Judging complete")
 	GameLoop.change_state(GameState.State.ELIMINATION)
+
+func _on_judge_focus_requested(judge_key: String):
+	# Camera focusing is handled automatically by JudgePresentation system
+	pass
+
+func _on_judge_voice_requested(judge_key: String, mood: String):
+	# Voice playback is handled automatically by JudgePresentation system
+	pass
 
 func get_player_mixing_pot() -> MixingPot:
 	return mixing_pot
