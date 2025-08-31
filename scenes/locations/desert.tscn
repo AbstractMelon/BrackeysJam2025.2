@@ -1,3 +1,61 @@
-[gd_scene load_steps=0 format=3 uid="uid://b0yy2tt4mkkwy"]
+[gd_scene load_steps=11 format=3 uid="uid://b0yy2tt4mkkwy"]
+
+[ext_resource type="PackedScene" uid="uid://djyx8akx6ie7d" path="res://scenes/components/item_spawner.tscn" id="1_cxjvr"]
+[ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="2_o88ts"]
+[ext_resource type="Resource" uid="uid://chv5hh53mshow" path="res://resources/items/banana.tres" id="3_nvrbp"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lrb7n"]
+size = Vector3(30, 0.2, 30)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jungle"]
+albedo_color = Color(0.835294, 0.67451, 0.321569, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_i6r76"]
+material = SubResource("StandardMaterial3D_jungle")
+size = Vector3(30, 0.2, 30)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rrxxn"]
+size = Vector3(25, 5, 25)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0wkqy"]
+albedo_color = Color(0.8, 0.8, 0.2, 1)
+emission = Color(0.8, 0.8, 0.2, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4dggd"]
+albedo_color = Color(0.3, 0.3, 0.3, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_xvlkt"]
+material = SubResource("StandardMaterial3D_4dggd")
+size = Vector3(25, 0.2, 25)
 
 [node name="Desert" type="Node3D"]
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_lrb7n")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("BoxMesh_i6r76")
+
+[node name="PlayerSpawn" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="ItemSpawner" parent="." instance=ExtResource("1_cxjvr")]
+available_items = Array[ExtResource("2_o88ts")]([ExtResource("3_nvrbp")])
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 5, 0)
+
+[node name="ReturnPad" type="Area3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, -0.9, -8)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ReturnPad"]
+shape = SubResource("BoxShape3D_rrxxn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ReturnPad"]
+material_override = SubResource("StandardMaterial3D_0wkqy")
+mesh = SubResource("BoxMesh_xvlkt")
