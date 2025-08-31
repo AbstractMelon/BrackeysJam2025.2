@@ -8,11 +8,11 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
 size = Vector3(30, 0.2, 30)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jungle"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3qhuv"]
 albedo_color = Color(0.2, 0.8, 0.3, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_floor"]
-material = SubResource("StandardMaterial3D_jungle")
+material = SubResource("StandardMaterial3D_3qhuv")
 size = Vector3(30, 0.2, 30)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_r4x20"]
@@ -23,12 +23,12 @@ albedo_color = Color(0.8, 0.8, 0.2, 1)
 emission = Color(0.8, 0.8, 0.2, 1)
 emission_energy_multiplier = 0.5
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4dggd"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k8mel"]
 albedo_color = Color(0.3, 0.3, 0.3, 1)
 roughness = 0.8
 
 [sub_resource type="BoxMesh" id="BoxMesh_j0nxp"]
-material = SubResource("StandardMaterial3D_4dggd")
+material = SubResource("StandardMaterial3D_k8mel")
 size = Vector3(25, 0.2, 25)
 
 [node name="JungleLocation" type="Node3D"]
