@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://chb6fptmqidgj"]
+[gd_scene load_steps=7 format=3 uid="uid://chb6fptmqidgj"]
 
 [ext_resource type="Script" uid="uid://nuig7hxx5y58" path="res://scripts/autoload/GameLoop.gd" id="1_4rpi2"]
 [ext_resource type="Script" uid="uid://be2na812acy6t" path="res://scripts/NPCController.gd" id="2_y4rrr"]
+[ext_resource type="Script" uid="uid://chhv7gbkjsu1k" path="res://scripts/ItemSpawner.gd" id="3_msdxk"]
+[ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="4_3r4np"]
+[ext_resource type="Resource" uid="uid://chv5hh53mshow" path="res://resources/items/banana.tres" id="5_shb7c"]
+[ext_resource type="Resource" uid="uid://b1wwo5e3c2mrs" path="res://resources/items/doughnut.tres" id="6_dr834"]
 
 [node name="GameLoop" type="Node"]
 script = ExtResource("1_4rpi2")
@@ -11,5 +15,13 @@ script = ExtResource("2_y4rrr")
 metadata/_custom_type_script = "uid://be2na812acy6t"
 
 [node name="Timer" type="Timer" parent="."]
+
+[node name="ItemSpawner" type="Node3D" parent="."]
+script = ExtResource("3_msdxk")
+available_items = Array[ExtResource("4_3r4np")]([ExtResource("5_shb7c"), ExtResource("6_dr834")])
+physical = false
+metadata/_custom_type_script = "uid://chhv7gbkjsu1k"
+
+[node name="SpawnTimer" type="Timer" parent="ItemSpawner"]
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

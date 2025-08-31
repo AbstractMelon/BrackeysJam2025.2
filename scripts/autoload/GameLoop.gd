@@ -26,7 +26,7 @@ var stations: Array[Vector3] = [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0
 var round_difficulty: float = 1.0
 
 @onready var timer: Timer = $Timer
-@onready var npc_controller = $NPCController
+@onready var npc_controller : NPCController = $NPCController
 
 func _ready():
 	pass
@@ -129,6 +129,11 @@ func _setup_round():
 func _spawn_round_items():
 	var item_spawner = get_tree().get_first_node_in_group("item_spawner")
 	if item_spawner and item_spawner.has_method("spawn_items_for_round"):
+		var item_count = int(8 + current_round * 2)  # More items each round
+		item_spawner.spawn_items_for_round(item_count, round_difficulty)
+	
+	var item_data_spawner = get_tree().get_first_node_in_group("item_spawner")
+	if item_data_spawner and item_data_spawner.has_method("spawn_items_for_round"):
 		var item_count = int(8 + current_round * 2)  # More items each round
 		item_spawner.spawn_items_for_round(item_count, round_difficulty)
 

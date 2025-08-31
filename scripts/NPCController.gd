@@ -11,13 +11,28 @@ var is_baking: bool = false
 # NPC behavior timers
 var npc_timers: Dictionary = {}
 var item_spawner: Node
+var add_to_pot_when_loaded: Dictionary[GameState.PlayerData, DataArrayHolder] = {}
+
+class DataArrayHolder:
+	var data : Array[ItemData] = []
+	
 
 func _ready():
 	# Find item spawner in scene
 	call_deferred("_find_item_spawner")
 
+func on_rejoined_kitchen():
+	if LocationManager.get_current_location_name() != "Kitchen":
+		return
+	for entry in add_to_pot_when_loaded:
+		print("Getting entry")
+		for i in range(add_to_pot_when_loaded[entry].data.size()):
+			print("Getting item in entry")
+			_npc_add_item_to_pot(entry, add_to_pot_when_loaded[entry].data[i])
+	
+
 func _find_item_spawner():
-	item_spawner = get_tree().get_first_node_in_group("item_spawner")
+	item_spawner = get_tree().get_first_node_in_group("item_data_spawner")
 
 func start_baking(npcs: Array[GameState.PlayerData], difficulty: float):
 	active_npcs = npcs
@@ -38,7 +53,7 @@ func _process(delta):
 		return
 
 	if not item_spawner:
-		item_spawner = get_tree().get_first_node_in_group("item_spawner")
+		item_spawner = get_tree().get_first_node_in_group("item_data_spawner")
 		if not item_spawner:
 			return
 
@@ -86,7 +101,7 @@ func _get_npc_skill_level(npc: GameState.PlayerData) -> float:
 
 func _npc_collect_item(npc: GameState.PlayerData):
 	print("Collecting item")
-	if not item_spawner or not npc.mixing_pot:
+	if not item_spawner:
 		return
 
 	# Get available items from spawner
@@ -102,15 +117,16 @@ func _npc_collect_item(npc: GameState.PlayerData):
 func _get_available_items() -> Array:
 	# Get items that are currently spawned in the world
 	var items = []
-	var pickup_items = get_tree().get_nodes_in_group("pickup_items")
+	var spawner : ItemSpawner = get_tree().get_first_node_in_group("item_data_spawner")
+	var available_items = spawner.active_items_data
 
-	for item in pickup_items:
-		if item is PickupableItem and not item.is_being_carried and not item.is_in_group("crates"):
+	for item in available_items:
+		if item is ItemData:
 			items.append(item)
 
 	return items
 
-func _select_item_for_npc(npc: GameState.PlayerData, available_items: Array) -> PickupableItem:
+func _select_item_for_npc(npc: GameState.PlayerData, available_items: Array) -> ItemData:
 	if available_items.is_empty():
 		return null
 
@@ -127,45 +143,53 @@ func _select_item_for_npc(npc: GameState.PlayerData, available_items: Array) -> 
 		# Random selection
 		return available_items[randi() % available_items.size()]
 
-func _select_best_item(available_items: Array) -> PickupableItem:
+func _select_best_item(available_items: Array) -> ItemData:
 	var best_item = null
 	var best_value = -1
 
 	for item in available_items:
-		if item is PickupableItem and item.item_data:
-			var value = item.get_point_value()
-			if value > best_value:
-				best_value = value
-				best_item = item
+		
+		var value = item.point_value if not item.is_shiny else int(item.point_value * item.shiny_multiplier)
+
+		if value > best_value:
+			best_value = value
+			best_item = item
 
 	return best_item if best_item else available_items[randi() % available_items.size()]
 
-func _select_decent_item(available_items: Array) -> PickupableItem:
+func _select_decent_item(available_items: Array) -> ItemData:
 	# Filter out items that are obviously bad (negative value, rotten, etc.)
 	var decent_items = []
 
 	for item in available_items:
-		if item is PickupableItem and item.item_data:
-			var item_name = item.item_data.item_name.to_lower()
-			var point_value = item.get_point_value()
-
-			# Avoid obviously bad items
-			if point_value >= 5 and not ("rotten" in item_name or "poison" in item_name or "cursed" in item_name):
-				decent_items.append(item)
+		var item_name = item.item_name.to_lower()
+		var point_value = item.point_value if not item.is_shiny else int(item.point_value * item.shiny_multiplier)
+		
+		# Avoid obviously bad items
+		if point_value >= 5 and not ("rotten" in item_name or "poison" in item_name or "cursed" in item_name):
+			decent_items.append(item)
 
 	if decent_items.is_empty():
 		return available_items[randi() % available_items.size()]
 	else:
 		return decent_items[randi() % decent_items.size()]
 
-func _npc_add_item_to_pot(npc: GameState.PlayerData, item: PickupableItem):
-	if not npc.mixing_pot or not item:
+func _npc_add_item_to_pot(npc: GameState.PlayerData, item: ItemData):
+	if not npc.mixing_pot:
+		if add_to_pot_when_loaded.has(npc):
+			add_to_pot_when_loaded[npc].data.append(item)
+		else:
+			var new_data = DataArrayHolder.new()
+			new_data.data.append(item)
+			add_to_pot_when_loaded[npc] = new_data
+		return
+	if not item:
 		return
 
 	# Simulate the NPC picking up and mixing the item
-	var points = GameManager.calculate_item_points(item)
+	var points = GameManager.calculate_item_points(null, item)
 	npc.mixing_pot.base_points += points
-	npc.mixing_pot.mixed_items.append(item.item_data)
+	npc.mixing_pot.mixed_items.append(item)
 
 	# Update NPC pot score data first
 	npc.mixing_pot.update_score_data()
@@ -173,15 +197,15 @@ func _npc_add_item_to_pot(npc: GameState.PlayerData, item: PickupableItem):
 	# Update NPC round score to match current pot points
 	npc.round_score = npc.mixing_pot.get_current_points()
 
-	# Remove item from world
-	item.queue_free()
-
 	npc_action_completed.emit(npc, "item_collected")
 	
 	npc.mixing_pot.update_score_data()
 	npc.mixing_pot.update_ui()
+	
+	var spawner : ItemSpawner = get_tree().get_first_node_in_group("item_data_spawner")
+	spawner.remove_item(null, item)
 
-	print("NPC ", npc.name, " collected ", item.item_data.item_name, " for ", points, " points. Total pot: ", npc.round_score)
+	print("NPC ", npc.name, " collected ", item.item_name, " for ", points, " points. Total pot: ", npc.round_score)
 
 func get_npc_progress(npc: GameState.PlayerData) -> Dictionary:
 	var progress = {
