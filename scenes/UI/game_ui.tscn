@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bj6ncu2hxw7q2" path="res://scripts/GameUI.gd" id="1_gameui"]
 [ext_resource type="PackedScene" uid="uid://bkq8x5y0x8dxm" path="res://scenes/UI/pause_menu.tscn" id="2_168mx"]
-[ext_resource type="Script" uid="uid://w56g6k60xbq7" path="res://scripts/TypewriterEffect.gd" id="3_typewriter"]
-[ext_resource type="PackedScene" uid="uid://bk8j7n4p5m3x" path="res://scenes/UI/biscuit_info_display.tscn" id="4_yr8ot"]
+[ext_resource type="Script" path="res://scripts/TypewriterEffect.gd" id="3_typewriter"]
+[ext_resource type="PackedScene" path="res://scenes/UI/biscuit_info_display.tscn" id="4_yr8ot"]
 
 [sub_resource type="Theme" id="Theme_1"]
 

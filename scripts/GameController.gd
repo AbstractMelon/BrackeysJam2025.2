@@ -57,6 +57,7 @@ func _on_game_state_changed(new_state: GameState.State):
 func _on_location_changed():
 	if LocationManager.get_current_location_name() == "Kitchen":
 		GameLoop._assign_mixing_pots()
+		GameLoop.npc_controller.on_rejoined_kitchen()
 
 func _setup_round():
 	print("[GameController] Setting up round ", GameLoop.get_current_round())

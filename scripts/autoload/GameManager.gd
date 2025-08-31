@@ -33,16 +33,19 @@ func get_player() -> Node:
 func get_world() -> Node:
 	return get_tree().get_current_scene()
 
-func calculate_item_points(item: PickupableItem) -> int:
-	if not item or not item.item_data:
-		return 0
+func calculate_item_points(item: PickupableItem = null, item_data: ItemData = null) -> int:
+	if item:
+		if not item or not item.item_data:
+			return 0
+		
+		var base_points = item.get_point_value()
+		var final_points = float(base_points)
+		
+		# Apply global point multiplier
+		
+		return int(final_points)
 	
-	var base_points = item.get_point_value()
-	var final_points = float(base_points)
-	
-	# Apply global point multiplier
-	
-	return int(final_points)
+	return item_data.point_value if not item_data.is_shiny else int(item_data.point_value * item_data.shiny_multiplier)
 	
 func reset_all_modifiers():
 	ModifierManager.reset_modifiers()
