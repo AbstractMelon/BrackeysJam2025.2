@@ -1,18 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://bldnpr6f5jwqv"]
+[gd_scene load_steps=9 format=3 uid="uid://bldnpr6f5jwqv"]
 
 [ext_resource type="PackedScene" uid="uid://djyx8akx6ie7d" path="res://scenes/components/item_spawner.tscn" id="1_t4ie7"]
 [ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="2_2jwuu"]
 [ext_resource type="Resource" uid="uid://chv5hh53mshow" path="res://resources/items/banana.tres" id="3_1acgv"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_rajdw"]
-size = Vector3(30, 0.2, 30)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jungle"]
-albedo_color = Color(0.2, 0.8, 0.3, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_ryvx8"]
-material = SubResource("StandardMaterial3D_jungle")
-size = Vector3(30, 0.2, 30)
+[ext_resource type="ArrayMesh" uid="uid://da0tv2mjxe002" path="res://assets/models/Untitled.obj" id="4_1acgv"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5h6yu"]
 size = Vector3(25, 5, 25)
@@ -32,15 +23,6 @@ size = Vector3(25, 0.2, 25)
 
 [node name="Ocean" type="Node3D"]
 
-[node name="Floor" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
-shape = SubResource("BoxShape3D_rajdw")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
-mesh = SubResource("BoxMesh_ryvx8")
-
 [node name="PlayerSpawn" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
@@ -59,3 +41,7 @@ shape = SubResource("BoxShape3D_5h6yu")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="ReturnPad"]
 material_override = SubResource("StandardMaterial3D_rp4u8")
 mesh = SubResource("BoxMesh_i2u2a")
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+mesh = ExtResource("4_1acgv")
