@@ -26,6 +26,8 @@ func _initialize_game():
 	GameLoop.player_eliminated.connect(_on_player_eliminated)
 	GameLoop.game_over.connect(_on_game_over)
 
+	LocationManager.teleport_completed.connect(_on_location_changed)
+
 	JudgeSystem.judging_started.connect(_on_judging_started)
 	JudgeSystem.judge_comment.connect(_on_judge_comment)
 	JudgeSystem.judging_complete.connect(_on_judging_complete)
@@ -51,6 +53,10 @@ func _on_game_state_changed(new_state: GameState.State):
 			_handle_game_over()
 		GameState.State.VICTORY:
 			_handle_victory()
+
+func _on_location_changed():
+	if LocationManager.get_current_location_name() == "Kitchen":
+		GameLoop._assign_mixing_pots()
 
 func _setup_round():
 	print("[GameController] Setting up round ", GameLoop.get_current_round())
