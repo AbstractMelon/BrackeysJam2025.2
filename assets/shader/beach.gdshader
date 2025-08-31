@@ -30,12 +30,12 @@ float smooth_noise(vec2 pos) {
     vec2 i = floor(pos);
     vec2 f = fract(pos);
     f = f * f * (3.0 - 2.0 * f);
-    
+
     float a = noise(i);
     float b = noise(i + vec2(1.0, 0.0));
     float c = noise(i + vec2(0.0, 1.0));
     float d = noise(i + vec2(1.0, 1.0));
-    
+
     return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
 }
 
@@ -48,13 +48,13 @@ void vertex() {
 void fragment() {
     // Get world position height from vertex shader
     float height = world_position.y;
-    
+
     // Add noise variation to height
     float height_noise = smooth_noise(world_position.xz * noise_scale) * noise_strength;
     height += height_noise;
-    
+
     vec4 final_color;
-    
+
     // Determine color based on height with smooth transitions
     if (height < water_level) {
         final_color = water_color;
@@ -95,9 +95,9 @@ void fragment() {
             final_color = rock_color;
         }
     }
-    
+
     ALBEDO = final_color.rgb;
-    
+
     // Adjust roughness based on material type
     if (height < water_level + 0.5) {
         ROUGHNESS = 0.1; // Wet areas are smoother
@@ -108,6 +108,6 @@ void fragment() {
     } else {
         ROUGHNESS = 0.7; // Rock
     }
-    
+
     METALLIC = 0.0;
 }

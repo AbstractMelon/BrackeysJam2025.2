@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://bldnpr6f5jwqv"]
+[gd_scene load_steps=11 format=3 uid="uid://bldnpr6f5jwqv"]
 
 [ext_resource type="PackedScene" uid="uid://djyx8akx6ie7d" path="res://scenes/components/item_spawner.tscn" id="1_t4ie7"]
 [ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="2_2jwuu"]
 [ext_resource type="Resource" uid="uid://chv5hh53mshow" path="res://resources/items/banana.tres" id="3_1acgv"]
 [ext_resource type="ArrayMesh" uid="uid://da0tv2mjxe002" path="res://assets/models/Untitled.obj" id="4_1acgv"]
+[ext_resource type="Shader" uid="uid://cqxinxpgswxlk" path="res://assets/shader/beach.gdshader" id="5_1acgv"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5h6yu"]
 size = Vector3(25, 5, 25)
@@ -20,6 +21,23 @@ roughness = 0.8
 [sub_resource type="BoxMesh" id="BoxMesh_i2u2a"]
 material = SubResource("StandardMaterial3D_4dggd")
 size = Vector3(25, 0.2, 25)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rajdw"]
+render_priority = 0
+shader = ExtResource("5_1acgv")
+shader_parameter/water_level = 0.0
+shader_parameter/sand_level = 2.0
+shader_parameter/grass_level = 5.0
+shader_parameter/rock_level = 110.0
+shader_parameter/water_color = Color(0.2, 0.4, 0.8, 1)
+shader_parameter/wet_sand_color = Color(0.6, 0.4, 0.2, 1)
+shader_parameter/dry_sand_color = Color(0.9, 0.8, 0.6, 1)
+shader_parameter/grass_color = Color(0.3, 0.6, 0.2, 1)
+shader_parameter/rock_color = Color(0.4, 0.4, 0.4, 1)
+shader_parameter/snow_color = Color(0.95, 0.95, 0.95, 1)
+shader_parameter/transition_smoothness = 1.0
+shader_parameter/noise_scale = 2.0
+shader_parameter/noise_strength = 0.3
 
 [node name="Ocean" type="Node3D"]
 
@@ -45,3 +63,4 @@ mesh = SubResource("BoxMesh_i2u2a")
 [node name="Ground" type="MeshInstance3D" parent="."]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 mesh = ExtResource("4_1acgv")
+surface_material_override/0 = SubResource("ShaderMaterial_rajdw")
