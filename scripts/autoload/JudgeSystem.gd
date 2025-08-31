@@ -61,6 +61,7 @@ var comment_display_time: float = 4.0     # Time to display each comment
 var typing_speed: float = 0.03            # Speed for typewriter effect
 
 func start_judging(players: Array[GameState.PlayerData]):
+	print(str(players))
 	current_players = players
 	judging_in_progress = true
 	skip_requested = false

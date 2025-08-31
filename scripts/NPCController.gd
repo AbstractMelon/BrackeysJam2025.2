@@ -87,7 +87,6 @@ func _get_npc_skill_level(npc: GameState.PlayerData) -> float:
 func _npc_collect_item(npc: GameState.PlayerData):
 	print("Collecting item")
 	if not item_spawner or not npc.mixing_pot:
-		print(item_spawner)
 		return
 
 	# Get available items from spawner

@@ -75,6 +75,8 @@ func _on_state_changed(new_state: GameState.State):
 			_show_modifier_selection_ui()
 		GameState.State.GAME_OVER, GameState.State.VICTORY:
 			_show_game_over_ui(new_state)
+		GameState.State.LOCATION_SELECTION:
+			_show_location_selection()
 		_:
 			#_hide_all_ui()
 			pass
@@ -188,7 +190,8 @@ func _on_modifier_button_pressed(modifier: Modifier):
 	_apply_modifier(modifier)
 	modifier_panel.hide()
 	# Show location selection after modifier selection
-	_show_location_selection()
+	
+	GameLoop.change_state(GameState.State.LOCATION_SELECTION)
 
 func _apply_modifier(modifier : Modifier):
 	# Apply the selected modifier to the game
@@ -233,6 +236,7 @@ func show_judge_comment(judge_name: String, comment: String):
 	judge_comment.show()
 
 func _show_location_selection():
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	location_panel.show()
 
 	# Clear existing buttons
@@ -264,7 +268,7 @@ func _on_location_button_pressed(location_scene: PackedScene):
 	LocationManager.teleport_to_location(location_scene)
 
 	# Continue with next round
-	GameLoop.on_modifier_selected()
+	GameLoop.on_round_settings_selected()
 
 func _on_update_victim(player_name: String):
 	current_victim.text = "Currently Judging: " + player_name
