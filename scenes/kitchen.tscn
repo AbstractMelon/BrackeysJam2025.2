@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://53nblxbwf0d5" path="res://assets/models/building/wall-low.glb" id="9_fr5pv"]
 [ext_resource type="PackedScene" uid="uid://dowixpki25tvu" path="res://assets/models/Camera stand.glb" id="10_k0mf2"]
 [ext_resource type="ArrayMesh" uid="uid://b8mi0bya075br" path="res://assets/models/Trophy.obj" id="11_1gswy"]
-[ext_resource type="Script" path="res://scripts/TestCrateSpawner.gd" id="12_ls4fu"]
+[ext_resource type="Script" uid="uid://bx721rs0r115l" path="res://scripts/TestCrateSpawner.gd" id="12_ls4fu"]
 [ext_resource type="PackedScene" uid="uid://c2b0yyfp4by2q" path="res://assets/models/players/character-male-e.glb" id="17_k1cyo"]
 [ext_resource type="PackedScene" uid="uid://1seiuhu0eg3j" path="res://assets/models/players/character-female-d.glb" id="18_3fy06"]
 [ext_resource type="PackedScene" uid="uid://dodfqy0lqse6f" path="res://assets/models/players/character-male-d.glb" id="19_e7cmp"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=3 uid="uid://d3x5y607a8cac"]
 
-[ext_resource type="Script" path="res://scripts/BaseLocation.gd" id="1_hjm20"]
+[ext_resource type="Script" uid="uid://ddiiviug3efyx" path="res://scripts/BaseLocation.gd" id="1_hjm20"]
 [ext_resource type="PackedScene" uid="uid://djyx8akx6ie7d" path="res://scenes/components/item_spawner.tscn" id="2_wbucu"]
 [ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="3_t7cx1"]
 [ext_resource type="Resource" uid="uid://chv5hh53mshow" path="res://resources/items/banana.tres" id="4_u33w6"]
