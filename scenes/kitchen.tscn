@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://53nblxbwf0d5" path="res://assets/models/building/wall-low.glb" id="9_fr5pv"]
 [ext_resource type="PackedScene" uid="uid://dowixpki25tvu" path="res://assets/models/Camera stand.glb" id="10_k0mf2"]
 [ext_resource type="ArrayMesh" uid="uid://b8mi0bya075br" path="res://assets/models/Trophy.obj" id="11_1gswy"]
-[ext_resource type="Script" uid="uid://bx721rs0r115l" path="res://scripts/TestCrateSpawner.gd" id="12_ls4fu"]
+[ext_resource type="Script" path="res://scripts/TestCrateSpawner.gd" id="12_ls4fu"]
 [ext_resource type="PackedScene" uid="uid://djyx8akx6ie7d" path="res://scenes/components/item_spawner.tscn" id="13_j1h31"]
 [ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="14_mbcyj"]
 [ext_resource type="Resource" uid="uid://chv5hh53mshow" path="res://resources/items/banana.tres" id="15_psp1i"]
@@ -409,7 +409,6 @@ available_items = Array[ExtResource("14_mbcyj")]([ExtResource("15_psp1i"), ExtRe
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)
 script = ExtResource("12_ls4fu")
 spawn_position = Vector3(0, 7.5, 0)
-metadata/_custom_type_script = "uid://bx721rs0r115l"
 
 [node name="Judges" type="Node3D" parent="."]
 

@@ -21,6 +21,8 @@ func _ready():
 	if not is_npc_pot:
 		mixing_area.body_entered.connect(_on_item_entered)
 	
+	add_to_group("pots")
+	
 	update_score_data()
 	update_ui()
 
