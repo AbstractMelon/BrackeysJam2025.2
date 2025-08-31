@@ -88,7 +88,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.62327, -0.724631, -5.12516)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.01915, -0.0726186, -6.9533)
 
 [node name="Pyramid" parent="." instance=ExtResource("7_xvlkt")]
-transform = Transform3D(-12.6413, 0, 8.0745, 0, 15, 0, -8.0745, 0, -12.6413, -8.76165, -0.614268, 1.24613)
+transform = Transform3D(-12.6413, 0, 8.0745, 0, 15, 0, -8.0745, 0, -12.6413, -8.76165, 3.25159, 1.24613)
 
 [node name="Cactus2" parent="." instance=ExtResource("4_i6r76")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9157, 0.00103438, 1.05804)

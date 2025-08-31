@@ -278,7 +278,7 @@ func _on_update_victim(player_name: String):
 	if player:
 		show_biscuit_info(player)
 
-func _on_judge_comment(judge_name: String, comment: String, comment_type: int):
+func _on_judge_comment(judge_name: String, comment: String, comment_type: String):
 	show_judge_comment(judge_name, comment)
 
 func get_typewriter_effect() -> TypewriterEffect:

@@ -160,7 +160,7 @@ func _on_game_over(winner: GameState.PlayerData):
 func _on_judging_started():
 	print("[GameController] Judging cutscene started")
 
-func _on_judge_comment(judge_name: String, comment: String, comment_type: int):
+func _on_judge_comment(judge_name: String, comment: String, comment_type: String):
 	# Show comment in UI
 	if game_ui:
 		game_ui.show_judge_comment(judge_name, comment)

@@ -299,7 +299,8 @@ func _deliver_comment(judge_key: String, biscuit: GameState.BiscuitData, categor
 		if category == "primary":
 			var threshold = judge.get("praise_threshold", 60)
 			comment_type_str = "PRAISE" if biscuit.total_points > threshold else "CRITICISM"
-		emit_judge_comment_with_typewriter(name, text, comment_type_str)
+		judge_comment.emit(name, text, comment_type_str)
+		
 	print("%s: %s" % [name, text])
 
 func _check_biscuit_condition(biscuit: GameState.BiscuitData, conditional: Dictionary) -> bool:
@@ -338,13 +339,6 @@ func _wait_for_comment_completion():
 
 func _on_typewriter_finished():
 	pass
-
-func emit_judge_comment_with_typewriter(judge_name: String, comment: String, comment_type: String):
-	if typewriter_effect:
-		var formatted_comment = judge_name + ": " + comment
-		typewriter_effect.start_typewriter(formatted_comment)
-	else:
-		judge_comment.emit(judge_name, comment, comment_type)
 
 func _determine_mood_for_comment(judge_key: String, biscuit: GameState.BiscuitData, category: String, comment_text: String) -> String:
 	var score = biscuit.total_points

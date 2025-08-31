@@ -5,11 +5,11 @@ signal camera_transition_complete()
 
 @export_group("Camera Settings")
 @export var transition_duration: float = 1.5
-@export var camera_offset: Vector3 = Vector3(0, 0, -1.25)
-@export var camera_look_offset: Vector3 = Vector3(0, 0, 0)
+@export var camera_offset: Vector3 = Vector3(0, 1, -8)
+@export var camera_look_offset: Vector3 = Vector3(0, 1, 0)
 
 @export_group("Audio Settings")
-@export var voice_volume: float = 10
+@export var voice_volume: float = 15
 
 @onready var camera_rig: Node3D = $CameraRig
 @onready var judge_camera: Camera3D = $CameraRig/JudgeCamera
