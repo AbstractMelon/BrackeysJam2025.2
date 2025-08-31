@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://bomy1jbd4lktn"]
+[gd_scene load_steps=33 format=3 uid="uid://bomy1jbd4lktn"]
 
 [ext_resource type="Texture2D" uid="uid://ww8mqihhdcf4" path="res://assets/images/ground/1K_tiling_17_basecolor.png" id="1_88wuv"]
 [ext_resource type="Texture2D" uid="uid://wceqeafm1vcj" path="res://assets/images/ground/1K_tiling_17_height.png" id="2_acu1m"]
@@ -12,10 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://dowixpki25tvu" path="res://assets/models/Camera stand.glb" id="10_k0mf2"]
 [ext_resource type="ArrayMesh" uid="uid://b8mi0bya075br" path="res://assets/models/Trophy.obj" id="11_1gswy"]
 [ext_resource type="Script" uid="uid://bx721rs0r115l" path="res://scripts/TestCrateSpawner.gd" id="12_ls4fu"]
-[ext_resource type="PackedScene" uid="uid://djyx8akx6ie7d" path="res://scenes/components/item_spawner.tscn" id="13_j1h31"]
-[ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="14_mbcyj"]
-[ext_resource type="Resource" uid="uid://chv5hh53mshow" path="res://resources/items/banana.tres" id="15_psp1i"]
-[ext_resource type="Resource" uid="uid://b1wwo5e3c2mrs" path="res://resources/items/doughnut.tres" id="16_lxurs"]
 [ext_resource type="PackedScene" uid="uid://c2b0yyfp4by2q" path="res://assets/models/players/character-male-e.glb" id="17_k1cyo"]
 [ext_resource type="PackedScene" uid="uid://1seiuhu0eg3j" path="res://assets/models/players/character-female-d.glb" id="18_3fy06"]
 [ext_resource type="PackedScene" uid="uid://dodfqy0lqse6f" path="res://assets/models/players/character-male-d.glb" id="19_e7cmp"]
@@ -283,7 +279,7 @@ shape = SubResource("BoxShape3D_j5uij")
 transform = Transform3D(-4.37114e-08, 0, 3.42287, 0, 7.51216, 0, -1, 0, -1.49618e-07, -0.37957, -2.63743, -17.1195)
 
 [node name="Model" parent="Building/Wall4" instance=ExtResource("9_fr5pv")]
-transform = Transform3D(1, 0, 2.84217e-14, 0, 1.01497, 0, -3.55271e-15, 0, 3.037, -0.00214386, 0.00125861, -0.000280291)
+transform = Transform3D(1, 0, 2.84217e-14, 0, 1.01497, 0, -3.55271e-15, 0, 3.037, -5.65515, 0.00125861, -0.000280358)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Building/Wall4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, -3.55271e-15, 0, 1, 0.00413513, 0.65837, 0.250933)
@@ -398,12 +394,6 @@ is_npc_pot = true
 
 [node name="ButteryBob" parent="MixingPots/Pot7" instance=ExtResource("25_k0mf2")]
 transform = Transform3D(-2.74716, 0, 0.54141, 0, 2.8, 0, -0.54141, 0, -2.74716, -0.22959, -1.04461, 1.13931)
-
-[node name="ItemSpawner" parent="." instance=ExtResource("13_j1h31")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.999795, -0.316886, -31.879)
-max_items = 50
-spawn_interval = 1.0
-available_items = Array[ExtResource("14_mbcyj")]([ExtResource("15_psp1i"), ExtResource("16_lxurs")])
 
 [node name="TestCrateSpawner" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)

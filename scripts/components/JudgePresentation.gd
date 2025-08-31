@@ -9,7 +9,7 @@ signal camera_transition_complete()
 @export var camera_look_offset: Vector3 = Vector3(0, 1.5, 0)
 
 @export_group("Audio Settings")
-@export var voice_volume: float = 0.0
+@export var voice_volume: float = 10
 
 @onready var camera_rig: Node3D = $CameraRig
 @onready var judge_camera: Camera3D = $CameraRig/JudgeCamera
@@ -75,9 +75,9 @@ func _setup_camera():
 
 func _find_judge_nodes():
 	# Find the existing judge nodes in the kitchen scene
-	var grandma = get_node_or_null("../../LocationContainer/Kitchen/Judges/Grandma")
-	var rordon = get_node_or_null("../../LocationContainer/Kitchen/Judges/Rordon")
-	var biscotti = get_node_or_null("../../LocationContainer/Kitchen/Judges/Biscotti")
+	var grandma = get_node_or_null("../LocationContainer/Kitchen/Judges/Grandma")
+	var rordon = get_node_or_null("../LocationContainer/Kitchen/Judges/Rordon")
+	var biscotti = get_node_or_null("../LocationContainer/Kitchen/Judges/Biscotti")
 
 	if grandma:
 		judge_nodes["granny_butterworth"] = grandma
@@ -99,6 +99,17 @@ func _find_judge_nodes():
 
 	if judge_nodes.is_empty():
 		print("[JudgePresentation] ERROR: No judge nodes found! Check scene structure.")
+
+func _get_judge_node(judge_key: String) -> Node3D:
+	match judge_key:
+		"granny_butterworth":
+			return get_node_or_null("../LocationContainer/Kitchen/Judges/Grandma")
+		"rordan_gamsey":
+			return get_node_or_null("../LocationContainer/Kitchen/Judges/Rordon")
+		"professor_biscotti":
+			return get_node_or_null("../LocationContainer/Kitchen/Judges/Biscotti")
+	return null
+
 
 func start_judge_presentation():
 	if is_presenting:
@@ -144,7 +155,12 @@ func focus_on_judge(judge_key: String):
 		return
 
 	current_judge = judge_key
-	var judge_node = judge_nodes[judge_key]
+	
+	var judge_node = _get_judge_node(judge_key)
+	if not judge_node:
+		print("[JudgePresentation] ERROR: Judge node not found (maybe scene unloaded)")
+		return
+
 	var target_position = judge_node.global_position + camera_offset
 	var look_target = judge_node.global_position + camera_look_offset
 

@@ -6,7 +6,6 @@ signal game_ended()
 
 @onready var player: FirstPersonController = $Player
 @onready var mixing_pot: MixingPot = $LocationContainer/Kitchen/MixingPot
-@onready var item_spawner: ItemSpawner = $LocationContainer/Kitchen/ItemSpawner
 @onready var game_ui: GameUI = $GameUI
 @onready var judge_presentation: JudgePresentation = $JudgePresentation
 
@@ -128,10 +127,6 @@ func _handle_game_over():
 		player.set_physics_process(false)
 		player.set_process_input(false)
 
-	# Stop all spawning
-	if item_spawner:
-		item_spawner.stop_round_spawning()
-
 func _handle_victory():
 	print("[GameController] Victory!")
 	game_ended.emit()
@@ -140,11 +135,7 @@ func _handle_victory():
 	if player:
 		player.set_physics_process(false)
 		player.set_process_input(false)
-
-	# Stop all spawning
-	if item_spawner:
-		item_spawner.stop_round_spawning()
-
+		
 	# Maybe play victory animation/sound
 
 func _on_round_started(round_number: int):
