@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3 uid="uid://bpqiqc1pixn32"]
+
+[ext_resource type="ArrayMesh" uid="uid://cklqru31y6di2" path="res://assets/food/banana.obj" id="1_8cmi6"]
+[ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="2_h2cul"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ytuuf"]
+albedo_color = Color(1, 1, 0.14902, 1)
+
+[resource]
+script = ExtResource("2_h2cul")
+item_name = "Banana"
+point_value = 10
+zone_type = 0
+mesh = ExtResource("1_8cmi6")
+material = SubResource("StandardMaterial3D_ytuuf")
+is_shiny = false
+shiny_multiplier = 2.0
+is_poisonous = false
+metadata/_custom_type_script = "uid://dpsy87irbr46a"
