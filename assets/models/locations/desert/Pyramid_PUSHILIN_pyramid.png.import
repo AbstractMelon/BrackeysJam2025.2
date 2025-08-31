@@ -2,21 +2,21 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bj0maxdkma4mm"
-path.s3tc="res://.godot/imported/Cactus_PUSHILIN_cactus.png-b1d812c680979d6363921221dae46e47.s3tc.ctex"
-path.etc2="res://.godot/imported/Cactus_PUSHILIN_cactus.png-b1d812c680979d6363921221dae46e47.etc2.ctex"
+uid="uid://ce7hwi5q1iggf"
+path.s3tc="res://.godot/imported/Pyramid_PUSHILIN_pyramid.png-79ea83d0b211e08383f2a54119d3e15f.s3tc.ctex"
+path.etc2="res://.godot/imported/Pyramid_PUSHILIN_pyramid.png-79ea83d0b211e08383f2a54119d3e15f.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "0c1b8a27812ae738162ecb21696d690f"
+"md5": "54e7ba52337b47556bab925aadf24c47"
 }
 
 [deps]
 
-source_file="res://assets/models/Cactus_PUSHILIN_cactus.png"
-dest_files=["res://.godot/imported/Cactus_PUSHILIN_cactus.png-b1d812c680979d6363921221dae46e47.s3tc.ctex", "res://.godot/imported/Cactus_PUSHILIN_cactus.png-b1d812c680979d6363921221dae46e47.etc2.ctex"]
+source_file="res://assets/models/locations/desert/Pyramid_PUSHILIN_pyramid.png"
+dest_files=["res://.godot/imported/Pyramid_PUSHILIN_pyramid.png-79ea83d0b211e08383f2a54119d3e15f.s3tc.ctex", "res://.godot/imported/Pyramid_PUSHILIN_pyramid.png-79ea83d0b211e08383f2a54119d3e15f.etc2.ctex"]
 
 [params]
 

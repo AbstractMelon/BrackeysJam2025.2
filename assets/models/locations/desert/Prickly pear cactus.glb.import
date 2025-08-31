@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://defxpvpht6cjt"
-path="res://.godot/imported/Cactus.glb-63c81afc01a0a3437cab55d70d9afd49.scn"
+uid="uid://madww0eaqgmb"
+path="res://.godot/imported/Prickly pear cactus.glb-741b599b4121b4426d46e499eb069f68.scn"
 
 [deps]
 
-source_file="res://assets/models/Cactus.glb"
-dest_files=["res://.godot/imported/Cactus.glb-63c81afc01a0a3437cab55d70d9afd49.scn"]
+source_file="res://assets/models/locations/desert/Prickly pear cactus.glb"
+dest_files=["res://.godot/imported/Prickly pear cactus.glb-741b599b4121b4426d46e499eb069f68.scn"]
 
 [params]
 

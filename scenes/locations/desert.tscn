@@ -3,10 +3,10 @@
 [ext_resource type="PackedScene" uid="uid://djyx8akx6ie7d" path="res://scenes/components/item_spawner.tscn" id="1_cxjvr"]
 [ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="2_o88ts"]
 [ext_resource type="Resource" uid="uid://chv5hh53mshow" path="res://resources/items/banana.tres" id="3_nvrbp"]
-[ext_resource type="PackedScene" uid="uid://defxpvpht6cjt" path="res://assets/models/Cactus.glb" id="4_i6r76"]
-[ext_resource type="PackedScene" uid="uid://d3w0xarmx3085" path="res://assets/models/Desert skull.glb" id="5_rrxxn"]
-[ext_resource type="PackedScene" uid="uid://madww0eaqgmb" path="res://assets/models/Prickly pear cactus.glb" id="6_0wkqy"]
-[ext_resource type="PackedScene" uid="uid://divdqvttp0qt3" path="res://assets/models/Pyramid.glb" id="7_xvlkt"]
+[ext_resource type="PackedScene" uid="uid://defxpvpht6cjt" path="res://assets/models/locations/desert/Cactus.glb" id="4_i6r76"]
+[ext_resource type="PackedScene" uid="uid://d3w0xarmx3085" path="res://assets/models/locations/desert/Desert skull.glb" id="5_rrxxn"]
+[ext_resource type="PackedScene" uid="uid://madww0eaqgmb" path="res://assets/models/locations/desert/Prickly pear cactus.glb" id="6_0wkqy"]
+[ext_resource type="PackedScene" uid="uid://divdqvttp0qt3" path="res://assets/models/locations/desert/Pyramid.glb" id="7_xvlkt"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lrb7n"]
 size = Vector3(30, 0.2, 30)

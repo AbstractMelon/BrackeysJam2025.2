@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://d3w0xarmx3085"
-path="res://.godot/imported/Desert skull.glb-63bfe2a0634e25d346d964a9d37b91d1.scn"
+uid="uid://divdqvttp0qt3"
+path="res://.godot/imported/Pyramid.glb-ff0b567322790c8a102f23037128b50a.scn"
 
 [deps]
 
-source_file="res://assets/models/Desert skull.glb"
-dest_files=["res://.godot/imported/Desert skull.glb-63bfe2a0634e25d346d964a9d37b91d1.scn"]
+source_file="res://assets/models/locations/desert/Pyramid.glb"
+dest_files=["res://.godot/imported/Pyramid.glb-ff0b567322790c8a102f23037128b50a.scn"]
 
 [params]
 
