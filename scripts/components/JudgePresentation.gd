@@ -5,7 +5,7 @@ signal camera_transition_complete()
 
 @export_group("Camera Settings")
 @export var transition_duration: float = 1.5
-@export var camera_offset: Vector3 = Vector3(0, 1.8, 2.5)
+@export var camera_offset: Vector3 = Vector3(0, -1, 1.25)
 @export var camera_look_offset: Vector3 = Vector3(0, 1.5, 0)
 
 @export_group("Audio Settings")
