@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bx2l2u26uttd6"]
+[gd_scene load_steps=8 format=3 uid="uid://bx2l2u26uttd6"]
 
 [ext_resource type="PackedScene" uid="uid://drmufre8h1ghu" path="res://scenes/player.tscn" id="1_uwrxv"]
 [ext_resource type="PackedScene" uid="uid://bomy1jbd4lktn" path="res://scenes/kitchen.tscn" id="6_p57ef"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://ctnbqgf36a50c" path="res://scripts/GameController.gd" id="18_gamecontroller"]
 [ext_resource type="PackedScene" uid="uid://db3ipmukjssfw" path="res://scenes/UI/game_ui.tscn" id="19_gameui"]
 [ext_resource type="AudioStream" uid="uid://cjur5kpp1i4ih" path="res://assets/audio/IntroLoop.ogg" id="20_1kice"]
+[ext_resource type="PackedScene" uid="uid://bqw8x7n0p1u4c" path="res://scenes/components/judge_presentation.tscn" id="21_judge_presentation"]
 
 [node name="Game" type="Node3D"]
 script = ExtResource("18_gamecontroller")
@@ -45,3 +46,5 @@ texture = ExtResource("10_vtaks")
 [node name="AudioManager" type="AudioStreamPlayer" parent="LocationContainer/Kitchen"]
 stream = ExtResource("20_1kice")
 autoplay = true
+
+[node name="JudgePresentation" parent="." groups=["judge_presentation"] instance=ExtResource("21_judge_presentation")]
