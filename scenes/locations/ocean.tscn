@@ -1,3 +1,16 @@
-[gd_scene format=3 uid="uid://bldnpr6f5jwqv"]
+[gd_scene load_steps=3 format=3 uid="uid://bldnpr6f5jwqv"]
 
-[node name="Ocean" type="Node2D"]
+[ext_resource type="Script" uid="uid://ccn7o8jbfpgi6" path="res://scripts/oceanGenerator.gd" id="1_qnqcq"]
+[ext_resource type="PackedScene" uid="uid://yfvqheb4dxrj" path="res://assets/models/Ship/ship-large.glb" id="2_d5avd"]
+
+[node name="Ocean" type="Node3D"]
+script = ExtResource("1_qnqcq")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.675217, -0.100055, -0.730802, 0, 0.990757, -0.135647, 0.737619, 0.0915908, 0.668976, -7.40612, 1.5065, 11.2301)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.681334, -0.616941, 0.393913, 0, 0.538153, 0.842847, -0.731972, -0.574261, 0.366662, 0, 14.349, 0)
+
+[node name="ship-large2" parent="." instance=ExtResource("2_d5avd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.562117, -1.61101, 0.0451841)
