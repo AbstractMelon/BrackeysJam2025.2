@@ -5,14 +5,19 @@ class_name ItemSpawner
 @export var max_items: int = 15
 @export var spawn_interval: float = 5.0
 @export var available_items: Array[ItemData] = []
+@export var physical: bool = true
 
 @onready var spawn_timer: Timer = $SpawnTimer
 var pickupable_item_scene: PackedScene = preload("res://scenes/components/pickupable_item.tscn")
 var active_items: Array[PickupableItem] = []
 var round_spawning: bool = false
+var active_items_data: Array[ItemData]  = []
 
 func _ready():
-	add_to_group("item_spawner")
+	if physical:
+		add_to_group("item_spawner")
+	else:
+		add_to_group("item_data_spawner")
 	print("[ItemSpawner] Ready. Radius:", spawn_radius, " Max:", max_items, " Interval:", spawn_interval)
 	spawn_timer.wait_time = spawn_interval
 	spawn_timer.timeout.connect(_on_spawn_timer_timeout)
@@ -106,6 +111,10 @@ func create_shiny_variant(base_data: ItemData) -> ItemData:
 	return shiny_data
 
 func get_random_spawn_position() -> Vector3:
+	
+	if not physical:
+		return Vector3.ZERO
+	
 	if not is_inside_tree():
 		print("[ItemSpawner] Warning: not in tree when getting spawn position")
 		return Vector3.ZERO
@@ -134,20 +143,24 @@ func spawn_item(item_data: ItemData, position: Vector3):
 	if not is_inside_tree():
 		print("[ItemSpawner] Cannot spawn item: not in tree")
 		return
-
-	var item_instance = pickupable_item_scene.instantiate()
-	item_instance.item_data = item_data
+		
+	if physical:
+		var item_instance = pickupable_item_scene.instantiate()
+		item_instance.item_data = item_data
 	
-	# Connect signals
-	item_instance.item_picked_up.connect(_on_item_picked_up)
-	item_instance.item_dropped.connect(_on_item_dropped)
-
-	# Add to parent first, then set position
-	get_parent().add_child(item_instance)
-	item_instance.global_position = position
+		# Connect signals
+		item_instance.item_picked_up.connect(_on_item_picked_up)
+		item_instance.item_dropped.connect(_on_item_dropped)
 	
-	active_items.append(item_instance)
-	print("[ItemSpawner] Spawned item:", item_data.item_name, " at", position, " Active items:", active_items.size())
+		# Add to parent first, then set position
+		get_parent().add_child(item_instance)
+		item_instance.global_position = position
+		
+		active_items.append(item_instance)
+		print("[ItemSpawner] Spawned item:", item_data.item_name, " at", position, " Active items:", active_items.size())
+		return
+	
+	active_items_data.append(item_data)
 
 func _on_item_picked_up(_item: PickupableItem):
 	pass
@@ -155,10 +168,14 @@ func _on_item_picked_up(_item: PickupableItem):
 func _on_item_dropped(_item: PickupableItem):
 	pass
 
-func remove_item(item: PickupableItem):
-	if item in active_items:
+func remove_item(item: PickupableItem = null, item_data: ItemData = null):
+	if item and item in active_items:
 		active_items.erase(item)
 		print("[ItemSpawner] Removed item:", item.item_data.item_name, " Active items:", active_items.size())
+	
+	if item_data and item_data in active_items_data:
+		active_items_data.erase(item_data)
+		print("[ItemSpawner] Removed item data:", item_data.item_name, " Active item datas:", active_items_data.size())
 
 func stop_round_spawning():
 	round_spawning = false

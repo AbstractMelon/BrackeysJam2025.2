@@ -1,3 +1,148 @@
-[gd_scene format=3 uid="uid://b0yy2tt4mkkwy"]
+[gd_scene load_steps=16 format=3 uid="uid://b0yy2tt4mkkwy"]
+
+[ext_resource type="PackedScene" uid="uid://djyx8akx6ie7d" path="res://scenes/components/item_spawner.tscn" id="1_cxjvr"]
+[ext_resource type="Script" uid="uid://dpsy87irbr46a" path="res://resources/scripts/ItemData.gd" id="2_o88ts"]
+[ext_resource type="Resource" uid="uid://chv5hh53mshow" path="res://resources/items/banana.tres" id="3_nvrbp"]
+[ext_resource type="PackedScene" uid="uid://defxpvpht6cjt" path="res://assets/models/Cactus.glb" id="4_i6r76"]
+[ext_resource type="PackedScene" uid="uid://d3w0xarmx3085" path="res://assets/models/Desert skull.glb" id="5_rrxxn"]
+[ext_resource type="PackedScene" uid="uid://madww0eaqgmb" path="res://assets/models/Prickly pear cactus.glb" id="6_0wkqy"]
+[ext_resource type="PackedScene" uid="uid://divdqvttp0qt3" path="res://assets/models/Pyramid.glb" id="7_xvlkt"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lrb7n"]
+size = Vector3(30, 0.2, 30)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cxjvr"]
+albedo_color = Color(0.835294, 0.67451, 0.321569, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_i6r76"]
+material = SubResource("StandardMaterial3D_jungle")
+size = Vector3(50, 0.2, 50)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rrxxn"]
+size = Vector3(25, 5, 25)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0wkqy"]
+albedo_color = Color(0.8, 0.8, 0.2, 1)
+emission = Color(0.8, 0.8, 0.2, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4dggd"]
+albedo_color = Color(0.3, 0.3, 0.3, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_xvlkt"]
+material = SubResource("StandardMaterial3D_4dggd")
+size = Vector3(25, 0.2, 25)
+
+[sub_resource type="Environment" id="Environment_cxjvr"]
+background_mode = 1
+background_color = Color(0.9, 0.8, 0.6, 1)
+ambient_light_color = Color(0.95, 0.85, 0.65, 1)
+ambient_light_energy = 0.7
+glow_enabled = true
+glow_strength = 0.3
+fog_enabled = true
+fog_light_color = Color(0.901961, 0.8, 0.6, 1)
+fog_density = 0.05
 
 [node name="Desert" type="Node3D"]
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_lrb7n")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("BoxMesh_i6r76")
+
+[node name="PlayerSpawn" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="ItemSpawner" parent="." instance=ExtResource("1_cxjvr")]
+available_items = Array[ExtResource("2_o88ts")]([ExtResource("3_nvrbp")])
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 5, 0)
+
+[node name="ReturnPad" type="Area3D" parent="."]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, -0.9, -8)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ReturnPad"]
+shape = SubResource("BoxShape3D_rrxxn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ReturnPad"]
+material_override = SubResource("StandardMaterial3D_0wkqy")
+mesh = SubResource("BoxMesh_xvlkt")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_cxjvr")
+
+[node name="Cactus" parent="." instance=ExtResource("4_i6r76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.71951, 0.0010339, 2.18513)
+
+[node name="Desert skull" parent="." instance=ExtResource("5_rrxxn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.62327, -0.724631, -5.12516)
+
+[node name="Prickly pear cactus" parent="." instance=ExtResource("6_0wkqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.01915, -0.0726186, -6.9533)
+
+[node name="Pyramid" parent="." instance=ExtResource("7_xvlkt")]
+transform = Transform3D(-12.6413, 0, 8.0745, 0, 15, 0, -8.0745, 0, -12.6413, -8.76165, -0.614268, 1.24613)
+
+[node name="Cactus2" parent="." instance=ExtResource("4_i6r76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.9157, 0.00103438, 1.05804)
+
+[node name="Cactus3" parent="." instance=ExtResource("4_i6r76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.42335, 0.00103438, -14.1644)
+
+[node name="Cactus4" parent="." instance=ExtResource("4_i6r76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.3748, 0.00103438, 12.5833)
+
+[node name="Cactus5" parent="." instance=ExtResource("4_i6r76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.6904, 0, -20.3366)
+
+[node name="Prickly pear cactus2" parent="." instance=ExtResource("6_0wkqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.128, -0.0726186, -5.12673)
+
+[node name="Prickly pear cactus3" parent="." instance=ExtResource("6_0wkqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.61704, -0.0726186, 9.13977)
+
+[node name="Prickly pear cactus4" parent="." instance=ExtResource("6_0wkqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.8688, 0, -10.201)
+
+[node name="Prickly pear cactus5" parent="." instance=ExtResource("6_0wkqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.50617, 0, -16.3808)
+
+[node name="Prickly pear cactus6" parent="." instance=ExtResource("6_0wkqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.5927, 0, 5.84033)
+
+[node name="Prickly pear cactus7" parent="." instance=ExtResource("6_0wkqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.1106, -0.0726205, -13.2147)
+
+[node name="Desert skull2" parent="." instance=ExtResource("5_rrxxn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.9409, -1.90735e-06, -2.38725)
+
+[node name="Desert skull3" parent="." instance=ExtResource("5_rrxxn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.6267, 0, 15.7788)
+
+[node name="Desert skull4" parent="." instance=ExtResource("5_rrxxn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5856, 0, -15.447)
+
+[node name="Cactus6" parent="." instance=ExtResource("4_i6r76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.87642, 0, 19.8435)
+
+[node name="Cactus7" parent="." instance=ExtResource("4_i6r76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.6561, 0, -7.94442)
+
+[node name="Cactus8" parent="." instance=ExtResource("4_i6r76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.1231, 1.90735e-06, 1.99782)
+
+[node name="Cactus9" parent="." instance=ExtResource("4_i6r76")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.82903, 0, -19.6591)
+
+[node name="Prickly pear cactus8" parent="." instance=ExtResource("6_0wkqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.176, 0, -16.9721)
+
+[node name="Desert skull5" parent="." instance=ExtResource("5_rrxxn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.598261, 0, -21.2857)

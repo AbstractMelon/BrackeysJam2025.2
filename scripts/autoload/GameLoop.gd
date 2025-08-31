@@ -17,7 +17,7 @@ signal timer_updated(time_left: float)
 @export var baking_time: float = 30.0  # 5 minutes
 
 var current_state: GameState.State = GameState.State.MENU
-var current_round: int = 1
+var current_round: int = 0
 var baking_timer: float = 0.0
 var players: Array[GameState.PlayerData] = []
 var human_player: GameState.PlayerData
@@ -26,7 +26,7 @@ var stations: Array[Vector3] = [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0
 var round_difficulty: float = 1.0
 
 @onready var timer: Timer = $Timer
-@onready var npc_controller = $NPCController
+@onready var npc_controller : NPCController = $NPCController
 
 func _ready():
 	pass
@@ -35,7 +35,7 @@ func start_new_game():
 	_initialize_players()
 	current_round = 1
 	round_difficulty = 1.0
-	change_state(GameState.State.SETUP)
+	change_state(GameState.State.LOCATION_SELECTION)
 
 func _initialize_players():
 	players.clear()
@@ -55,7 +55,7 @@ func _initialize_players():
 		alive_players.append(npc)
 
 	_assign_mixing_pots()
-
+	
 func _assign_mixing_pots():
 	var game_scene = get_tree().current_scene
 	if not game_scene:
@@ -103,10 +103,13 @@ func _handle_state_change(_old_state: GameState.State, new_state: GameState.Stat
 			_start_elimination_phase()
 		GameState.State.MODIFIER_SELECTION:
 			_start_modifier_selection()
+		GameState.State.LOCATION_SELECTION:
+			_start_location_selection()
 		GameState.State.GAME_OVER:
 			_handle_game_over()
 		GameState.State.VICTORY:
 			_handle_victory()
+
 
 func _setup_round():
 	print("Setting up round ", current_round)
@@ -126,6 +129,11 @@ func _setup_round():
 func _spawn_round_items():
 	var item_spawner = get_tree().get_first_node_in_group("item_spawner")
 	if item_spawner and item_spawner.has_method("spawn_items_for_round"):
+		var item_count = int(8 + current_round * 2)  # More items each round
+		item_spawner.spawn_items_for_round(item_count, round_difficulty)
+	
+	var item_data_spawner = get_tree().get_first_node_in_group("item_spawner")
+	if item_data_spawner and item_data_spawner.has_method("spawn_items_for_round"):
 		var item_count = int(8 + current_round * 2)  # More items each round
 		item_spawner.spawn_items_for_round(item_count, round_difficulty)
 
@@ -248,16 +256,26 @@ func _eliminate_player(player: GameState.PlayerData):
 		change_state(GameState.State.MODIFIER_SELECTION)
 
 func _start_modifier_selection():
+	
+	round_ended.emit(current_round - 1)
+	
 	print("Modifier selection phase started!")
 	# Show modifier selection UI to human player
 	var ui = get_tree().get_first_node_in_group("game_ui")
 	if ui and ui.has_method("show_modifier_selection"):
 		ui.show_modifier_selection()
 
-func on_modifier_selected():
-	# Called when human player selects a modifier
+func _start_location_selection():
+	print("Location selection phase started!")
+	# Show location selection UI to human player
+	var ui = get_tree().get_first_node_in_group("game_ui")
+	if ui and ui.has_method("show_location_selection"):
+		ui.show_location_selection()
+
+func on_round_settings_selected():
+	# Called when human player selects a modifier and location
 	current_round += 1
-	round_ended.emit(current_round - 1)
+
 	change_state(GameState.State.SETUP)
 
 func _handle_game_over():

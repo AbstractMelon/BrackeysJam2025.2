@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://drmufre8h1ghu"]
 
-[ext_resource type="Script" uid="uid://tw8egy8ai7wj" path="res://scripts/Player.gd" id="1_3vyb7"]
+[ext_resource type="Script" path="res://scripts/Player.gd" id="1_3vyb7"]
 [ext_resource type="Script" uid="uid://cy8d7bkopnmyv" path="res://scripts/ItemInteraction.gd" id="2_g2els"]
 [ext_resource type="PackedScene" uid="uid://bvdks5fgvnsv0" path="res://scenes/UI/item_tooltip.tscn" id="3_qhqgy"]
 [ext_resource type="AudioStream" uid="uid://bbmjc4m7hqwt6" path="res://assets/audio/SFX/dropitem.ogg" id="4_dqkch"]
@@ -9,12 +9,13 @@
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_3vyb7")
+footstep_volume = -40.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_u8vuu")
 
 [node name="Head" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.620785, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0.620785, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head"]
 

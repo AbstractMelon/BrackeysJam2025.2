@@ -7,6 +7,7 @@ enum State {
 	JUDGING,
 	ELIMINATION,
 	MODIFIER_SELECTION,
+	LOCATION_SELECTION,
 	GAME_OVER,
 	VICTORY
 }
@@ -17,7 +18,7 @@ class PlayerData:
 	var name: String
 	var is_human: bool
 	var is_alive: bool = true
-	var mixing_pot: MixingPot
+	var mixing_pot : MixingPot
 	var station_position: Vector3
 	var current_biscuit: BiscuitData
 	var total_score: int = 0

@@ -6,8 +6,8 @@ signal game_ended()
 
 @onready var player: FirstPersonController = $Player
 @onready var mixing_pot: MixingPot = $LocationContainer/Kitchen/MixingPot
-@onready var item_spawner: ItemSpawner = $LocationContainer/Kitchen/ItemSpawner
 @onready var game_ui: GameUI = $GameUI
+@onready var judge_presentation: JudgePresentation = $JudgePresentation
 
 @export var npc_mixing_pots: Array[MixingPot] = []
 
@@ -25,9 +25,13 @@ func _initialize_game():
 	GameLoop.player_eliminated.connect(_on_player_eliminated)
 	GameLoop.game_over.connect(_on_game_over)
 
+	LocationManager.teleport_completed.connect(_on_location_changed)
+
 	JudgeSystem.judging_started.connect(_on_judging_started)
 	JudgeSystem.judge_comment.connect(_on_judge_comment)
 	JudgeSystem.judging_complete.connect(_on_judging_complete)
+	JudgeSystem.judge_focus_requested.connect(_on_judge_focus_requested)
+	JudgeSystem.judge_voice_requested.connect(_on_judge_voice_requested)
 
 	# Start the game
 	GameLoop.start_new_game()
@@ -48,6 +52,11 @@ func _on_game_state_changed(new_state: GameState.State):
 			_handle_game_over()
 		GameState.State.VICTORY:
 			_handle_victory()
+
+func _on_location_changed():
+	if LocationManager.get_current_location_name() == "Kitchen":
+		GameLoop._assign_mixing_pots()
+		GameLoop.npc_controller.on_rejoined_kitchen()
 
 func _setup_round():
 	print("[GameController] Setting up round ", GameLoop.get_current_round())
@@ -118,10 +127,6 @@ func _handle_game_over():
 		player.set_physics_process(false)
 		player.set_process_input(false)
 
-	# Stop all spawning
-	if item_spawner:
-		item_spawner.stop_round_spawning()
-
 func _handle_victory():
 	print("[GameController] Victory!")
 	game_ended.emit()
@@ -130,11 +135,7 @@ func _handle_victory():
 	if player:
 		player.set_physics_process(false)
 		player.set_process_input(false)
-
-	# Stop all spawning
-	if item_spawner:
-		item_spawner.stop_round_spawning()
-
+		
 	# Maybe play victory animation/sound
 
 func _on_round_started(round_number: int):
@@ -167,6 +168,14 @@ func _on_judge_comment(judge_name: String, comment: String, comment_type: int):
 func _on_judging_complete():
 	print("[GameController] Judging complete")
 	GameLoop.change_state(GameState.State.ELIMINATION)
+
+func _on_judge_focus_requested(judge_key: String):
+	# Camera focusing is handled automatically by JudgePresentation system
+	pass
+
+func _on_judge_voice_requested(judge_key: String, mood: String):
+	# Voice playback is handled automatically by JudgePresentation system
+	pass
 
 func get_player_mixing_pot() -> MixingPot:
 	return mixing_pot

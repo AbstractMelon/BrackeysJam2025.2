@@ -5,35 +5,143 @@ signal judge_comment(judge_name: String, comment: String, comment_type: String)
 signal judge_reaction(judge_name: String, reaction: String)
 signal judging_complete()
 signal update_victim(player_name: String)
+signal judge_focus_requested(judge_key: String)
+signal judge_voice_requested(judge_key: String, mood: String)
 
-enum Judge {
-	GRANNY_BUTTERWORTH,
-	RORDAN_GAMSEY,
-	PROFESSOR_BISCOTTI
-}
+@export var single_comment_per_judge: bool = true
+@export var comment_display_time: float = 4.0
+@export var typing_speed: float = 0.03
 
-enum CommentType {
-	PRAISE,
-	CRITICISM,
-	OBSERVATION,
-	REACTION,
-	PERSONAL_STORY,
-	TECHNICAL_ANALYSIS,
-	EMOTIONAL_RESPONSE,
-	COMPARISON,
-	SUGGESTION,
-	WARNING
-}
-
-var judge_data = {
-	Judge.GRANNY_BUTTERWORTH: {
+@export var judge_data: Dictionary = {
+	"granny_butterworth": {
 		"name": "Granny Butterworth",
+		"praise_threshold": 50,
+		"initial_moods": {"patience": 1.0, "nostalgia": 1.0},
+		"comment_pool": ["primary", "story", "technical", "emotional"],
+		"comment_sequence": [
+			{"type": "primary", "chance": 1.0},
+			{"type": "story", "chance": 0.6},
+			{"type": "technical", "chance": 0.7},
+			{"type": "emotional", "chance": 0.5}
+		],
+		"comments": {
+			"primary": {
+				"type": "comment",
+				"score_tiers": {
+					80: ["Oh darling, this could win the county fair three years running!", "Well dearie, this is simply scrumptious. Brings a tear to my eye.", "My stars, I haven't tasted something this good since 1947!", "Bless your heart, this is exactly how my mother used to make them!", "Sweetie, you've got the touch! This is pure magic!"],
+					50: ["Not terrible, love, but I've had better at Tuesday bingo night.", "It's edible, dear, which is more than I expected.", "Sweetie, I'd serve this to guests I don't like very much.", "Well, it's not the worst thing I've ever tasted, bless your heart.", "Dearie, this needs a bit more love in the mixing bowl."],
+					25: ["Oh sweetie, were you trying to bake or to start a fire?", "This wouldn't fool a raccoon on garbage day.", "Bless your heart, dear, but this belongs in the compost.", "My stars, what happened in that oven?", "Dearie, I think the recipe got lost in translation."],
+					0: ["Good heavens, what IS this? An attempt on my life?", "This belongs in a museum exhibit about kitchen crimes.", "Darling, if I swallow this, ring the doctor immediately.", "My stars, this is a war crime against baking!", "Sweetie, I think you've invented a new form of punishment."]
+				}
+			},
+			"story": {
+				"type": "comment", "comment_type": "PERSONAL_STORY",
+				"score_tiers": {
+					70: ["This reminds me of my mother's kitchen on Sunday mornings. The whole house would smell like heaven!", "Oh darling, this takes me back to my wedding day. The baker made the most perfect biscuits I've ever tasted.", "My stars, this is just like what my Aunt Bessie used to make. She had the magic touch, just like you!"],
+					0: ["This reminds me of my first attempt at baking. I was so proud until I tasted it. We all start somewhere, dearie!", "Oh honey, this brings back memories of the time I forgot to add flour. The results were... educational.", "Sweetie, this reminds me of my neighbor's cooking. God rest her soul, but that woman couldn't boil water!"]
+				}
+			},
+			"technical": {
+				"type": "comment", "comment_type": "OBSERVATION",
+				"conditionals": [
+					{"condition": "ingredients_lt", "value": 3, "lines": ["Lazy baking, dear. Where's the love?", "I counted the ingredients and got bored.", "This recipe looks shorter than my grocery list."]},
+					{"condition": "ingredients_gt", "value": 8, "lines": ["My word, you've got everything but the kitchen sink in here!", "Sweetie, sometimes less is more in baking.", "Dearie, you're trying too hard."]},
+					{"condition": "attribute", "value": "Radioactive", "lines": ["It's glowing! I suppose that makes it festive?", "My grandson's nightlight is dimmer than this biscuit.", "Mercy, I can feel my bones vibrating already."]}
+				]
+			},
+			"emotional": {
+				"type": "reaction",
+				"score_tiers": {
+					80: ["*wipes away a tear* Oh, this is just beautiful!", "*clutches heart* My stars, this is pure joy!", "*beams with pride* Darling, you've made an old woman very happy!"],
+					0: ["*winces slightly* Oh dear...", "*forces a smile* Bless your heart...", "*looks concerned* Sweetie, are you feeling alright?"]
+				}
+			}
+		}
 	},
-	Judge.RORDAN_GAMSEY: {
+	"rordan_gamsey": {
 		"name": "Rordan Gamsey",
+		"praise_threshold": 60,
+		"initial_moods": {"rage": 1.0, "standards": 1.0},
+		"comment_pool": ["primary", "technical", "comparison"],
+		"comment_sequence": [
+			{"type": "primary", "chance": 1.0},
+			{"type": "technical", "chance": 0.8},
+			{"type": "comparison", "chance": 0.6},
+			{"type": "outburst", "chance": 0.7, "condition": "rage_gt", "value": 1.2}
+		],
+		"comments": {
+			"primary": {
+				"type": "comment",
+				"score_tiers": {
+					90: ["THIS IS WHAT I'M TALKING ABOUT! Perfect texture, perfect flavor! BEAUTIFUL!", "FINALLY! Something that doesn't make me want to scream.", "YES! You actually remembered how to bake!"],
+					60: ["Not bad, but it's MISSING SOMETHING! Where's the passion?!", "It's edible, but it's not blowing my socks off!", "This is fine. And I hate fine."],
+					30: ["DRY AS A DESERT! This biscuit is an insult to bakers everywhere!", "I've eaten cardboard with more moisture!", "Are you sure this isn't a building material?"],
+					0: ["WHAT IS THIS?! Did you even TRY?! Absolutely DREADFUL!", "This isn't food, it's a war crime!", "I wouldn't feed this to my worst enemy!"]
+				}
+			},
+			"technical": {
+				"type": "comment", "comment_type": "TECHNICAL_ANALYSIS",
+				"conditionals": [
+					{"condition": "ingredients_lt", "value": 3, "lines": ["WHERE ARE THE INGREDIENTS?! This is baking, not a minimalist art project!", "I've seen more complexity in a saltine cracker!"]},
+					{"condition": "attribute", "value": "Rotten", "lines": ["GET THIS GARBAGE OUT OF MY SIGHT!", "I'm not touching that. Health inspectors would faint!", "This should be buried in a hazmat site!"]},
+					{"condition": "score_lt", "value": 25, "lines": ["The texture is WRONG! The flavor is WRONG! Everything is WRONG!", "This violates every principle of baking!"]}
+				]
+			},
+			"comparison": {
+				"type": "comment", "comment_type": "COMPARISON",
+				"score_tiers": {
+					80: ["This could stand up to the finest Parisian patisseries!", "I've had worse at three-Michelin-starred restaurants!"],
+					0: ["I've had better food in school cafeterias!", "This makes airline food look gourmet!", "I've seen better baking in prison!"]
+				}
+			},
+			"outburst": {
+				"type": "reaction",
+				"lines": ["*throws hands in air* I CAN'T TAKE THIS ANYMORE!", "*slams fist on table* THIS IS MADNESS!", "*pulls hair* WHY DO I DO THIS TO MYSELF?!"]
+			}
+		}
 	},
-	Judge.PROFESSOR_BISCOTTI: {
+	"professor_biscotti": {
 		"name": "Professor Biscotti",
+		"praise_threshold": 75,
+		"initial_moods": {"curiosity": 1.0, "precision": 1.0},
+		"comment_pool": ["scientific", "complexity", "theoretical"],
+		"comment_sequence": [
+			{"type": "scientific", "chance": 1.0},
+			{"type": "complexity", "chance": 0.7},
+			{"type": "theoretical", "chance": 0.5},
+			{"type": "research", "chance": 0.4, "condition": "curiosity_gt", "value": 1.1}
+		],
+		"comments": {
+			"scientific": {
+				"type": "comment", "comment_type": "TECHNICAL_ANALYSIS",
+				"score_tiers": {
+					# Using complexity score (ingredients + attributes)
+					8: ["Fascinating! The interplay here demonstrates sophisticated flavor chemistry.", "A triumph of technique! Bold, daring, and scientifically intriguing.", "This could be published in the Journal of Experimental Gastronomy!"],
+					5: ["An adequate attempt at complexity, though somewhat inconsistent.", "There is evidence of innovation, if not complete execution.", "Ambitious, though a bit rough around the edges."],
+					3: ["Rather simplistic. Where is the creative spark?", "This feels like an undergraduate's first attempt at baking.", "Competent, but hardly memorable."],
+					0: ["This exhibits a fundamental misunderstanding of baking principles.", "From a methodological standpoint, a complete disaster.", "Hardly worthy of analysis. A culinary failure."]
+				}
+			},
+			"complexity": {
+				"type": "comment", "comment_type": "OBSERVATION",
+				"conditionals": [
+					{"condition": "ingredients_gt", "value": 6, "lines": ["The ingredient complexity suggests advanced understanding of flavor interactions.", "Multiple components indicate sophisticated approach to recipe development."]},
+					{"condition": "ingredients_lt", "value": 3, "lines": ["Minimalism in baking can be elegant, but this is just lazy.", "One ingredient? This is culinary nihilism."]},
+					{"condition": "attribute", "value": "Radioactive", "lines": ["Intriguing use of radioactive elements! Unconventional indeed.", "A glowing biscuit? The molecular implications are concerning."]}
+				]
+			},
+			"theoretical": {
+				"type": "comment", "comment_type": "TECHNICAL_ANALYSIS",
+				"score_tiers": {
+					75: ["Clearly demonstrates technical proficiency.", "A sound execution of theoretical principles.", "This shows advanced understanding of baking mechanics."],
+					0: ["A failure of basic technique.", "Poor execution undermines any theoretical promise.", "This belongs in a case study of what not to do."]
+				}
+			},
+			"research": {
+				"type": "comment", "comment_type": "SUGGESTION",
+				"lines": ["This warrants further investigation in controlled laboratory conditions.", "I would recommend additional research into the underlying mechanisms.", "This presents an interesting case for academic study." ]
+			}
+		}
 	}
 }
 
@@ -42,11 +150,7 @@ var judging_in_progress: bool = false
 var judge_mood_modifiers: Dictionary = {}
 var skip_requested: bool = false
 var typewriter_effect: TypewriterEffect
-
-# Settings
-var single_comment_per_judge: bool = true  # Set to false for multiple comments
-var comment_display_time: float = 4.0     # Time to display each comment
-var typing_speed: float = 0.03            # Speed for typewriter effect
+var judge_presentation: JudgePresentation
 
 func start_judging(players: Array[GameState.PlayerData]):
 	current_players = players
@@ -54,6 +158,7 @@ func start_judging(players: Array[GameState.PlayerData]):
 	skip_requested = false
 	_initialize_judge_moods()
 	_setup_typewriter_effect()
+	_setup_judge_presentation()
 	judging_started.emit()
 	_begin_judging_sequence()
 
@@ -63,14 +168,11 @@ func skip_judging():
 		typewriter_effect.skip_to_end()
 
 func _initialize_judge_moods():
-	judge_mood_modifiers = {
-		Judge.GRANNY_BUTTERWORTH: {"patience": 1.0, "nostalgia": 1.0},
-		Judge.RORDAN_GAMSEY: {"rage": 1.0, "standards": 1.0},
-		Judge.PROFESSOR_BISCOTTI: {"curiosity": 1.0, "precision": 1.0}
-	}
+	judge_mood_modifiers.clear()
+	for judge_key in judge_data:
+		judge_mood_modifiers[judge_key] = judge_data[judge_key]["initial_moods"].duplicate()
 
 func _setup_typewriter_effect():
-	# Get the game UI and setup typewriter effect
 	var game_ui = get_tree().get_first_node_in_group("game_ui")
 	if game_ui:
 		typewriter_effect = game_ui.get_typewriter_effect()
@@ -79,144 +181,154 @@ func _setup_typewriter_effect():
 			if not typewriter_effect.typing_finished.is_connected(_on_typewriter_finished):
 				typewriter_effect.typing_finished.connect(_on_typewriter_finished)
 
+func _setup_judge_presentation():
+	judge_presentation = get_tree().get_first_node_in_group("judge_presentation")
+	if judge_presentation:
+		judge_presentation.start_judge_presentation()
+
 func _begin_judging_sequence():
-	print("=== JUDGING BEGINS ===")
 	var sorted_players = current_players.duplicate()
 	sorted_players.sort_custom(func(a, b): return a.round_score < b.round_score)
 
 	for player in sorted_players:
-		if skip_requested:
-			break
+		if skip_requested: break
 		await _judge_player_biscuit(player)
 		if not skip_requested:
-			await get_tree().create_timer(1.0).timeout  # Brief pause between players
+			await get_tree().create_timer(1.0).timeout
 		_update_judge_moods(player)
+
+	if judge_presentation:
+		judge_presentation.end_judge_presentation()
 
 	judging_complete.emit()
 	judging_in_progress = false
 
 func _judge_player_biscuit(player: GameState.PlayerData):
-	if not player.current_biscuit or skip_requested:
-		return
-
-	print("\n--- Judging ", player.name, "'s biscuit ---")
-
-	# Tell the UI who is being judged
+	if not player.current_biscuit or skip_requested: return
 	update_victim.emit(player.name)
 
-	if single_comment_per_judge:
-		await _single_judge_comments(player)
+	for judge_key in judge_data:
+		if skip_requested: return
+		var judge = judge_data[judge_key]
+		var biscuit = player.current_biscuit
+
+		if single_comment_per_judge:
+			var comment_pool = _get_available_comment_types(judge_key)
+			var chosen_type = comment_pool.pick_random()
+			if chosen_type:
+				await _deliver_comment(judge_key, biscuit, chosen_type)
+				await _wait_for_comment_completion()
+		else:
+			for comment_info in judge.get("comment_sequence", []):
+				if skip_requested: return
+				if not _check_mood_condition(judge_key, comment_info): continue
+
+				if randf() < comment_info.get("chance", 1.0):
+					await _deliver_comment(judge_key, biscuit, comment_info["type"])
+					await get_tree().create_timer(0.8).timeout
+
+			if not skip_requested: await get_tree().create_timer(1.5).timeout
+
+func _get_available_comment_types(judge_key: String) -> Array[String]:
+	var judge = judge_data[judge_key]
+
+	# Cast to Array and then rebuild into Array[String]
+	var raw_pool: Array = judge.get("comment_pool", [])
+	var pool: Array[String] = []
+	for item in raw_pool:
+		pool.append(str(item))  # force as string in case the array has mixed types
+
+	if _check_mood_condition(judge_key, {"condition": "rage_gt", "value": 1.2}):
+		pool.append("outburst")
+	if _check_mood_condition(judge_key, {"condition": "curiosity_gt", "value": 1.1}):
+		pool.append("research")
+
+	return pool
+
+func _deliver_comment(judge_key: String, biscuit: GameState.BiscuitData, category: String):
+	var judge = judge_data[judge_key]
+	var category_data = judge["comments"].get(category)
+	if not category_data: return
+
+	var comment_lines: Array[String] = []
+	if "lines" in category_data:
+		var raw_lines: Array = category_data["lines"]
+		for l in raw_lines:
+			comment_lines.append(str(l))
+	elif "conditionals" in category_data:
+		for conditional in category_data["conditionals"]:
+			if _check_biscuit_condition(biscuit, conditional):
+				for l in conditional["lines"]:
+					comment_lines.append(str(l))
+	elif "score_tiers" in category_data:
+		var score = biscuit.total_points
+		if category == "scientific":
+			score = biscuit.ingredients.size() + biscuit.special_attributes.size()
+
+		var tiers = category_data["score_tiers"].keys()
+		tiers.sort()
+		tiers.reverse()
+		for tier_score in tiers:
+			if score >= tier_score:
+				var raw_lines: Array = category_data["score_tiers"][tier_score]
+				for l in raw_lines:
+					comment_lines.append(str(l))
+				break
+
+	if comment_lines.is_empty(): return
+
+	# Focus camera on current judge
+	judge_focus_requested.emit(judge_key)
+	if judge_presentation:
+		await judge_presentation.focus_on_judge(judge_key)
+
+	var text = comment_lines.pick_random()
+	var name = judge["name"]
+	var type = category_data.get("type", "comment")
+
+	# Determine mood and play voice
+	var mood = _determine_mood_for_comment(judge_key, biscuit, category, text)
+	judge_voice_requested.emit(judge_key, mood)
+	if judge_presentation:
+		judge_presentation.play_voice_line(judge_key, mood)
+
+	if type == "reaction":
+		judge_reaction.emit(name, text)
 	else:
-		await _multiple_judge_comments(player)
+		var comment_type_str = category_data.get("comment_type", "OBSERVATION")
+		if category == "primary":
+			var threshold = judge.get("praise_threshold", 60)
+			comment_type_str = "PRAISE" if biscuit.total_points > threshold else "CRITICISM"
+		emit_judge_comment_with_typewriter(name, text, comment_type_str)
+	print("%s: %s" % [name, text])
 
-func _single_judge_comments(player: GameState.PlayerData):
-	# Each judge gives one comment, randomly selected from their full repertoire
-	await _granny_single_comment(player)
-	if skip_requested: return
-	await _wait_for_comment_completion()
+func _check_biscuit_condition(biscuit: GameState.BiscuitData, conditional: Dictionary) -> bool:
+	match conditional["condition"]:
+		"ingredients_lt": return biscuit.ingredients.size() < conditional["value"]
+		"ingredients_gt": return biscuit.ingredients.size() > conditional["value"]
+		"attribute": return conditional["value"] in biscuit.special_attributes
+		"score_lt": return biscuit.total_points < conditional["value"]
+	return false
 
-	await _rordan_single_comment(player)
-	if skip_requested: return
-	await _wait_for_comment_completion()
-
-	await _professor_single_comment(player)
-	if skip_requested: return
-	await _wait_for_comment_completion()
-
-func _multiple_judge_comments(player: GameState.PlayerData):
-	# Original multiple comment system
-	await _granny_butterworth_judges(player)
-	if skip_requested: return
-	await get_tree().create_timer(1.5).timeout
-
-	await _rordan_gamsey_judges(player)
-	if skip_requested: return
-	await get_tree().create_timer(1.5).timeout
-
-	await _professor_biscotti_judges(player)
-	if skip_requested: return
-	await get_tree().create_timer(1.0).timeout
+func _check_mood_condition(judge_key: String, comment_info: Dictionary) -> bool:
+	if not "condition" in comment_info: return true
+	var moods = judge_mood_modifiers[judge_key]
+	match comment_info["condition"]:
+		"rage_gt": return moods.get("rage", 0.0) > comment_info["value"]
+		"curiosity_gt": return moods.get("curiosity", 0.0) > comment_info["value"]
+	return true
 
 func _update_judge_moods(player: GameState.PlayerData):
 	var biscuit = player.current_biscuit
-	if not biscuit:
-		return
+	if not biscuit: return
 
-	# Granny gets more patient with good biscuits, less with bad ones
-	if biscuit.total_points > 70:
-		judge_mood_modifiers[Judge.GRANNY_BUTTERWORTH]["patience"] += 0.1
-	else:
-		judge_mood_modifiers[Judge.GRANNY_BUTTERWORTH]["patience"] -= 0.1
+	if biscuit.total_points > 70: judge_mood_modifiers["granny_butterworth"]["patience"] += 0.1
+	else: judge_mood_modifiers["granny_butterworth"]["patience"] -= 0.1
 
-	# Rordan gets angrier with bad biscuits, calmer with excellent ones
-	if biscuit.total_points < 30:
-		judge_mood_modifiers[Judge.RORDAN_GAMSEY]["rage"] += 0.2
-	elif biscuit.total_points > 90:
-		judge_mood_modifiers[Judge.RORDAN_GAMSEY]["rage"] -= 0.1
+	if biscuit.total_points < 30: judge_mood_modifiers["rordan_gamsey"]["rage"] += 0.2
+	elif biscuit.total_points > 90: judge_mood_modifiers["rordan_gamsey"]["rage"] -= 0.1
 
-	# Professor gets more curious with complex biscuits
-	if biscuit.ingredients.size() > 5:
-		judge_mood_modifiers[Judge.PROFESSOR_BISCOTTI]["curiosity"] += 0.1
-
-# ---------------- Single Comment Versions ----------------
-func _granny_single_comment(player: GameState.PlayerData):
-	var biscuit = player.current_biscuit
-	var patience = judge_mood_modifiers[Judge.GRANNY_BUTTERWORTH]["patience"]
-	var nostalgia = judge_mood_modifiers[Judge.GRANNY_BUTTERWORTH]["nostalgia"]
-
-	# Randomly choose comment type
-	var comment_types = ["primary", "story", "technical", "emotional"]
-	var chosen_type = comment_types.pick_random()
-
-	match chosen_type:
-		"primary":
-			await _granny_primary_assessment(biscuit, patience)
-		"story":
-			await _granny_personal_story(biscuit, nostalgia)
-		"technical":
-			await _granny_technical_observation(biscuit)
-		"emotional":
-			await _granny_emotional_response(biscuit, patience)
-
-func _rordan_single_comment(player: GameState.PlayerData):
-	var biscuit = player.current_biscuit
-	var rage = judge_mood_modifiers[Judge.RORDAN_GAMSEY]["rage"]
-
-	# Randomly choose comment type
-	var comment_types = ["primary", "technical", "comparison"]
-	if rage > 1.2:
-		comment_types.append("outburst")
-	var chosen_type = comment_types.pick_random()
-
-	match chosen_type:
-		"primary":
-			await _rordan_primary_assessment(biscuit, rage)
-		"technical":
-			await _rordan_technical_criticism(biscuit)
-		"comparison":
-			await _rordan_comparison(biscuit)
-		"outburst":
-			await _rordan_emotional_outburst(biscuit)
-
-func _professor_single_comment(player: GameState.PlayerData):
-	var biscuit = player.current_biscuit
-	var curiosity = judge_mood_modifiers[Judge.PROFESSOR_BISCOTTI]["curiosity"]
-
-	# Randomly choose comment type
-	var comment_types = ["scientific", "complexity", "theoretical"]
-	if curiosity > 1.1:
-		comment_types.append("research")
-	var chosen_type = comment_types.pick_random()
-
-	match chosen_type:
-		"scientific":
-			await _professor_scientific_analysis(biscuit)
-		"complexity":
-			await _professor_complexity_assessment(biscuit)
-		"theoretical":
-			await _professor_theoretical_implications(biscuit)
-		"research":
-			await _professor_research_suggestions(biscuit)
+	if biscuit.ingredients.size() > 5: judge_mood_modifiers["professor_biscotti"]["curiosity"] += 0.1
 
 func _wait_for_comment_completion():
 	if typewriter_effect and typewriter_effect.is_currently_typing():
@@ -225,7 +337,6 @@ func _wait_for_comment_completion():
 		await get_tree().create_timer(comment_display_time).timeout
 
 func _on_typewriter_finished():
-	# Called when typewriter effect finishes typing
 	pass
 
 func emit_judge_comment_with_typewriter(judge_name: String, comment: String, comment_type: String):
@@ -233,578 +344,44 @@ func emit_judge_comment_with_typewriter(judge_name: String, comment: String, com
 		var formatted_comment = judge_name + ": " + comment
 		typewriter_effect.start_typewriter(formatted_comment)
 	else:
-		# Fallback to regular emission
 		judge_comment.emit(judge_name, comment, comment_type)
 
-# ---------------- Multiple Comment Versions ----------------
-func _granny_butterworth_judges(player: GameState.PlayerData):
-	var biscuit = player.current_biscuit
-	var patience = judge_mood_modifiers[Judge.GRANNY_BUTTERWORTH]["patience"]
-	var nostalgia = judge_mood_modifiers[Judge.GRANNY_BUTTERWORTH]["nostalgia"]
+func _determine_mood_for_comment(judge_key: String, biscuit: GameState.BiscuitData, category: String, comment_text: String) -> String:
+	var score = biscuit.total_points
 
-	# Primary assessment
-	await _granny_primary_assessment(biscuit, patience)
-	if skip_requested: return
-	await get_tree().create_timer(0.8).timeout
+	# Check for specific mood indicators in text
+	var lower_comment = comment_text.to_lower()
+	if "beautiful" in lower_comment or "perfect" in lower_comment or "scrumptious" in lower_comment:
+		return "Happy"
+	elif "terrible" in lower_comment or "disaster" in lower_comment or "dreadful" in lower_comment:
+		return "Angry"
+	elif "not terrible" in lower_comment or "edible" in lower_comment or "adequate" in lower_comment:
+		return "Disappointed"
+	elif "reminds me" in lower_comment and score < 30:
+		return "Sad"
 
-	# Personal story or memory
-	if randf() < 0.6:
-		await _granny_personal_story(biscuit, nostalgia)
-		if skip_requested: return
-		await get_tree().create_timer(0.6).timeout
+	# Use judge presentation system if available
+	if judge_presentation:
+		return judge_presentation.determine_mood_from_comment(judge_key, comment_text, category, score)
 
-	# Technical observation
-	if randf() < 0.7:
-		await _granny_technical_observation(biscuit)
-		if skip_requested: return
-		await get_tree().create_timer(0.5).timeout
+	# Fallback mood determination
+	match judge_key:
+		"granny_butterworth":
+			if score >= 70: return "Happy"
+			elif score >= 40: return "Disappointed"
+			elif score >= 20: return "Sad"
+			else: return "Angry"
+		"rordan_gamsey":
+			if score >= 80: return "Happy"
+			elif score >= 50: return "Disappointed"
+			else: return "Angry"
+		"professor_biscotti":
+			if score >= 75: return "Happy"
+			elif score >= 50: return "Disappointed"
+			elif score >= 25: return "Sad"
+			else: return "Disappointed"
 
-	# Emotional response
-	if randf() < 0.5:
-		await _granny_emotional_response(biscuit, patience)
-		if skip_requested: return
-		await get_tree().create_timer(0.4).timeout
-
-func _granny_primary_assessment(biscuit: GameState.BiscuitData, _patience: float):
-	var comments = []
-
-	if biscuit.total_points > 80:
-		comments = [
-			"Oh darling, this could win the county fair three years running!",
-			"Well dearie, this is simply scrumptious. Brings a tear to my eye.",
-			"My stars, I haven't tasted something this good since 1947!",
-			"Bless your heart, this is exactly how my mother used to make them!",
-			"Sweetie, you've got the touch! This is pure magic!",
-			"Oh my, this reminds me of the bakery on Main Street back in '52!",
-			"Darling, this is fit for the governor's table!",
-			"My goodness, you've captured the essence of home baking!"
-		]
-	elif biscuit.total_points > 50:
-		comments = [
-			"Not terrible, love, but I've had better at Tuesday bingo night.",
-			"It's edible, dear, which is more than I expected.",
-			"Sweetie, I'd serve this to guests I don't like very much.",
-			"Well, it's not the worst thing I've ever tasted, bless your heart.",
-			"Dearie, this needs a bit more love in the mixing bowl.",
-			"It's got potential, sweetie, but it's not quite there yet.",
-			"Oh honey, this is... well, it's certainly a biscuit.",
-			"Bless you for trying, dear, but practice makes perfect."
-		]
-	elif biscuit.total_points > 25:
-		comments = [
-			"Oh sweetie, were you trying to bake or to start a fire?",
-			"This wouldn't fool a raccoon on garbage day.",
-			"Bless your heart, dear, but this belongs in the compost.",
-			"My stars, what happened in that oven?",
-			"Dearie, I think the recipe got lost in translation.",
-			"Oh honey, this is a culinary tragedy.",
-			"Sweetie, I'm not sure what this is, but it's not a biscuit.",
-			"Bless your heart, but this needs divine intervention."
-		]
-	else:
-		comments = [
-			"Good heavens, what IS this? An attempt on my life?",
-			"This belongs in a museum exhibit about kitchen crimes.",
-			"Darling, if I swallow this, ring the doctor immediately.",
-			"My stars, this is a war crime against baking!",
-			"Sweetie, I think you've invented a new form of punishment.",
-			"Oh dear, this is what nightmares are made of.",
-			"Bless your heart, but this is pure evil in biscuit form.",
-			"My goodness, this should be studied by scientists... for what NOT to do."
-		]
-
-	var comment = comments.pick_random()
-	judge_comment.emit("Granny Butterworth", comment, CommentType.PRAISE if biscuit.total_points > 50 else CommentType.CRITICISM)
-	print("Granny Butterworth: ", comment)
-
-func _granny_personal_story(biscuit: GameState.BiscuitData, _nostalgia: float):
-	var stories = []
-
-	if "Sweet" in biscuit.special_attributes:
-		stories = [
-			"Reminds me of the time little Tommy tried to make cookies and used a whole bag of sugar. Oh, that boy was bouncing off the walls for days!",
-			"The sweetness brings back memories of my grandmother's honey biscuits. She'd always say, 'A little extra sugar never hurt nobody.'",
-			"This takes me back to the church bake sale of '63. Sister Margaret's sweet rolls were the talk of the town!"
-		]
-	elif "Spicy" in biscuit.special_attributes:
-		stories = [
-			"My word, this reminds me of when cousin Edna tried to make 'exotic' food. We all learned that day that not everything needs hot sauce!",
-			"Oh my, this brings back memories of the chili cook-off disaster of '78. Poor Reverend Johnson never lived that down!",
-			"Sweetie, this reminds me of the time I accidentally used cayenne instead of cinnamon. The family still talks about it!"
-		]
-	elif biscuit.total_points > 70:
-		stories = [
-			"This reminds me of my mother's kitchen on Sunday mornings. The whole house would smell like heaven!",
-			"Oh darling, this takes me back to my wedding day. The baker made the most perfect biscuits I've ever tasted.",
-			"My stars, this is just like what my Aunt Bessie used to make. She had the magic touch, just like you!"
-		]
-	else:
-		stories = [
-			"This reminds me of my first attempt at baking. I was so proud until I tasted it. We all start somewhere, dearie!",
-			"Oh honey, this brings back memories of the time I forgot to add flour. The results were... educational.",
-			"Sweetie, this reminds me of my neighbor's cooking. God rest her soul, but that woman couldn't boil water!"
-		]
-
-	if stories.size() > 0:
-		var story = stories.pick_random()
-		judge_comment.emit("Granny Butterworth", story, CommentType.PERSONAL_STORY)
-		print("Granny Butterworth: ", story)
-
-func _granny_technical_observation(biscuit: GameState.BiscuitData):
-	var observations = []
-
-	if biscuit.ingredients.size() < 3:
-		observations = [
-			"Lazy baking, dear. Where's the love?",
-			"I counted the ingredients and got bored.",
-			"This recipe looks shorter than my grocery list.",
-			"Sweetie, a biscuit needs more than just flour and water.",
-			"Dearie, you're missing the heart of baking - variety!"
-		]
-	elif biscuit.ingredients.size() > 8:
-		observations = [
-			"My word, you've got everything but the kitchen sink in here!",
-			"Sweetie, sometimes less is more in baking.",
-			"Dearie, you're trying too hard. Simple is often better.",
-			"Oh my, this is like a culinary treasure hunt!",
-			"Bless your heart, but you might be overcomplicating things."
-		]
-
-	if "Radioactive" in biscuit.special_attributes:
-		observations.append_array([
-			"It's glowing! I suppose that makes it festive?",
-			"My grandson's nightlight is dimmer than this biscuit.",
-			"Mercy, I can feel my bones vibrating already.",
-			"Sweetie, I think you've invented a new form of lighting!",
-			"Oh my, this could power a small village!"
-		])
-
-	if observations.size() > 0:
-		var observation = observations.pick_random()
-		judge_comment.emit("Granny Butterworth", observation, CommentType.OBSERVATION)
-		print("Granny Butterworth: ", observation)
-
-func _granny_emotional_response(biscuit: GameState.BiscuitData, _patience: float):
-	var responses = []
-
-	if biscuit.total_points > 80:
-		responses = [
-			"*wipes away a tear* Oh, this is just beautiful!",
-			"*clutches heart* My stars, this is pure joy!",
-			"*beams with pride* Darling, you've made an old woman very happy!",
-			"*sighs contentedly* This is what heaven tastes like!"
-		]
-	elif biscuit.total_points < 30:
-		responses = [
-			"*winces slightly* Oh dear...",
-			"*forces a smile* Bless your heart...",
-			"*looks concerned* Sweetie, are you feeling alright?",
-			"*takes a deep breath* Well, at least you tried..."
-		]
-
-	if responses.size() > 0:
-		var response = responses.pick_random()
-		judge_reaction.emit("Granny Butterworth", response)
-		print("Granny Butterworth: ", response)
-
-# ---------------- Rordan Gamsey ----------------
-func _rordan_gamsey_judges(player: GameState.PlayerData):
-	var biscuit = player.current_biscuit
-	var rage = judge_mood_modifiers[Judge.RORDAN_GAMSEY]["rage"]
-
-	# Primary assessment
-	await _rordan_primary_assessment(biscuit, rage)
-	if skip_requested: return
-	await get_tree().create_timer(0.8).timeout
-
-	# Technical criticism
-	if randf() < 0.8:
-		await _rordan_technical_criticism(biscuit)
-		if skip_requested: return
-		await get_tree().create_timer(0.6).timeout
-
-	# Comparison to standards
-	if randf() < 0.6:
-		await _rordan_comparison(biscuit)
-		if skip_requested: return
-		await get_tree().create_timer(0.5).timeout
-
-	# Emotional outburst
-	if rage > 1.2 and randf() < 0.7:
-		await _rordan_emotional_outburst(biscuit)
-		if skip_requested: return
-		await get_tree().create_timer(0.4).timeout
-
-func _rordan_primary_assessment(biscuit: GameState.BiscuitData, _rage: float):
-	var comments = []
-
-	if biscuit.total_points > 90:
-		comments = [
-			"THIS IS WHAT I'M TALKING ABOUT! Perfect texture, perfect flavor! BEAUTIFUL!",
-			"FINALLY! Something that doesn't make me want to scream.",
-			"YES! You actually remembered how to bake!",
-			"MAGNIFICENT! This is what baking is supposed to be!",
-			"OUTSTANDING! You've restored my faith in humanity!",
-			"BRILLIANT! This is pure culinary genius!",
-			"EXCEPTIONAL! This could grace the finest restaurants!",
-			"PERFECTION! This is what dreams are made of!"
-		]
-	elif biscuit.total_points > 60:
-		comments = [
-			"Not bad, but it's MISSING SOMETHING! Where's the passion?!",
-			"It's edible, but it's not blowing my socks off!",
-			"This is fine. And I hate fine.",
-			"ACCEPTABLE! But acceptable is not EXCELLENT!",
-			"You're on the right track, but you're not THERE yet!",
-			"This shows promise, but promise isn't perfection!",
-			"It's not terrible, but it's not great either!",
-			"You've got the basics, now show me some MAGIC!"
-		]
-	elif biscuit.total_points > 30:
-		comments = [
-			"DRY AS A DESERT! This biscuit is an insult to bakers everywhere!",
-			"I've eaten cardboard with more moisture!",
-			"Are you sure this isn't a building material?",
-			"This is what happens when you don't care about your craft!",
-			"UNACCEPTABLE! This is amateur hour!",
-			"You call this baking? I call this a tragedy!",
-			"This is why I have trust issues with home cooks!",
-			"Did you even TRY to make this edible?!"
-		]
-	else:
-		comments = [
-			"WHAT IS THIS?! Did you even TRY?! Absolutely DREADFUL!",
-			"This isn't food, it's a war crime!",
-			"I wouldn't feed this to my worst enemy!",
-			"This is an affront to everything I stand for!",
-			"I'm calling the health inspector! This is dangerous!",
-			"This belongs in a museum of culinary disasters!",
-			"I've seen better food in prison cafeterias!",
-			"This is proof that some people shouldn't be allowed in kitchens!"
-		]
-
-	var comment = comments.pick_random()
-	judge_comment.emit("Rordan Gamsey", comment, CommentType.CRITICISM if biscuit.total_points < 60 else CommentType.PRAISE)
-	print("Rordan Gamsey: ", comment)
-
-func _rordan_technical_criticism(biscuit: GameState.BiscuitData):
-	var criticisms = []
-
-	if biscuit.ingredients.size() < 3:
-		criticisms = [
-			"WHERE ARE THE INGREDIENTS?! This is baking, not a minimalist art project!",
-			"You've got three ingredients and none of them are interesting!",
-			"This is the culinary equivalent of a blank canvas!",
-			"I've seen more complexity in a saltine cracker!",
-			"You call this a recipe? I call this laziness!"
-		]
-
-	if "Spicy" in biscuit.special_attributes:
-		criticisms.append_array([
-			"TOO MUCH SPICE! Are you trying to kill me?!",
-			"This isn't a biscuit, it's a weapon!",
-			"My tongue is on fire! Who let this happen?!",
-			"This is assault with a deadly biscuit!",
-			"I need a fire extinguisher for my mouth!"
-		])
-
-	if "Rotten" in biscuit.special_attributes:
-		criticisms.append_array([
-			"GET THIS GARBAGE OUT OF MY SIGHT!",
-			"I'm not touching that. Health inspectors would faint!",
-			"This should be buried in a hazmat site!",
-			"This is what nightmares are made of!",
-			"I'm calling the CDC! This is a biohazard!"
-		])
-
-	if biscuit.total_points < 25:
-		criticisms.append_array([
-			"The texture is WRONG! The flavor is WRONG! Everything is WRONG!",
-			"This violates every principle of baking!",
-			"You've committed crimes against gastronomy!",
-			"This is what happens when you ignore basic technique!",
-			"I'm questioning your right to own an oven!"
-		])
-
-	if criticisms.size() > 0:
-		var criticism = criticisms.pick_random()
-		judge_comment.emit("Rordan Gamsey", criticism, CommentType.TECHNICAL_ANALYSIS)
-		print("Rordan Gamsey: ", criticism)
-
-func _rordan_comparison(biscuit: GameState.BiscuitData):
-	var comparisons = []
-
-	if biscuit.total_points > 80:
-		comparisons = [
-			"This could stand up to the finest Parisian patisseries!",
-			"I've had worse at three-Michelin-starred restaurants!",
-			"This puts some of my own creations to shame!",
-			"This is what I expect from a master baker!",
-			"This could win international competitions!"
-		]
-	elif biscuit.total_points < 40:
-		comparisons = [
-			"I've had better food in school cafeterias!",
-			"This makes airline food look gourmet!",
-			"I've seen better baking in prison!",
-			"This is worse than hospital food!",
-			"I've had better biscuits from a vending machine!"
-		]
-
-	if comparisons.size() > 0:
-		var comparison = comparisons.pick_random()
-		judge_comment.emit("Rordan Gamsey", comparison, CommentType.COMPARISON)
-		print("Rordan Gamsey: ", comparison)
-
-func _rordan_emotional_outburst(_biscuit: GameState.BiscuitData):
-	var outbursts = [
-		"*throws hands in air* I CAN'T TAKE THIS ANYMORE!",
-		"*slams fist on table* THIS IS MADNESS!",
-		"*pulls hair* WHY DO I DO THIS TO MYSELF?!",
-		"*stares at ceiling* SOMEONE SAVE ME FROM THIS HELL!",
-		"*clutches head* MY BRAIN IS MELTING FROM THIS INCOMPETENCE!"
-	]
-
-	var outburst = outbursts.pick_random()
-	judge_reaction.emit("Rordan Gamsey", outburst)
-	print("Rordan Gamsey: ", outburst)
-
-# ---------------- Professor Biscotti ----------------
-func _professor_biscotti_judges(player: GameState.PlayerData):
-	var biscuit = player.current_biscuit
-	var curiosity = judge_mood_modifiers[Judge.PROFESSOR_BISCOTTI]["curiosity"]
-
-	# Scientific analysis
-	await _professor_scientific_analysis(biscuit)
-	if skip_requested: return
-	await get_tree().create_timer(0.8).timeout
-
-	# Complexity assessment
-	if randf() < 0.7:
-		await _professor_complexity_assessment(biscuit)
-		if skip_requested: return
-		await get_tree().create_timer(0.6).timeout
-
-	# Theoretical implications
-	if randf() < 0.5:
-		await _professor_theoretical_implications(biscuit)
-		if skip_requested: return
-		await get_tree().create_timer(0.5).timeout
-
-	# Research suggestions
-	if curiosity > 1.1 and randf() < 0.4:
-		await _professor_research_suggestions(biscuit)
-		if skip_requested: return
-		await get_tree().create_timer(0.4).timeout
-
-func _professor_scientific_analysis(biscuit: GameState.BiscuitData):
-	var complexity_score = biscuit.ingredients.size() + biscuit.special_attributes.size()
-	var comments = []
-
-	if complexity_score > 8:
-		comments = [
-			"Fascinating! The interplay here demonstrates sophisticated flavor chemistry.",
-			"A triumph of technique! Bold, daring, and scientifically intriguing.",
-			"This could be published in the Journal of Experimental Gastronomy!",
-			"Remarkable complexity! The molecular interactions are quite sophisticated.",
-			"An excellent example of advanced culinary science in practice.",
-			"The theoretical framework here is quite sound and innovative.",
-			"This demonstrates a deep understanding of gastronomic principles.",
-			"A masterful application of complex flavor theory."
-		]
-	elif complexity_score > 5:
-		comments = [
-			"An adequate attempt at complexity, though somewhat inconsistent.",
-			"There is evidence of innovation, if not complete execution.",
-			"Ambitious, though a bit rough around the edges.",
-			"The approach shows promise, but lacks refinement.",
-			"Interesting methodology, though the results are mixed.",
-			"A solid foundation with room for improvement.",
-			"The concept is sound, but execution needs work.",
-			"Promising, though not entirely successful."
-		]
-	elif complexity_score > 3:
-		comments = [
-			"Rather simplistic. Where is the creative spark?",
-			"This feels like an undergraduate's first attempt at baking.",
-			"Competent, but hardly memorable.",
-			"Basic technique, lacking in innovation.",
-			"A straightforward approach with limited complexity.",
-			"Functional, but not particularly interesting.",
-			"Standard methodology, nothing remarkable.",
-			"Adequate, but uninspired."
-		]
-	else:
-		comments = [
-			"This exhibits a fundamental misunderstanding of baking principles.",
-			"From a methodological standpoint, a complete disaster.",
-			"Hardly worthy of analysis. A culinary failure.",
-			"This violates basic principles of food science.",
-			"A textbook example of what not to do in baking.",
-			"This demonstrates a lack of understanding of fundamentals.",
-			"Poor execution undermines any theoretical promise.",
-			"This belongs in a case study of culinary failure."
-		]
-
-	var comment = comments.pick_random()
-	judge_comment.emit("Professor Biscotti", comment, CommentType.TECHNICAL_ANALYSIS)
-	print("Professor Biscotti: ", comment)
-
-func _professor_complexity_assessment(biscuit: GameState.BiscuitData):
-	var assessments = []
-
-	if biscuit.ingredients.size() > 6:
-		assessments = [
-			"The ingredient complexity suggests advanced understanding of flavor interactions.",
-			"Multiple components indicate sophisticated approach to recipe development.",
-			"The variety of elements shows commendable experimentation.",
-			"Complex ingredient matrix demonstrates culinary ambition.",
-			"Multiple variables suggest systematic approach to flavor development."
-		]
-	elif biscuit.ingredients.size() < 3:
-		assessments = [
-			"Minimalism in baking can be elegant, but this is just lazy.",
-			"One ingredient? This is culinary nihilism.",
-			"Reducing a biscuit to its atomic parts is not innovation.",
-			"The lack of complexity suggests limited understanding of baking science.",
-			"This represents an oversimplified approach to culinary arts."
-		]
-
-	if "Radioactive" in biscuit.special_attributes:
-		assessments.append_array([
-			"Intriguing use of radioactive elements! Unconventional indeed.",
-			"A glowing biscuit? The molecular implications are concerning.",
-			"This may violate several international treaties.",
-			"The radioactive properties present interesting research opportunities.",
-			"This could revolutionize the field of luminescent gastronomy."
-		])
-
-	if assessments.size() > 0:
-		var assessment = assessments.pick_random()
-		judge_comment.emit("Professor Biscotti", assessment, CommentType.OBSERVATION)
-		print("Professor Biscotti: ", assessment)
-
-func _professor_theoretical_implications(biscuit: GameState.BiscuitData):
-	var implications = []
-
-	if biscuit.total_points > 75:
-		implications = [
-			"Clearly demonstrates technical proficiency.",
-			"A sound execution of theoretical principles.",
-			"This shows advanced understanding of baking mechanics.",
-			"The results validate established culinary theories.",
-			"This could serve as a case study in successful technique application."
-		]
-	elif biscuit.total_points < 25:
-		implications = [
-			"A failure of basic technique.",
-			"Poor execution undermines any theoretical promise.",
-			"This belongs in a case study of what not to do.",
-			"The results contradict fundamental baking principles.",
-			"This demonstrates the importance of proper methodology."
-		]
-
-	if implications.size() > 0:
-		var implication = implications.pick_random()
-		judge_comment.emit("Professor Biscotti", implication, CommentType.TECHNICAL_ANALYSIS)
-		print("Professor Biscotti: ", implication)
-
-func _professor_research_suggestions(_biscuit: GameState.BiscuitData):
-	var suggestions = [
-		"This warrants further investigation in controlled laboratory conditions.",
-		"I would recommend additional research into the underlying mechanisms.",
-		"This presents an interesting case for academic study.",
-		"Further experimentation could yield valuable insights.",
-		"This could form the basis of a comprehensive research paper."
-	]
-
-	var suggestion = suggestions.pick_random()
-	judge_comment.emit("Professor Biscotti", suggestion, CommentType.SUGGESTION)
-	print("Professor Biscotti: ", suggestion)
-
-# ---------------- Utility Functions ----------------
-func get_judge_name(judge: Judge) -> String:
-	return judge_data[judge].name
-
+	return "Disappointed"
 
 func is_judging() -> bool:
 	return judging_in_progress
-
-# ---------------- Advanced Dialogue System ----------------
-func generate_contextual_response(judge: Judge, _biscuit: GameState.BiscuitData, context: String) -> String:
-	var responses = []
-
-	match judge:
-		Judge.GRANNY_BUTTERWORTH:
-			if context == "ingredient_quality":
-				responses = [
-					"The quality of ingredients speaks volumes, dearie.",
-					"Good ingredients make good biscuits, that's what my mother always said.",
-					"Sweetie, you can taste the love in quality ingredients."
-				]
-			elif context == "baking_time":
-				responses = [
-					"Timing is everything in baking, love.",
-					"My grandmother used to say, 'Watch the clock, not the recipe.'",
-					"Dearie, patience in baking is a virtue."
-				]
-
-		Judge.RORDAN_GAMSEY:
-			if context == "ingredient_quality":
-				responses = [
-					"QUALITY INGREDIENTS ARE NON-NEGOTIABLE!",
-					"You can't polish a turd, and you can't make good biscuits with bad ingredients!",
-					"The ingredients make or break the dish! It's that simple!"
-				]
-			elif context == "baking_time":
-				responses = [
-					"TIMING IS EVERYTHING! You can't rush perfection!",
-					"The difference between good and great is in the timing!",
-					"Baking is a science! You can't ignore the laws of physics!"
-				]
-
-		Judge.PROFESSOR_BISCOTTI:
-			if context == "ingredient_quality":
-				responses = [
-					"The quality of ingredients directly correlates with final product excellence.",
-					"Ingredient selection is a critical variable in the baking equation.",
-					"The molecular composition of ingredients significantly impacts outcome."
-				]
-			elif context == "baking_time":
-				responses = [
-					"Temporal precision is crucial in achieving optimal results.",
-					"The relationship between time and temperature is fundamental to success.",
-					"Proper timing ensures proper molecular transformation."
-				]
-
-	return responses.pick_random() if responses.size() > 0 else "Interesting observation."
-
-func generate_emotional_reaction(judge: Judge, intensity: float) -> String:
-	var reactions = []
-
-	match judge:
-		Judge.GRANNY_BUTTERWORTH:
-			if intensity > 0.8:
-				reactions = ["*clutches pearls*", "*fans self*", "*wipes away tears*"]
-			elif intensity > 0.5:
-				reactions = ["*nods approvingly*", "*smiles warmly*", "*chuckles softly*"]
-			else:
-				reactions = ["*sighs*", "*shakes head gently*", "*looks concerned*"]
-
-		Judge.RORDAN_GAMSEY:
-			if intensity > 0.8:
-				reactions = ["*throws hands up*", "*slams table*", "*pulls hair*"]
-			elif intensity > 0.5:
-				reactions = ["*crosses arms*", "*narrows eyes*", "*taps foot*"]
-			else:
-				reactions = ["*rolls eyes*", "*scoffs*", "*turns away*"]
-
-		Judge.PROFESSOR_BISCOTTI:
-			if intensity > 0.8:
-				reactions = ["*adjusts glasses excitedly*", "*leans forward*", "*scribbles notes*"]
-			elif intensity > 0.5:
-				reactions = ["*nods thoughtfully*", "*strokes chin*", "*raises eyebrow*"]
-			else:
-				reactions = ["*sighs*", "*shakes head*", "*looks disappointed*"]
-
-	return reactions.pick_random() if reactions.size() > 0 else "*reacts*"
